@@ -61,9 +61,26 @@ session.setAttribute("orderDto", dtos);
 		// 세션에 저장된 주문 데이터를 불러와 모델에 담기
 		System.out.println("dtawedawfdp");
 		List<PurchaseReadyDto> orderData = (List<PurchaseReadyDto>) session.getAttribute("orderDto");
+//		double totalPrice = 0.00;
+		final double[] totalPrice = {0.0};
+		orderData.forEach(data -> {
+			System.out.println("price" + data.getPrice());
+			double price = Double.parseDouble(data.getPrice());
+			totalPrice[0] += price;
+			String imageUrl = data.getImageUrl();
+			if (imageUrl != null) {
+				imageUrl = imageUrl.replace("http://localhost:8080/", "")
+						.replace("[", "")
+						.replace("]", "");
+				data.setImageUrl(imageUrl);
+				System.out.println("image" + data.getImageUrl());
+			}
+		});
+		System.out.println("total" + totalPrice[0]);
 		String userId = authentication.getName();
 		model.addAttribute("product", orderData);
 		model.addAttribute("userId", userId);
+		model.addAttribute("totalPrice", totalPrice[0]);
 		// 추가 주문자 정보, 총 결제 금액 등도 모델에 담아서 Thymeleaf 템플릿으로 전달
 		return "order/cartToOrder";
 	}

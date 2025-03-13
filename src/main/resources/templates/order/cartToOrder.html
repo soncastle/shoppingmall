@@ -174,7 +174,7 @@
 		<div class="title">주문제품</div>
 		<hr class="section-divider">
 		<div th:each="product, iterStat : ${product}" class="product-item">
-			<img th:src="${#strings.replace(#strings.replace(#strings.replace(product.imageUrl, 'http://localhost:8080/', ''), '[', ''), ']', '')}" alt="Product Image" />
+			<img th:src="${product.imageUrl}" alt="Product Image">
 			<div class="product-info">
 				<p>상품명: <span name="productName" th:text="${product.productName}"></span>g</p>
 				<p>옵션: <span name="option" th:text="${product.option != null ? product.option : '없음'}"></span>g</p>
@@ -302,27 +302,37 @@
 	</div>
 	<div class="summary-item total">
 		<span>총 결제 금액</span>
-		<span id="totalPrice" th:text="${totalPrice}">0원</span>
+		<span id="totalPrice" th:text="${totalPrice}"></span>
 	</div>
 	<div class="note">
 		위 제품의 구매 조건을 확인하였으며, 결제 및 개인 정보 제3자 제공에 모두 동의합니다.
 		<input type="checkbox" id="agreeTerms">
 	</div>
-	<button type="submit" form="orderForm" class="purchase-btn" id=totalPay th:text="${totalPayment}">원 결제하기</button>
+	<button type="submit" form="orderForm" class="purchase-btn" id="pay">결제하기</button>
 </div>
 <script>
+	const totalSumPrice = document.getElementById('totalPrice').textContent;
 	document.getElementById('coupon-select').addEventListener('change', function() {
     var couponDetails = document.getElementById('coupon-details');
-    var total = document.getElementById('totalPay').value;
-    var updatedTotal = total;
+    var totalText = document.getElementById('totalPrice').textContent;
+    var total = Number(totalText);
+    console.log('text', totalText);
+	var updateTotal = 0;
     // 선택된 값이 5000일 때만 표시
     if (this.value === '5000') {
     couponDetails.style.display = 'block';
-    updateTotal -= 5000;
+    updatedTotal = total - 5000;
+
+    document.getElementById('couponDiscount').textContent = '-5000 원';
+        if(updatedTotal <= 0){
+		updatedTotal = 0;
+    };
     } else {
     couponDetails.style.display = 'none';
+	document.getElementById('couponDiscount').textContent = '-0 원';
+    updatedTotal = totalSumPrice;
     }
-    document.getElementById('totalPay').textContent = `${updatedTotal} 원 결제하기`;
+    document.getElementById('totalPrice').textContent = `${updatedTotal} 원`;
     });
 
 const totalPayment = document.getElementById('orderForm');
@@ -333,7 +343,7 @@ console.log(key, value);  // 각 key와 value를 출력해서 확인
 const paymentButtons = document.querySelectorAll('.payment-methods button');
 const cardSelect = document.getElementById('cardSelect');
 const paymentMethodInput = document.getElementById('paymentMethod');
-const agreeCheckbox = document.getElementById('agreeTerms');
+
 
 paymentButtons.forEach(button => {
 button.addEventListener('click', function() {
@@ -373,11 +383,12 @@ if (deliveryRequest.value === 'custom') {
 // 폼 제출 이벤트
 function submitOrder(event) {
 event.preventDefault();
+const agreeCheckbox = document.getElementById('agreeTerms');
 
 if (!agreeCheckbox.checked) {
     alert('결제 및 개인정보 제3자 제공에 동의하셔야 합니다.');
     return;
-}
+
 
 const form = document.getElementById('orderForm');
 const formData = new FormData(form);
@@ -417,6 +428,7 @@ fetch('/order/rest/process', {
     alert('주문 처리 중 오류가 발생했습니다.');
 });
 }
+	}
 </script>
 <!-- Daum Postcode API 스크립트 추가 -->
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
