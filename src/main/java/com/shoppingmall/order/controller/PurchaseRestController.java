@@ -8,14 +8,12 @@ import com.shoppingmall.order.repository.PurchaseDeliveryRepository;
 import com.shoppingmall.order.repository.PurchaseProductRepository;
 import com.shoppingmall.order.repository.PurchaseRepository;
 import com.shoppingmall.order.service.PurchaseService;
-import com.shoppingmall.product.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -100,10 +98,11 @@ public class PurchaseRestController {
 
   //물품 구입
   @PostMapping("/process")
-  public ResponseEntity<?> processOrder(@ModelAttribute CartToPuchaseDto cartToPuchaseDto) {
+  public ResponseEntity<?> processOrder(@ModelAttribute List<PurchaseProductDto> purchaseProductDtos,
+                                        Authentication authentication) {
     try {
+      String userId = authentication.getName();
       // 서비스 레이어로 주문 데이터 전달
-      service.processOrder(cartToPuchaseDto);
       return ResponseEntity.ok().body("{\"success\":true}");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body("{\"success\":false, \"message\":\"" + e.getMessage() + "\"}");

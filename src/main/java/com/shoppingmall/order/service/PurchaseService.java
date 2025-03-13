@@ -226,7 +226,7 @@ public class PurchaseService {
 		});
 	}
 
-	public void processOrder(CartToPuchaseDto cartDto) {
+	public void processOrder(CartToPuchaseDto cartDto, String userId) {
 		// 주문 데이터 처리 로직 예제
 		List<PurchaseProductDto> productList = cartDto.getPurchaseProductDtos();
 		if (productList != null) {
@@ -234,7 +234,7 @@ public class PurchaseService {
 		PurchaseProduct products = new PurchaseProduct();
 		PurchaseDelivery delivery = new PurchaseDelivery();
 
-		purchase.setUserId(cartDto.getUserId());
+		purchase.setUserId(userId);
 		delivery.setReceiverAddr(cartDto.getReceiverAddr());
 		delivery.setReceiverName(cartDto.getReceiverName());
 		delivery.setReceiverPhone(cartDto.getReceiverPhone());
@@ -250,7 +250,7 @@ public class PurchaseService {
 			deliveryRepo.save(delivery);
 			for (PurchaseProductDto product : productList) {
 				products.setOption(product.getOption());
-				products.setUserId(cartDto.getUserId());
+				products.setUserId(userId);
 				products.setPurchase(purchase);
 				products.setProductName(product.getProductName());
 				products.setDeliveryStatus("배송준비중");
@@ -261,4 +261,5 @@ public class PurchaseService {
 		}
 		System.out.println("주문이 처리되었습니다. 사용자 ID: " + cartDto.getUserId());
 	}
+
 }

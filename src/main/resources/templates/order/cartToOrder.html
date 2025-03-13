@@ -174,7 +174,7 @@
 		<div class="title">주문제품</div>
 		<hr class="section-divider">
 		<div th:each="product, iterStat : ${product}" class="product-item">
-			<img th:src="${product.imageUrl}" alt="Product Image" th:unless="${product.imageUrl}" src="https://via.placeholder.com/80x80">
+			<img th:src="${#strings.replace(#strings.replace(#strings.replace(product.imageUrl, 'http://localhost:8080/', ''), '[', ''), ']', '')}" alt="Product Image" />
 			<div class="product-info">
 				<p>상품명: <span name="productName" th:text="${product.productName}"></span>g</p>
 				<p>옵션: <span name="option" th:text="${product.option != null ? product.option : '없음'}"></span>g</p>
@@ -242,12 +242,15 @@
 		<div class="title">쿠폰</div>
 		<hr class="section-divider">
 		<div class="form-group">
-			<select name="coupon">
+			<select name="coupon" id="coupon-select">
 				<option value="">쿠폰을 선택해주세요.</option>
-				<option value="5000">가입 감사 쿠폰 5천원</option>
+				<option value="5000" id="accession_coupon">가입 감사 쿠폰 5천원</option>
 			</select>
-		</div>
 
+		</div>
+		<div id="coupon-details" style="display:none;">
+			<p id="coupon-description"></p>
+		</div>
 		<!-- 결제 수단 -->
 		<div class="title">결제 수단</div>
 		<hr class="section-divider">
@@ -305,101 +308,115 @@
 		위 제품의 구매 조건을 확인하였으며, 결제 및 개인 정보 제3자 제공에 모두 동의합니다.
 		<input type="checkbox" id="agreeTerms">
 	</div>
-	<button type="submit" form="orderForm" class="purchase-btn" th:text="${totalPayment} + '원 결제하기'">0원 결제하기</button>
+	<button type="submit" form="orderForm" class="purchase-btn" id=totalPay th:text="${totalPayment}">원 결제하기</button>
 </div>
 <script>
-	const totalPayment = document.getElementById('orderForm');
-	totalPayment.forEach((value, key) => {
-        console.log(key, value);  // 각 key와 value를 출력해서 확인
-   		 });
-	// 결제 수단 버튼 클릭 이벤트
-    const paymentButtons = document.querySelectorAll('.payment-methods button');
-    const cardSelect = document.getElementById('cardSelect');
-    const paymentMethodInput = document.getElementById('paymentMethod');
-    const agreeCheckbox = document.getElementById('agreeTerms');
-
-    paymentButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            paymentButtons.forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
-            paymentMethodInput.value = this.getAttribute('data-method');
-
-            if (this.getAttribute('data-card') === 'true') {
-                cardSelect.classList.add('active');
-            } else {
-                cardSelect.classList.remove('active');
-            }
-        });
+	document.getElementById('coupon-select').addEventListener('change', function() {
+    var couponDetails = document.getElementById('coupon-details');
+    var total = document.getElementById('totalPay').value;
+    var updatedTotal = total;
+    // 선택된 값이 5000일 때만 표시
+    if (this.value === '5000') {
+    couponDetails.style.display = 'block';
+    updateTotal -= 5000;
+    } else {
+    couponDetails.style.display = 'none';
+    }
+    document.getElementById('totalPay').textContent = `${updatedTotal} 원 결제하기`;
     });
 
-    // Daum Postcode API
-    function execDaumPostcode() {
-        new daum.Postcode({
-            oncomplete: function(data) {
-                var addr = data.address;
-                document.getElementById('receiver_addr').value = addr;
-            }
-        }).open();
+const totalPayment = document.getElementById('orderForm');
+totalPayment.forEach((value, key) => {
+console.log(key, value);  // 각 key와 value를 출력해서 확인
+    });
+// 결제 수단 버튼 클릭 이벤트
+const paymentButtons = document.querySelectorAll('.payment-methods button');
+const cardSelect = document.getElementById('cardSelect');
+const paymentMethodInput = document.getElementById('paymentMethod');
+const agreeCheckbox = document.getElementById('agreeTerms');
+
+paymentButtons.forEach(button => {
+button.addEventListener('click', function() {
+    paymentButtons.forEach(btn => btn.classList.remove('active'));
+    this.classList.add('active');
+    paymentMethodInput.value = this.getAttribute('data-method');
+
+    if (this.getAttribute('data-card') === 'true') {
+        cardSelect.classList.add('active');
+    } else {
+        cardSelect.classList.remove('active');
     }
+});
+});
 
-    // 배송 요청 사항 커스텀 입력 토글
-    function toggleCustomRequest() {
-        const deliveryRequest = document.getElementById('deliveryRequest');
-        const customInput = document.querySelector('.delivery-request-custom');
-        if (deliveryRequest.value === 'custom') {
-            customInput.style.display = 'block';
-        } else {
-            customInput.style.display = 'none';
-        }
+// Daum Postcode API
+function execDaumPostcode() {
+new daum.Postcode({
+    oncomplete: function(data) {
+        var addr = data.address;
+        document.getElementById('receiver_addr').value = addr;
     }
+}).open();
+}
 
-    // 폼 제출 이벤트
-    function submitOrder(event) {
-        event.preventDefault();
+// 배송 요청 사항 커스텀 입력 토글
+function toggleCustomRequest() {
+const deliveryRequest = document.getElementById('deliveryRequest');
+const customInput = document.querySelector('.delivery-request-custom');
+if (deliveryRequest.value === 'custom') {
+    customInput.style.display = 'block';
+} else {
+    customInput.style.display = 'none';
+}
+}
 
-        if (!agreeCheckbox.checked) {
-            alert('결제 및 개인정보 제3자 제공에 동의하셔야 합니다.');
-            return;
-        }
+// 폼 제출 이벤트
+function submitOrder(event) {
+event.preventDefault();
 
-        const form = document.getElementById('orderForm');
-        const formData = new FormData(form);
+if (!agreeCheckbox.checked) {
+    alert('결제 및 개인정보 제3자 제공에 동의하셔야 합니다.');
+    return;
+}
 
-		formData.forEach((value, key) => {
-        console.log(key, value);  // 각 key와 value를 출력해서 확인
-   		 });
+const form = document.getElementById('orderForm');
+const formData = new FormData(form);
 
-        // 오른쪽 섹션의 결제 금액 데이터 추가
-        const paymentData = {
-            totalProductPrice: document.getElementById('totalProductPrice').textContent.replace('원', '').replace(/,/g, ''),
-            couponDiscount: document.getElementById('couponDiscount').textContent.replace('원', '').replace(/,/g, ''),
-            pointsUsed: document.getElementById('pointsUsed').textContent.replace('원', '').replace(/,/g, ''),
-            shippingFee: document.getElementById('shippingFee').textContent.replace('원', '').replace(/,/g, ''),
-            totalPrice: document.getElementById('totalPrice').textContent.replace('원', '').replace(/,/g, '')
-        };
+formData.forEach((value, key) => {
+console.log(key, value);  // 각 key와 value를 출력해서 확인
+    });
 
-        for (const [key, value] of Object.entries(paymentData)) {
-            formData.append(key, value);
-        }
-        // 백엔드로 전송
-        fetch('/order/rest/process', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('주문이 완료되었습니다!');
-                window.location.href = '/order';
-            } else {
-                alert('주문 처리 중 오류가 발생했습니다: ' + data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('주문 처리 중 오류가 발생했습니다.');
-        });
+// 오른쪽 섹션의 결제 금액 데이터 추가
+const paymentData = {
+    totalProductPrice: document.getElementById('totalProductPrice').textContent.replace('원', '').replace(/,/g, ''),
+    couponDiscount: document.getElementById('couponDiscount').textContent.replace('원', '').replace(/,/g, ''),
+    pointsUsed: document.getElementById('pointsUsed').textContent.replace('원', '').replace(/,/g, ''),
+    shippingFee: document.getElementById('shippingFee').textContent.replace('원', '').replace(/,/g, ''),
+    totalPrice: document.getElementById('totalPrice').textContent.replace('원', '').replace(/,/g, '')
+};
+
+for (const [key, value] of Object.entries(paymentData)) {
+    formData.append(key, value);
+}
+// 백엔드로 전송
+fetch('/order/rest/process', {
+    method: 'POST',
+    body: formData
+})
+.then(response => response.json())
+.then(data => {
+    if (data.success) {
+        alert('주문이 완료되었습니다!');
+        window.location.href = '/order';
+    } else {
+        alert('주문 처리 중 오류가 발생했습니다: ' + data.message);
     }
+})
+.catch(error => {
+    console.error('Error:', error);
+    alert('주문 처리 중 오류가 발생했습니다.');
+});
+}
 </script>
 <!-- Daum Postcode API 스크립트 추가 -->
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>

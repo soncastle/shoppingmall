@@ -9,17 +9,22 @@ import com.shoppingmall.order.repository.PurchaseProductRepository;
 import com.shoppingmall.order.repository.PurchaseReviewRepository;
 import com.shoppingmall.order.service.PurchaseService;
 import io.jsonwebtoken.io.IOException;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequestMapping("/order")
 @Controller
@@ -37,16 +42,33 @@ public String index2() {
 
 @Autowired
 	PurchaseProductRepository prodrepo;
-@GetMapping("/orders")
-public String cartToPurchase(@ModelAttribute List<PurchaseProductDto> dtos,
-					 Model model) {
-model.addAttribute("product", prodrepo.findAll());
-//model.addAttribute("product", prodrepo.dtos);
-	return "order/cartToOrder";
+
+@PostMapping("/orders")
+public ResponseEntity<Map<String, String>> cartToPurchase(@RequestBody List<PurchaseReadyDto> dtos,
+																		 RedirectAttributes redirectAttributes,
+																		 HttpSession session,
+																		 Model model) {
+	System.out.println("dtp");
+session.setAttribute("orderDto", dtos);
+	Map<String, String> response = new HashMap<>();
+	response.put("result", "good");
+	return ResponseEntity.ok(response);
 }
 
+	@GetMapping("/cartToOrder")
+	public String orderPage(Model model, HttpSession session,
+													Authentication authentication) {
+		// 세션에 저장된 주문 데이터를 불러와 모델에 담기
+		System.out.println("dtawedawfdp");
+		List<PurchaseReadyDto> orderData = (List<PurchaseReadyDto>) session.getAttribute("orderDto");
+		String userId = authentication.getName();
+		model.addAttribute("product", orderData);
+		model.addAttribute("userId", userId);
+		// 추가 주문자 정보, 총 결제 금액 등도 모델에 담아서 Thymeleaf 템플릿으로 전달
+		return "order/cartToOrder";
+	}
 
-@GetMapping("/purchase")
+		@GetMapping("/purchase")
 public String purchase(){ return "order/purchaseReady";}
 
 @GetMapping("/review")

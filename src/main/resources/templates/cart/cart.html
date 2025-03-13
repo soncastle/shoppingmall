@@ -52,7 +52,8 @@
 	                </tr>
 	            </tbody>
 	        </table>
-	
+			<script>
+			</script>
 	        <div class="total-container">
 			    <span><span id="selected-total">0원</span></span>
 			    <span>+ 배송비<span id="shipping-fee"> 0원</span></span>
@@ -74,13 +75,55 @@
 		    <p>배송비 <span id="shipping-fee">+ 0원</span></p>
 		    <hr>
 		    <h2>총 금액 <span id="final-total">0원</span></h2>
-		    <button type="button">주문하기</button>
+		    <button type="button" onclick="order()">주문하기</button>
 		</div> 
 </div>
 
 
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	
+<script>
+      function order() {
+        // 체크된 행만 선택
+        const rows = document.querySelectorAll('#cart-items tr input[name="selectedItems"]:checked');
+        const orderData = [];
+
+        rows.forEach(checkbox => {
+          const row = checkbox.closest('tr'); // 체크박스가 속한 행을 찾음
+
+          const imageElement = row.querySelector('img.product-image');
+          const productId = imageElement ? imageElement.getAttribute('data-product-id') : '';
+
+          const productNameElement = row.querySelector('span');
+          const productName = productNameElement ? productNameElement.innerText : '';
+
+          const quantityElement = row.querySelector('input[name="quantity"]');
+          const quantity = quantityElement ? quantityElement.value : '';
+
+          const option = '';
+
+          const priceElement = row.querySelector('.subtotal');
+          const price = priceElement ? priceElement.innerText : '';
+
+          const imageUrl = imageElement ? imageElement.src : '';
+
+          orderData.push({ productId, productName, quantity, option, price, imageUrl });
+        });
+
+        console.log("선택된 주문 데이터:", orderData);
+
+        // orderData를 서버로 전송
+        fetch('/order/orders', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(orderData)
+        })
+          .then(response => response.json())
+          .then(data =>  window.location.href = "/order/cartToOrder")
+          .catch(error => console.error('Error:', error));
+      }
+</script>
     <script>
 	    $(document).on('click', '.product-image', function() {
 	        const productId = $(this).data('product-id');
