@@ -201,7 +201,8 @@
       width: 24px;
       text-align: center;
       border: none;
-      font-size: 12px;
+      font-size: 18px;
+      font-weight: bold;
     }
     .qty-input:focus {
       outline: none;
@@ -213,10 +214,12 @@
       color: #333;
     }
     .total-price-row {
-      font-size: 18px;
+      font-size: 23px;
       font-weight: 700;
       color: #333;
       margin-top: 12px;
+      display: flex;
+      justify-content: flex-end;
     }
     .button-row {
       display: flex;
@@ -729,7 +732,7 @@
         <div class="product-title" th:text="${product.productName}">상품명</div>
         <!-- 에이콘 정품 보장 -->
         <div class="brand-assurance">
-          <img src="/images/icon.png" alt="정품 보장 아이콘"/>
+          <img src="/images/ui/icon.png" alt="정품 보장 아이콘"/>
           <span>에이콘 정품 보장</span>
         </div>
         <!-- 평점/리뷰 -->
@@ -1049,7 +1052,7 @@
       const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
       const dd = String(tomorrow.getDate()).padStart(2, '0');
       shippingBlock.innerHTML = `
-        <img src="/images/truck.png" alt="트럭 아이콘"/>
+        <img src="/images/ui/truck.png" alt="트럭 아이콘"/>
         지금 주문 시 내일(${mm}.${dd}) 바로 발송
       `;
     }
