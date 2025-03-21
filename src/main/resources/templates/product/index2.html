@@ -594,9 +594,9 @@
           <div class="banner-slider-container">
             <div class="swiper-container banner-swiper">
               <div class="swiper-wrapper">
-                <div class="swiper-slide"><img src="/images/ui/v1.jpg" alt="배너1"></div>
-                <div class="swiper-slide"><img src="/images/ui/v2.jpg" alt="배너2"></div>
-                <div class="swiper-slide"><img src="/images/ui/v3.jpg" alt="배너3"></div>
+                <div class="swiper-slide"><img src="/images/v1.jpg" alt="배너1"></div>
+                <div class="swiper-slide"><img src="/images/v2.jpg" alt="배너2"></div>
+                <div class="swiper-slide"><img src="/images/v3.jpg" alt="배너3"></div>
               </div>
               <div class="swiper-button-prev"></div>
               <div class="swiper-button-next"></div>
@@ -608,37 +608,37 @@
             <ul>
               <li>
                 <a th:href="@{'/products/category/7'(petType='CAT', sort='newest')}">
-                  <img src="/images/ui/catbab.png" alt="고양이사료 아이콘"/>
+                  <img src="/images/catbab.png" alt="고양이사료 아이콘"/>
                   <span>고양이사료</span>
                 </a>
               </li>
               <li>
                 <a th:href="@{'/products/category/8'(petType='CAT', sort='newest')}">
-                  <img src="/images/ui/catsnack.png" alt="고양이간식 아이콘"/>
+                  <img src="/images/catsnack.png" alt="고양이간식 아이콘"/>
                   <span>고양이간식</span>
                 </a>
               </li>
               <li>
                 <a th:href="@{'/products/category/9'(petType='CAT', sort='newest')}">
-                  <img src="/images/ui/cattoy.png" alt="고양이용품 아이콘"/>
+                  <img src="/images/cattoy.png" alt="고양이용품 아이콘"/>
                   <span>고양이용품</span>
                 </a>
               </li>
               <li>
                 <a th:href="@{'/products/category/10'(petType='DOG', sort='newest')}">
-                  <img src="/images/ui/dogbab.png" alt="강아지사료 아이콘"/>
+                  <img src="/images/dogbab.png" alt="강아지사료 아이콘"/>
                   <span>강아지사료</span>
                 </a>
               </li>
               <li>
                 <a th:href="@{'/products/category/11'(petType='DOG', sort='newest')}">
-                  <img src="/images/ui/dogsnack.png" alt="강아지간식 아이콘"/>
+                  <img src="/images/dogsnack.png" alt="강아지간식 아이콘"/>
                   <span>강아지간식</span>
                 </a>
               </li>
               <li>
                 <a th:href="@{'/products/category/12'(petType='DOG', sort='newest')}">
-                  <img src="/images/ui/dogtoy.png" alt="강아지용품 아이콘"/>
+                  <img src="/images/dogtoy.png" alt="강아지용품 아이콘"/>
                   <span>강아지용품</span>
                 </a>
               </li>
@@ -674,7 +674,7 @@
 
                 <!-- 당일발송 -->
                 <p class="delivery-badge">
-                  <img src="/images/ui/truck.png" alt="배송아이콘">
+                  <img src="/images/truck.png" alt="배송아이콘">
                   당일발송
                 </p>
 
@@ -703,7 +703,7 @@
                 </p>
                 <p class="price" th:text="${#numbers.formatInteger(p.price, 0)} + '원'"></p>
                 <p class="delivery-badge">
-                  <img src="/images/ui/truck.png" alt="배송아이콘">
+                  <img src="/images/truck.png" alt="배송아이콘">
                   당일발송
                 </p>
                 <p class="category-info" th:text="'(' + ${p.category.categoryName} + ' / ' + ${p.subcategory.subcategoryName} + ')'"></p>
@@ -730,7 +730,7 @@
                 </p>
                 <p class="price" th:text="${#numbers.formatInteger(p.price, 0)} + '원'"></p>
                 <p class="delivery-badge">
-                  <img src="/images/ui/truck.png" alt="배송아이콘">
+                  <img src="/images/truck.png" alt="배송아이콘">
                   당일발송
                 </p>
                 <p class="category-info" th:text="'(' + ${p.category.categoryName} + ' / ' + ${p.subcategory.subcategoryName} + ')'"></p>
@@ -750,12 +750,12 @@
 				    <a th:href="@{'/products/category/' + ${cat.categoryId} (petType=${selectedPetType}, sort='newest')}">
 				      <!-- 아이콘 조건 분기 -->
 				      <img th:if="${cat.categoryName.contains('고양이')}"
-				           src="/images/ui/categorycat.svg"
+				           src="/images/categorycat.svg"
 				           alt="고양이아이콘"
 				           style="width:30px; height:30px; margin-right:6px; vertical-align:middle;">
 				
 				      <img th:if="${cat.categoryName.contains('강아지')}"
-				           src="/images/ui/categorydog.svg"
+				           src="/images/categorydog.svg"
 				           alt="강아지아이콘"
 				           style="width:30px; height:30px; margin-right:6px; vertical-align:middle;">
 				
@@ -826,7 +826,7 @@
 
                   <!-- 당일발송 -->
                   <p class="delivery-badge">
-                    <img src="/images/ui/truck.png" alt="배송아이콘">
+                    <img src="/images/truck.png" alt="배송아이콘">
                     당일발송
                   </p>
 
@@ -843,12 +843,12 @@
         <div th:case="'rating'">
           <div class="side-banner-left">
             <a href="#">
-              <img src="/images/ui/v4.png" alt="왼쪽배너">
+              <img src="/images/v4.png" alt="왼쪽배너">
             </a>
           </div>
           <div class="side-banner-right">
             <a href="#">
-              <img src="/images/ui/v5.png" alt="오른쪽배너">
+              <img src="/images/v5.png" alt="오른쪽배너">
             </a>
           </div>
 
@@ -879,7 +879,7 @@
 
                 <!-- 당일발송 -->
                 <p class="delivery-badge">
-                  <img src="/images/ui/truck.png" alt="배송아이콘">
+                  <img src="/images/truck.png" alt="배송아이콘">
                   당일발송
                 </p>
 
@@ -895,12 +895,12 @@
         <div th:case="'newest'">
           <div class="side-banner-left">
             <a href="#">
-              <img src="/images/ui/v4.png" alt="왼쪽배너">
+              <img src="/images/v4.png" alt="왼쪽배너">
             </a>
           </div>
           <div class="side-banner-right">
             <a href="#">
-              <img src="/images/ui/v5.png" alt="오른쪽배너">
+              <img src="/images/v5.png" alt="오른쪽배너">
             </a>
           </div>
 
@@ -930,7 +930,7 @@
 
                 <!-- 당일발송 -->
                 <p class="delivery-badge">
-                  <img src="/images/ui/truck.png" alt="배송아이콘">
+                  <img src="/images/truck.png" alt="배송아이콘">
                   당일발송
                 </p>
 
@@ -963,7 +963,7 @@
     	  {
     	    label: `
     	      <span style="position: relative; display:inline-block; width:100%; text-align:center;">
-    	        <img src="/images/ui/categorycat.svg" alt="고양이" 
+    	        <img src="/images/categorycat.svg" alt="고양이" 
     	             style="position:absolute; left:12px; top:50%; transform:translateY(-50%); width:24px; height:24px;" />
     	        고양이
     	      </span>
@@ -974,7 +974,7 @@
     	  {
     	    label: `
     	      <span style="position: relative; display:inline-block; width:100%; text-align:center;">
-    	        <img src="/images/ui/categorydog.svg" alt="강아지"
+    	        <img src="/images/categorydog.svg" alt="강아지"
     	             style="position:absolute; left:12px; top:50%; transform:translateY(-50%); width:24px; height:24px;" />
     	        강아지
     	      </span>

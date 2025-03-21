@@ -169,13 +169,13 @@ public class ProductController {
 
     private String uploadFile(MultipartFile file) {
         if (!file.isEmpty()) {
-            String basePath = new File("src/main/resources/static/images/product").getAbsolutePath();
+            String basePath = new File("src/main/resources/static/images").getAbsolutePath();
             String fileName = System.currentTimeMillis() + "-" + file.getOriginalFilename();
             String filePath = basePath + File.separator + fileName;
             File destinationFile = new File(filePath);
             try {
                 file.transferTo(destinationFile);
-                return "/images/product/" + fileName;
+                return "/images/" + fileName;
             } catch (IOException e) {
                 e.printStackTrace();
                 return null;
