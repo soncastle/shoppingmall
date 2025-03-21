@@ -1,25 +1,4 @@
 /* 마이페이지에 좋아요한 상품을 불러오는 함수  */
-
-
-export async function headerCartSize(){
-    try {
-      const response = await fetch("/cart/cartCount" , {
-        method : "GET"
-      })
-      if(!response.ok){
-        console.log("요청 불가")
-      }
-      const data = await response.json()
-
-      const cartCount = document.querySelector(".cart-badge");
-
-      cartCount.textContent =data.body.data.cartCount
-
-    }catch (e){
-      console.log(e)
-    }
-}
-
 export async  function loadWishlist(){
   try{
 
@@ -30,7 +9,7 @@ export async  function loadWishlist(){
 
 
     if(!response.ok){
-      console.log("찜한 제품 목록을 받아올수 없어요 ")
+      console.log("좋아요 목록을 받아올수 없어요 ")
     }
     const result = await response.json();
     console.log(result)
@@ -89,6 +68,7 @@ export async function loadPetList() {
               </div>
               <button type="button" class="layer_open"></button>
               <ul class="layer_modify" style="display: none">
+                <li><a class="trigger updateBtn">수정</a></li>
                 <li><a class="deleteBtn">삭제</a></li>
               </ul>
             </div>
@@ -105,8 +85,6 @@ export async function loadPetList() {
     console.error(e);
   }
 }
-
-
 
 // 레이어, 삭제 버튼 등에 대한 이벤트 리스너 설정 함수
 function setupPetListeners() {
@@ -173,57 +151,6 @@ function updateMyPageTopInfo(data) {
   document.querySelector(".mypage-top .img img").src = data.data.url;
   document.querySelector(".profile-default .default-img img").src = data.data.url;
 
-}
-
-
-export function bindHeart(){
-  const heartBtns = document.querySelectorAll(".heart")
-
-  heartBtns.forEach(btn => {
-    btn.addEventListener("click", async (e) => { // ✅ click 이벤트 사용!
-      const button = e.target;
-      const isLiked = button.classList.contains("active");
-      const listItem = button.closest("li"); // 가장 가까운 <li> 찾기
-      const productLink = listItem.querySelector("a"); // <a> 태그 찾기
-      const productId = productLink?.dataset.productid;
-      console.log(productId)
-
-
-      try{
-        if(isLiked) {
-          await removeFromWishlist(productId);
-        }else{
-          await addToWishlist(productId);
-        }
-
-        button.classList.toggle("active")
-      }catch (error){
-        console.log("찜 상태 변경 중 에러")
-      }
-    });
-  });
-}
-
-
-async function addToWishlist(productId) {
-  const response = await fetch("/wishlist/add", {
-    method: "POST",
-    credentials: "include",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({productId : Number(productId)})
-  });
-  if (!response.ok) throw new Error("찜 추가 요청 실패");
-}
-
-async function removeFromWishlist(productId) {
-  const response = await fetch("/wishlist/remove", {
-    method: "DELETE",
-    credentials: "include",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ productId : Number(productId) })
-  });
-
-  if (!response.ok) throw new Error("찜 삭제 요청 실패");
 }
 
 export async function loadTopInfo(){

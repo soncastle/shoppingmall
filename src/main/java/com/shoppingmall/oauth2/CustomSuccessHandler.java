@@ -37,20 +37,21 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             account = customOAuth2User.getAccountType();
             Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
             role = authorities.iterator().next().getAuthority();
-
+            System.out.println("account type : " + account);
 
         } else {
             CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
             userId = customUserDetails.getUsername();
             email = customUserDetails.getEmail();
             account = customUserDetails.getAccountType();
+            System.out.println(account);
             role = customUserDetails.getAuthorities().iterator().next().getAuthority();
 
         }
 
         String token = jwtUtil.createJwt(userId, email, account, role, 3600L);
         response.addCookie(createCookie("Authorization", token));
-        response.sendRedirect("http://localhost:8080");
+        response.sendRedirect("http://localhost:8080/home");
 
 
     }

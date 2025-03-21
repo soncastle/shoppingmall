@@ -36,11 +36,15 @@ public class PurchaseProduct {
 //    @Column(nullable = false, updatable = false)
     private LocalDateTime createAt; // 주문 생성 시간
 
+    private String cancelReason;
+
     private LocalDateTime cancelAt; // 주문 취소 시간
 
     private int totalPrice; // 해당 상품 총 가격
 
     private String deliveryStatus;
+
+    private String purchaseConform;
 
 //    private LocalDateTime review;
 }

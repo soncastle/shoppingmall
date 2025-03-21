@@ -3,595 +3,573 @@
 <head>
   <meta charset="UTF-8">
   <title>상품 상세</title>
-  <link rel="stylesheet" href="/css/layout/common.css">
   <!-- Swiper CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"/>
   <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
-  <link rel="stylesheet" href="/css/productDetail.css">
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f7fc; margin: 0; padding: 0; }
+    .container { display: flex; justify-content: center; width: 80%; max-width: 1200px; margin: 20px auto; background: #fff; box-shadow: 0 4px 8px rgba(0,0,0,0.1); padding: 20px; border-radius: 8px; }
+    .gallery-container { width: 500px; margin-right: 20px; }
+    .swiper-container.gallery-top { width: 100%; height: 500px; border-radius: 8px; overflow: hidden; margin-bottom: 10px; }
+    .swiper-container.gallery-thumbs { width: 100%; height: 100px; position: relative; overflow: hidden; }
+    .swiper-slide img { width: 100%; height: 100%; object-fit: contain; }
+    .thumbs-prev, .thumbs-next { position: absolute; top: 35px; width: 25px; height: 25px; z-index: 2; background: rgba(0,0,0,0.3); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; user-select: none; }
+    .thumbs-prev { left: 0; }
+    .thumbs-next { right: 0; }
+    .product-info { width: 380px; min-width: 320px; max-height: 650px; overflow-y: auto; border: 1px solid #ddd; border-radius: 8px; padding: 20px; background: #fafafa; display: flex; flex-direction: column; gap: 10px; }
+    .product-title { font-size: 24px; font-weight: bold; color: #333; margin-bottom: 10px; }
+    .price { color: #4A90E2; font-size: 18px; font-weight: bold; }
+    .product-tabs { margin-top: 10px; }
+    .tab-buttons-new { display: flex; border-bottom: 1px solid #ccc; margin-bottom: 10px; }
+    .tab-btn-new { flex: 1; text-align: center; padding: 12px 0; font-size: 16px; font-weight: 600; background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; transition: all 0.3s ease; color: #999; }
+    .tab-btn-new.active { color: #000; border-bottom: 2px solid #4A90E2; }
+    .tab-content-new { border: 1px solid #eee; background: #fff; padding: 15px; border-radius: 8px; min-height: 120px; max-height: 200px; overflow-y: auto; }
+    .tab-pane-new { display: none; font-size: 15px; line-height: 1.6; color: #333; }
+    .tab-pane-new.active { display: block; }
+    .option-list { margin-top: 10px; }
+    .option-item { display: flex; align-items: center; justify-content: space-between; border: 1px solid #ddd; border-radius: 5px; padding: 8px; margin-bottom: 5px; background: #fff; }
+    .option-name { font-weight: bold; color: #333; }
+    .option-controls { display: flex; gap: 5px; }
+    .price-summary { display: flex; justify-content: space-between; align-items: center; background: #fff; border: 1px solid #ddd; border-radius: 5px; padding: 10px; margin-top: 10px; }
+    .price-summary-label { font-weight: bold; color: #333; }
+    .price-summary-value { font-weight: bold; color: #4A90E2; }
+    .wishlist-btn { background: #fff; color: #4A90E2; border: 2px solid #4A90E2; margin-top: 20px; padding: 10px 20px; cursor: pointer; font-size: 16px; border-radius: 20px; width: 48%; transition: background-color 0.3s, color 0.3s; }
+    .wishlist-btn:hover { background: #4A90E2; color: #fff; }
+    .add-to-cart { background: #4A90E2; color: #fff; margin-top: 20px; padding: 10px 20px; cursor: pointer; font-size: 16px; border-radius: 20px; width: 48%; border: none; }
+    .form-buttons { display: flex; justify-content: space-between; width: 100%; margin-top: 10px; gap: 5px; }
+    .content-section { display: flex; flex-direction: column; width: 80%; max-width: 1200px; margin: 20px auto; background: #fff; box-shadow: 0 4px 8px rgba(0,0,0,0.1); padding: 20px; border-radius: 8px; }
+    .product-detail-images img { width: 100%; max-width: 900px; margin: 0 auto 10px; display: block; object-fit: contain; border-radius: 8px; }
+    #hidden-description { display: none; opacity: 0; transition: opacity 0.3s ease-in-out; }
+    #hidden-description.show { display: block; opacity: 1; }
+    #toggle-button { width: 100%; padding: 10px; background: #f5f5f5; border: none; cursor: pointer; font-size: 16px; margin-top: 10px; border-radius: 8px; }
+    .reviews { max-width: 800px; width: 85%; margin: 20px auto; background: #fff; border-radius: 8px; padding: 15px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+    .reviews h3 { margin-top: 0; font-size: 18px; margin-bottom: 10px; }
+    .review-summary { display: flex; margin-bottom: 20px; gap: 20px; }
+    .average-rating-container { width: 50%; text-align: center; }
+    .average-rating-display { font-size: 32px; font-weight: bold; margin-bottom: 10px; }
+    .average-rating-stars { display: inline-block; vertical-align: middle; font-size: 22px; margin-top: 5px; }
+    .rating-bars { width: 50%; }
+    .rating-row { display: flex; align-items: center; margin-bottom: 8px; }
+    .rating-text { width: 40px; text-align: right; margin-right: 8px; font-weight: bold; }
+    .rating-bar { flex: 1; background: #f0f0f0; border-radius: 5px; overflow: hidden; position: relative; height: 20px; margin-right: 8px; }
+    .rating-fill { background: #4A90E2; height: 100%; transition: width 0.5s ease-in-out; }
+    .rating-count { width: 30px; text-align: left; }
+    .review { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 15px; background: #f9f9f9; padding: 15px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 10px; min-height: 120px; overflow: hidden; position: relative; }
+    .review img { width: 100px; height: 100px; object-fit: cover; border-radius: 10px; flex-shrink: 0; }
+    .review-actions { position: absolute; top: 5px; right: 5px; display: flex; gap: 5px; }
+    .btn-edit { background: #4A90E2; font-size: 12px; padding: 3px 6px; border: none; border-radius: 4px; cursor: pointer; color: #fff; }
+    .btn-delete { background: #e74c3c; font-size: 12px; padding: 3px 6px; border: none; border-radius: 4px; cursor: pointer; color: #fff; }
+    .btn-comment { background: #95a5a6; font-size: 12px; padding: 3px 6px; border: none; border-radius: 4px; cursor: pointer; color: #fff; }
+    .review-comments { margin-top: 10px; padding: 10px; background: #fff; border: 1px solid #ddd; border-radius: 5px; }
+    .review-comments h4 { margin: 0 0 10px 0; font-size: 16px; }
+    .review-comments ul { list-style: none; padding-left: 0; margin: 0; }
+    .review-comments li { margin-bottom: 5px; font-size: 14px; }
+    .pagination { display: flex; justify-content: center; list-style-type: none; padding: 0; margin: 20px 0 0 0; }
+    .pagination li { margin: 0 5px; }
+    .pagination a { display: inline-block; padding: 8px 16px; margin-right: 4px; border-radius: 5px; border: 1px solid #ddd; background: #fff; color: #4A90E2; text-align: center; text-decoration: none; transition: background-color 0.3s, color 0.3s; }
+    .pagination a:hover { background: #4A90E2; color: #fff; }
+    .pagination a.active { background: #4A90E2; color: #fff; border-color: #4A90E2; }
+    .fixed-action-buttons { position: fixed; right: 30px; bottom: 100px; display: flex; flex-direction: column; gap: 10px; z-index: 999; }
+    .fixed-action-buttons a, .fixed-action-buttons form button { background: #4A90E2; color: #fff; border: none; padding: 10px 18px; border-radius: 30px; text-align: center; text-decoration: none; font-size: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); cursor: pointer; transition: background 0.2s ease; display: inline-block; width: 130px; white-space: nowrap; text-align: center; box-sizing: border-box; -webkit-appearance: none; -moz-appearance: none; appearance: none; outline: none; margin: 0; }
+    .fixed-action-buttons a:hover, .fixed-action-buttons form button:hover { background: #357ABD; }
+    .fixed-action-buttons form { margin: 0; }
+    .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5); justify-content: center; align-items: center; }
+    .modal-content { background: #fff; margin: auto; padding: 20px; border-radius: 8px; width: 400px; position: relative; }
+    .modal-content h2 { margin-top: 0; }
+    .close { position: absolute; top: 10px; right: 15px; font-size: 24px; cursor: pointer; }
+    .image-popup { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); z-index: 9999; justify-content: center; align-items: center; }
+    .popup-content { position: relative; max-width: 80%; max-height: 80%; }
+    .popup-content img { width: 100%; height: auto; border-radius: 8px; }
+    .close-btn { position: absolute; top: 10px; right: 20px; font-size: 32px; color: #fff; cursor: pointer; }
+  </style>
 </head>
 <body>
-<!-- 헤더 영역 -->
-<div th:replace="fragment/header :: headerFragment"></div>
-<!-- 네비게이션 영역 -->
-<div th:replace="fragment/nav :: navFragment2"></div>
-
-<div class="container">
-  <div class="pm-section">
-    <div class="detail-container">
-      <!-- 좌측 이미지 갤러리 -->
-      <div class="gallery-container">
-        <!-- 메인 슬라이더 -->
-        <div class="swiper-container gallery-top">
-          <div class="swiper-wrapper">
-            <div class="swiper-slide" th:each="imgUrl : ${product.imageUrls}">
-              <img th:src="@{${imgUrl}}" alt="대표 이미지"/>
-            </div>
-          </div>
-          <div class="swiper-button-prev"></div>
-          <div class="swiper-button-next"></div>
-        </div>
-        <!-- 썸네일 슬라이더 -->
-        <div class="swiper-container gallery-thumbs">
-          <div class="thumbs-prev">‹</div>
-          <div class="thumbs-next">›</div>
-          <div class="swiper-wrapper">
-            <div class="swiper-slide" th:each="imgUrl : ${product.imageUrls}">
-              <img th:src="@{${imgUrl}}" alt="대표이미지 썸네일"/>
-            </div>
+  <div class="container">
+    <div class="gallery-container">
+      <!-- 메인 슬라이더 -->
+      <div class="swiper-container gallery-top">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide" th:each="imgUrl : ${product.imageUrls}">
+            <img th:src="@{${imgUrl}}" alt="대표 이미지"/>
           </div>
         </div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
       </div>
-
-      <!-- 우측 상품 정보 -->
-      <div class="product-info">
-        <!-- 상품명 -->
-        <div class="product-title" th:text="${product.productName}">상품명</div>
-        <!-- 에이콘 정품 보장 -->
-        <div class="brand-assurance">
-          <img src="/images/product/icon.png" alt="정품 보장 아이콘"/>
-          <span>에이콘 정품 보장</span>
-        </div>
-        <!-- 평점/리뷰 -->
-        <div class="rating-info">
-          <span class="score" th:text="'⭐ ' + ${averageRating}">★ 4.5</span>
-          <span class="review-count" th:text="'리뷰 ' + ${totalReviews}">리뷰 0</span>
-        </div>
-        <!-- 가격 -->
-        <div class="price" id="product-price"
-             th:text="${#numbers.formatInteger(product.price, 0, 'COMMA')} + '원'">
-          2,900원
-        </div>
-
-        <!-- 지금 주문 시 내일 발송 (회색 배경) -->
-        <div class="shipping-block" id="shipping-block">
-          <!-- 자바스크립트에서 트럭아이콘+문구 삽입 -->
-        </div>
-
-        <!-- 옵션명 + 수량버튼 + 실시간 금액 -->
-        <div class="option-block">
-          <span class="option-text" th:text="${product.option}">옵션명</span>
-          <div class="option-row">
-            <div class="qty-box">
-              <button type="button" class="qty-btn" onclick="changeQuantityByButton(-1)">-</button>
-              <input type="text" class="qty-input" id="quantity" value="1" readonly />
-              <button type="button" class="qty-btn plus" onclick="changeQuantityByButton(1)">+</button>
-            </div>
-            <span class="live-price" id="live-price-right">2,900원</span>
-          </div>
-        </div>
-
-        <div class="total-price-row">
-          합계 <span id="total-price">2,900원</span>
-        </div>
-
-        <!-- 찜하기/장바구니 버튼 -->
-        <form th:action="@{/cart/add}" method="post">
-          <input type="hidden" id="userId" value="1"/> 
-          <input type="hidden" id="productId" th:value="${product.productId}"/>
-          <input type="hidden" name="quantity" id="quantity-value" th:value="1"/>
-          <div class="button-row">
-            <button id="wishlistButton" type="button" class="wishlist-btn">❤️ 찜하기</button>
-            <button id="addToCartButton" type="button" class="add-to-cart" onclick="addToCart()">장바구니 담기</button>
-          </div>
-        </form>
-
-        <!-- 탭 (INFORMATION / CAUTION) -->
-        <div class="product-tabs">
-          <div class="tab-buttons-new">
-            <button class="tab-btn-new active" onclick="openTab('information')">INFORMATION</button>
-            <button class="tab-btn-new" onclick="openTab('detail')">CAUTION</button>
-          </div>
-          <div class="tab-content-new">
-            <div id="information" class="tab-pane-new active">
-              <p th:text="${product.content}">상품 정보 내용...</p>
-            </div>
-            <div id="detail" class="tab-pane-new">
-              <p th:text="${product.description}">주의사항 내용...</p>
-            </div>
+      <!-- 썸네일 슬라이더 (4장씩) + 화살표 버튼 -->
+      <div class="swiper-container gallery-thumbs">
+        <div class="thumbs-prev">‹</div>
+        <div class="thumbs-next">›</div>
+        <div class="swiper-wrapper">
+          <div class="swiper-slide" th:each="imgUrl : ${product.imageUrls}">
+            <img th:src="@{${imgUrl}}" alt="대표이미지 썸네일"/>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- 상세 정보 / 리뷰 영역 -->
-    <div class="content-section">
-      <!-- 상세 이미지 -->
-      <div class="product-detail-images">
-        <div th:if="${product.detailImageUrls != null and product.detailImageUrls.size() > 0}">
-          <img th:src="@{${product.detailImageUrls[0]}}" alt="상세 이미지"/>
+    <!-- 상품 정보 -->
+    <div class="product-info">
+      <div class="product-title" th:text="${product.productName}"></div>
+      <p><strong>가격: </strong>
+        <span id="product-price" class="price" th:text="${#numbers.formatInteger(product.price,0)} + '원'">0원</span>
+      </p>
+      <div class="product-tabs">
+        <div class="tab-buttons-new">
+          <button class="tab-btn-new active" onclick="openTab('information')">INFORMATION</button>
+          <button class="tab-btn-new" onclick="openTab('detail')">CAUTION</button>
         </div>
-        <div id="hidden-description">
-          <div th:each="img, iterStat : ${product.detailImageUrls}" th:if="${iterStat.index > 0}">
-            <img th:src="@{${img}}" alt="상세 이미지"/>
+        <div class="tab-content-new">
+          <div id="information" class="tab-pane-new active">
+            <p th:text="${product.content}"></p>
+          </div>
+          <div id="detail" class="tab-pane-new">
+            <p th:text="${product.description}"></p>
           </div>
         </div>
-        <button id="toggle-button" onclick="toggleDescription()">상세정보 펼쳐보기 <i>▼</i></button>
       </div>
-
-      <!-- 리뷰 영역 -->
-      <div class="reviews">
-        <h3>리뷰</h3>
-        <div class="review-summary">
-          <div class="average-rating-container">
-            <div class="average-rating-display" th:text="${averageRating} + '점'">0점</div>
-            <div class="average-rating-stars">
-              <span th:text="${averageStars}">⭐⭐⭐⭐☆</span>
-            </div>
-          </div>
-          <div class="rating-bars">
-            <div class="rating-row">
-              <span class="rating-text">5점</span>
-              <div class="rating-bar">
-                <div class="rating-fill"
-                     th:style="${totalReviews != 0} ? 'width:' + (${count5} * 100 / ${totalReviews}) + '%' : 'width:0%'">
-                </div>
-              </div>
-              <span class="rating-count" th:text="${count5}">0</span>
-            </div>
-            <div class="rating-row">
-              <span class="rating-text">4점</span>
-              <div class="rating-bar">
-                <div class="rating-fill"
-                     th:style="${totalReviews != 0} ? 'width:' + (${count4} * 100 / ${totalReviews}) + '%' : 'width:0%'">
-                </div>
-              </div>
-              <span class="rating-count" th:text="${count4}">0</span>
-            </div>
-            <div class="rating-row">
-              <span class="rating-text">3점</span>
-              <div class="rating-bar">
-                <div class="rating-fill"
-                     th:style="${totalReviews != 0} ? 'width:' + (${count3} * 100 / ${totalReviews}) + '%' : 'width:0%'">
-                </div>
-              </div>
-              <span class="rating-count" th:text="${count3}">0</span>
-            </div>
-            <div class="rating-row">
-              <span class="rating-text">2점</span>
-              <div class="rating-bar">
-                <div class="rating-fill"
-                     th:style="${totalReviews != 0} ? 'width:' + (${count2} * 100 / ${totalReviews}) + '%' : 'width:0%'">
-                </div>
-              </div>
-              <span class="rating-count" th:text="${count2}">0</span>
-            </div>
-            <div class="rating-row">
-              <span class="rating-text">1점</span>
-              <div class="rating-bar">
-                <div class="rating-fill"
-                     th:style="${totalReviews != 0} ? 'width:' + (${count1} * 100 / ${totalReviews}) + '%' : 'width:0%'">
-                </div>
-              </div>
-              <span class="rating-count" th:text="${count1}">0</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- 리뷰 목록 -->
-        <div th:each="review : ${reviewsPage.content}" 
-             class="review"
-             th:attr="data-review-id=${review.reviewId}, data-rating=${review.rating}, data-comment=${review.comment}"
-             th:data-comments="${reviewComments[review.reviewId]}">
-
-          <!-- 1) 상단: 별점 + 날짜 -->
-          <div class="review-header">
-            <span class="review-stars" th:text="'★ ' + ${review.rating}"></span>
-            <span class="review-date" 
-                  th:text="${#dates.format(review.createdAt, 'yyyy-MM-dd HH:mm:ss')}">
-              2023-08-01 12:34
-            </span>
-          </div>
-
-          <!-- 2) 중간: 리뷰 텍스트 -->
-          <div class="review-body" th:text="${review.comment}">
-            리뷰 내용...
-          </div>
-
-          <!-- 3) 하단: 리뷰 사진 (있을 경우) -->
-          <div class="review-image" th:if="${review.imageUrl}">
-            <img th:src="@{${review.imageUrl}}"
-                 alt="Review Image"
-                 onclick="openImagePopup(this.src)"/>
-          </div>
-
-          <!-- 리뷰 수정/삭제/댓글 버튼 -->
-          <div class="review-actions">
-            <button class="btn-edit" th:onclick="|openEditModal(${review.reviewId})|">수정</button>
-            <form th:action="@{'/products/' + ${product.productId} + '/reviews/delete/' + ${review.reviewId}}"
-                  method="post"
-                  style="display:inline;"
-                  onsubmit="return confirm('리뷰를 삭제하시겠습니까?');">
-              <input type="hidden" name="_method" value="delete"/>
-              <button type="submit" class="btn-delete">삭제</button>
-            </form>
-            <button class="btn-comment" th:onclick="|openCommentModal(${review.reviewId})|">댓글</button>
-          </div>
-
-          <!-- 4) 댓글 박스 (회색 배경) -->
-          <div class="review-comments"
-               th:if="${reviewComments[review.reviewId] != null and #lists.size(reviewComments[review.reviewId]) > 0}">
-            <h4>댓글</h4>
-            <ul>
-			  <li th:each="c : ${reviewComments[review.reviewId]}">
-			    <strong th:text="${c.nickname}"></strong> :  <!-- ✅ nickname 표시 -->
-			    <span th:text="${c.content}"></span>
-			    <small th:text="${#dates.format(c.createdAt, 'yyyy-MM-dd HH:mm:ss')}"
-			           th:if="${c.createdAt != null}"></small>
-			  </li>
-			</ul>
-          </div>
-        </div>
-
-        <!-- 페이지네이션 -->
-        <ul class="pagination" th:if="${reviewsPage.totalPages > 1}">
-          <li th:each="i : ${#numbers.sequence(0, reviewsPage.totalPages - 1)}">
-            <a th:href="@{/products/{id}(id=${product.productId}, page=${i})}"
-               th:text="${i+1}"
-               th:classappend="${(i == reviewsPage.number) ? 'active' : ''}"></a>
-          </li>
-        </ul>
+      <!-- 옵션 선택 -->
+      <p><strong>옵션: </strong>
+        <select id="product-option" onchange="addOption()">
+          <option value="">옵션을 선택하세요</option>
+          <option th:each="opt : ${#strings.arraySplit(product.option,',')}" th:text="${opt}" th:value="${opt}"></option>
+        </select>
+      </p>
+      <div id="selected-options" class="option-list" style="display:none;"></div>
+      <div class="price-summary">
+        <div class="price-summary-label">총 상품금액(<span id="total-quantity">0</span>개)</div>
+        <div class="price-summary-value" id="total-price">0원</div>
       </div>
-    </div>
+      <form th:action="@{/cart/add}" method="post" class="form-buttons">
+        <input type="hidden" id="userId" value="1"/>
+        <input type="hidden" id="productId" th:value="${product.productId}"/>
+        <input type="hidden" name="quantity" id="quantity-value" th:value="1"/>
+        <button id="wishlistButton" type="button" class="wishlist-btn">❤️ 찜하기</button>
 
-    <!-- 우측 하단 고정 버튼들 -->
-    <div class="fixed-action-buttons">
-      <a th:href="@{'/products/edit/' + ${product.productId}}">수정하기</a>
-      <form th:action="@{'/products/delete/' + ${product.productId}}"
-            method="post"
-            onsubmit="return confirm('상품을 삭제하시겠습니까?');">
-        <input type="hidden" name="_method" value="delete"/>
-        <button type="submit">삭제하기</button>
+        <!-- 장바구니 담기 버튼(수정X)-->
+        <label for="quantity">수량:</label>
+        <input type="number" id="quantity" value="1" min="1" required>
+        <button type="button" class="add-to-cart" onclick="addToCart()">장바구니 담기</button>
+
       </form>
-      <a id="openReviewModalBtnFixed" href="javascript:void(0);" onclick="openReviewModal()">리뷰 작성하기</a>
-      <a href="/products">목록으로</a>
-      <!-- <a href="/wishlist">찜한상품</a> -->
-    </div>
-
-    <!-- 이미지 팝업 -->
-    <div id="imagePopup" class="image-popup" onclick="closeImagePopup(event)">
-      <div class="popup-content">
-        <span class="close-btn" onclick="closeImagePopup(event)">&times;</span>
-        <img id="popupImage" src="" alt="확대된 리뷰 이미지"/>
-      </div>
-    </div>
-
-    <!-- 리뷰 작성 모달 -->
-    <div id="reviewModal" class="modal">
-      <div class="modal-content">
-        <span class="close" onclick="closeReviewModal()">&times;</span>
-        <h2>리뷰 작성</h2>
-        <form id="reviewForm"
-              th:action="@{'/products/' + ${product.productId} + '/reviews'}"
-              method="post"
-              enctype="multipart/form-data">
-          <label for="rating">평점 (1~5):</label>
-          <input type="number" id="rating" name="rating" min="1" max="5" required/>
-          <label for="comment">리뷰 내용:</label>
-          <textarea id="comment" name="comment" placeholder="리뷰를 남겨주세요" required></textarea>
-          <label for="imageFile">파일 선택:</label>
-          <input type="file" id="imageFile" name="imageFile" accept="image/*"/>
-          <button type="submit">리뷰 등록</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- 리뷰 수정 모달 -->
-    <div id="editReviewModal" class="modal">
-      <div class="modal-content">
-        <span class="close" onclick="closeEditModal()">&times;</span>
-        <h2>리뷰 수정</h2>
-        <form id="editReviewForm" method="post" enctype="multipart/form-data">
-          <label for="editRating">평점 (1~5):</label>
-          <input type="number" id="editRating" name="rating" min="1" max="5" required/>
-          <label for="editComment">리뷰 내용:</label>
-          <textarea id="editComment" name="comment" placeholder="리뷰를 남겨주세요" required></textarea>
-          <label for="editImageFile">파일 선택 (수정 시 새 파일 선택):</label>
-          <input type="file" id="editImageFile" name="imageFile" accept="image/*"/>
-          <button type="submit">리뷰 수정</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- 댓글 모달 -->
-    <div id="commentModal" class="modal">
-      <div class="modal-content">
-        <span class="close" onclick="closeCommentModal()">&times;</span>
-        <h2>댓글</h2>
-        <form id="commentForm" onsubmit="return submitCommentAjax(event)">
-          <input type="text" name="content" placeholder="댓글 입력" required />
-          <!-- <input type="hidden" name="userId" value="1"/> -->
-          <button type="submit">댓글 추가</button>
-        </form>
-      </div>
     </div>
   </div>
-</div>
-
-<!-- 푸터 영역 -->
-<div th:replace="fragment/footer :: footerFragment"></div>
-
-<script>
-  document.addEventListener("DOMContentLoaded", function(){
-    /* 스와이퍼 초기화 */
-    var galleryThumbs = new Swiper('.gallery-thumbs', {
-      spaceBetween: 10,
-      slidesPerView: 4,
-      slidesPerGroup: 4,
-      watchSlidesProgress: true,
-      watchOverflow: true,
-      navigation: {
-        nextEl: '.thumbs-next',
-        prevEl: '.thumbs-prev'
-      }
-    });
-    var galleryTop = new Swiper('.gallery-top', {
-      spaceBetween: 10,
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev'
-      },
-      thumbs: {
-        swiper: galleryThumbs
-      },
-      autoplay: {
-        delay: 2000,
-        disableOnInteraction: false
-      }
-    });
-
-    /* 내일 날짜 자동 계산 */
-    const shippingBlock = document.getElementById('shipping-block');
-    if(shippingBlock){
-      const today = new Date();
-      const tomorrow = new Date(today);
-      tomorrow.setDate(today.getDate() + 1);
-      const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
-      const dd = String(tomorrow.getDate()).padStart(2, '0');
-      shippingBlock.innerHTML = `
-        <img src="/images/product/truck.png" alt="트럭 아이콘"/>
-        지금 주문 시 내일(${mm}.${dd}) 바로 발송
-      `;
-    }
-
-    updateTotalPrice(); // 페이지 로드시 합계 계산
-  });
-
-  /* 상세정보 펼쳐보기/접기 */
-  function toggleDescription(){
-    let section = document.getElementById("hidden-description");
-    let btn = document.getElementById("toggle-button");
-    if(section.classList.contains("show")){
-      section.classList.remove("show");
-      setTimeout(() => section.style.display = "none", 300);
-      btn.innerHTML = '상세정보 펼쳐보기 <i>▼</i>';
-    } else {
-      section.style.display = "block";
-      setTimeout(() => section.classList.add("show"), 10);
-      btn.innerHTML = '상세정보 접기 <i>▲</i>';
-    }
-  }
-
-  /* 탭 전환 */
-  function openTab(tabId){
-    document.querySelectorAll('.tab-pane-new').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.tab-btn-new').forEach(b => b.classList.remove('active'));
-    document.getElementById(tabId).classList.add('active');
-    document.querySelector(`.tab-btn-new[onclick*="${tabId}"]`).classList.add('active');
-  }
-
-  /* 수량 증가/감소 */
-  function changeQuantityByButton(diff){
-    const qtyInput = document.getElementById("quantity");
-    let currentVal = parseInt(qtyInput.value) || 1;
-    currentVal += diff;
-    if(currentVal < 1) currentVal = 1;
-    qtyInput.value = currentVal;
-    updateTotalPrice();
-  }
-
-  /* 합계 계산 (실시간 업데이트) */
-  function updateTotalPrice(){
-    const productPriceEl = document.getElementById('product-price');
-    const quantityInput  = document.getElementById('quantity');
-    const totalPriceEl   = document.getElementById('total-price');
-    const livePriceRight = document.getElementById('live-price-right');
-
-    if(!productPriceEl || !quantityInput || !totalPriceEl) return;
-
-    const basePrice = parseInt(productPriceEl.innerText.replace(/[^\d]/g, '')) || 0;
-    const mainQty   = parseInt(quantityInput.value) || 1;
-
-    const total = basePrice * mainQty;
-    const formatted = total.toLocaleString() + '원';
-
-    totalPriceEl.innerText = formatted;
-    if(livePriceRight) {
-      livePriceRight.innerText = formatted;
-    }
-
-    const hiddenQty = document.getElementById('quantity-value');
-    if(hiddenQty) hiddenQty.value = mainQty;
-  }
-
-  /* 찜하기 */
-  document.addEventListener("DOMContentLoaded", function(){
-    const wishlistButton = document.getElementById('wishlistButton');
-    if(wishlistButton){
-      wishlistButton.addEventListener('click', async function(){
-        const productId = document.getElementById('productId').value;
-        if(!productId){
-          alert('상품 정보를 찾을 수 없습니다.');
-          return;
+  <!-- 상세 이미지 / 리뷰 영역 -->
+  <div class="content-section">
+    <div class="product-detail-images">
+      <div th:if="${product.detailImageUrls != null and product.detailImageUrls.size() > 0}">
+        <img th:src="@{${product.detailImageUrls[0]}}" alt="상세 이미지"/>
+      </div>
+      <div id="hidden-description">
+        <div th:each="img, iterStat : ${product.detailImageUrls}" th:if="${iterStat.index > 0}">
+          <img th:src="@{${img}}" alt="상세 이미지"/>
+        </div>
+      </div>
+      <button id="toggle-button" onclick="toggleDescription()">상세정보 펼쳐보기 <i>▼</i></button>
+    </div>
+    <!-- 리뷰 영역 -->
+    <div class="reviews">
+      <h3>리뷰</h3>
+      <div class="review-summary">
+        <div class="average-rating-container">
+          <div class="average-rating-display"><span th:text="${averageRating} + '점'">0점</span></div>
+          <div class="average-rating-stars"><span th:text="${averageStars}">⭐⭐⭐⭐☆</span></div>
+        </div>
+        <div class="rating-bars">
+          <div class="rating-row">
+            <span class="rating-text">5점</span>
+            <div class="rating-bar">
+              <div class="rating-fill" th:style="${totalReviews != 0} ? 'width:' + (${count5} * 100 / ${totalReviews}) + '%' : 'width:0%'"></div>
+            </div>
+            <span class="rating-count" th:text="${count5}">0</span>
+          </div>
+          <div class="rating-row">
+            <span class="rating-text">4점</span>
+            <div class="rating-bar">
+              <div class="rating-fill" th:style="${totalReviews != 0} ? 'width:' + (${count4} * 100 / ${totalReviews}) + '%' : 'width:0%'"></div>
+            </div>
+            <span class="rating-count" th:text="${count4}">0</span>
+          </div>
+          <div class="rating-row">
+            <span class="rating-text">3점</span>
+            <div class="rating-bar">
+              <div class="rating-fill" th:style="${totalReviews != 0} ? 'width:' + (${count3} * 100 / ${totalReviews}) + '%' : 'width:0%'"></div>
+            </div>
+            <span class="rating-count" th:text="${count3}">0</span>
+          </div>
+          <div class="rating-row">
+            <span class="rating-text">2점</span>
+            <div class="rating-bar">
+              <div class="rating-fill" th:style="${totalReviews != 0} ? 'width:' + (${count2} * 100 / ${totalReviews}) + '%' : 'width:0%'"></div>
+            </div>
+            <span class="rating-count" th:text="${count2}">0</span>
+          </div>
+          <div class="rating-row">
+            <span class="rating-text">1점</span>
+            <div class="rating-bar">
+              <div class="rating-fill" th:style="${totalReviews != 0} ? 'width:' + (${count1} * 100 / ${totalReviews}) + '%' : 'width:0%'"></div>
+            </div>
+            <span class="rating-count" th:text="${count1}">0</span>
+          </div>
+        </div>
+      </div>
+      <!-- 리뷰 목록 -->
+      <div th:each="review : ${reviewsPage.content}" class="review"
+           th:attr="data-review-id=${review.reviewId}, data-rating=${review.rating}, data-comment=${review.comment}"
+           th:data-comments="${reviewComments[review.reviewId]}">
+        <img th:if="${review.imageUrl}" th:src="@{${review.imageUrl}}" alt="Review Image" class="review-image" onclick="openImagePopup(this.src)"/>
+        <p class="review-rating" th:data-rating="${review.rating}">
+          <strong>평점:</strong>
+          <span th:text="${#strings.repeat('⭐', review.rating)}"></span>
+          <span th:text="${#strings.repeat('☆', 5 - review.rating)}"></span>(<span th:text="${review.rating}"></span>점)
+        </p>
+        <p th:text="${review.comment}"></p>
+        <p th:text="${#dates.format(review.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></p>
+        <!-- 인라인 댓글 목록 -->
+        <div class="review-comments"
+             th:if="${reviewComments[review.reviewId] != null and #lists.size(reviewComments[review.reviewId]) > 0}">
+          <ul>
+            <li th:each="c : ${reviewComments[review.reviewId]}">
+              <strong th:text="${c.userId}"></strong> : <span th:text="${c.content}"></span>
+              <small th:text="${#dates.format(c.createdAt, 'yyyy-MM-dd HH:mm:ss')}" th:if="${c.createdAt != null}"></small>
+            </li>
+          </ul>
+        </div>
+        <!-- 리뷰 수정/삭제/댓글 버튼들 -->
+        <div class="review-actions">
+          <button class="btn-edit" th:onclick="|openEditModal(${review.reviewId})|">수정</button>
+          <form th:action="@{'/products/' + ${product.productId} + '/reviews/delete/' + ${review.reviewId}}"
+                method="post" style="display:inline;"
+                onsubmit="return confirm('리뷰를 삭제하시겠습니까?');">
+            <input type="hidden" name="_method" value="delete"/>
+            <button type="submit" class="btn-delete">삭제</button>
+          </form>
+          <button class="btn-comment" th:onclick="|openCommentModal(${review.reviewId})|">댓글</button>
+        </div>
+      </div>
+      <!-- 페이지네이션 -->
+      <ul class="pagination" th:if="${reviewsPage.totalPages > 1}">
+        <li th:each="i : ${#numbers.sequence(0, reviewsPage.totalPages - 1)}">
+          <a th:href="@{/products/{id}(id=${product.productId}, page=${i})}"
+             th:text="${i+1}"
+             th:classappend="${(i == reviewsPage.number) ? 'active' : ''}"></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!-- 우측 하단 고정 버튼들 -->
+  <div class="fixed-action-buttons">
+    <a th:href="@{'/products/edit/' + ${product.productId}}">수정하기</a>
+    <form th:action="@{'/products/delete/' + ${product.productId}}"
+          method="post"
+          onsubmit="return confirm('상품을 삭제하시겠습니까?');">
+      <input type="hidden" name="_method" value="delete"/>
+      <button type="submit">삭제하기</button>
+    </form>
+    <a id="openReviewModalBtnFixed" href="javascript:void(0);" onclick="openReviewModal()">리뷰 작성하기</a>
+    <a href="/products">목록으로</a>
+    <a href="/wishlist">찜한상품</a>
+  </div>
+  <!-- 이미지 팝업 -->
+  <div id="imagePopup" class="image-popup" onclick="closeImagePopup(event)">
+    <div class="popup-content">
+      <span class="close-btn" onclick="closeImagePopup(event)">&times;</span>
+      <img id="popupImage" src="" alt="확대된 리뷰 이미지"/>
+    </div>
+  </div>
+  <!-- 리뷰 작성 모달 -->
+  <div id="reviewModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeReviewModal()">&times;</span>
+      <h2>리뷰 작성</h2>
+      <form id="reviewForm"
+            th:action="@{'/products/' + ${product.productId} + '/reviews'}"
+            method="post"
+            enctype="multipart/form-data">
+        <label for="rating">평점 (1~5):</label>
+        <input type="number" id="rating" name="rating" min="1" max="5" required/>
+        <label for="comment">리뷰 내용:</label>
+        <textarea id="comment" name="comment" placeholder="리뷰를 남겨주세요" required></textarea>
+        <label for="imageFile">파일 선택:</label>
+        <input type="file" id="imageFile" name="imageFile" accept="image/*"/>
+        <button type="submit">리뷰 등록</button>
+      </form>
+    </div>
+  </div>
+  <!-- 리뷰 수정 모달 -->
+  <div id="editReviewModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeEditModal()">&times;</span>
+      <h2>리뷰 수정</h2>
+      <form id="editReviewForm" method="post" enctype="multipart/form-data">
+        <label for="editRating">평점 (1~5):</label>
+        <input type="number" id="editRating" name="rating" min="1" max="5" required/>
+        <label for="editComment">리뷰 내용:</label>
+        <textarea id="editComment" name="comment" placeholder="리뷰를 남겨주세요" required></textarea>
+        <label for="editImageFile">파일 선택 (수정 시 새 파일 선택):</label>
+        <input type="file" id="editImageFile" name="imageFile" accept="image/*"/>
+        <button type="submit">리뷰 수정</button>
+      </form>
+    </div>
+  </div>
+  <!-- 댓글 모달 (댓글 입력 전용) -->
+  <div id="commentModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeCommentModal()">&times;</span>
+      <h2>댓글</h2>
+      <form id="commentForm" onsubmit="return submitCommentAjax(event)">
+        <input type="text" name="content" placeholder="댓글 입력" required />
+        <input type="hidden" name="userId" value="1"/>
+        <button type="submit">댓글 추가</button>
+      </form>
+    </div>
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function(){
+      // 썸네일 슬라이더: slidesPerView=4, slidesPerGroup=4, watchOverflow=true
+      var galleryThumbs = new Swiper('.gallery-thumbs', {
+        spaceBetween:10,
+        slidesPerView:4,
+        slidesPerGroup:4,
+        watchSlidesProgress:true,
+        watchOverflow:true,
+        navigation: {
+          nextEl: '.thumbs-next',
+          prevEl: '.thumbs-prev'
         }
-        const response = await fetch(`/wishlist/add`, {
-          method:'POST',
-          headers : {
-            "Content-Type" : "application/json"
-          },
-          body : JSON.stringify({productId: Number(productId)})
+      });
+      // 메인 슬라이더
+      var galleryTop = new Swiper('.gallery-top', {
+        spaceBetween:10,
+        navigation:{ nextEl:'.swiper-button-next', prevEl:'.swiper-button-prev'},
+        // 썸네일 슬라이더와 연결
+        thumbs:{ swiper:galleryThumbs },
+        autoplay:{ delay:2000, disableOnInteraction:false }
+      });
+    });
+    function toggleDescription(){
+      let section = document.getElementById("hidden-description");
+      let btn = document.getElementById("toggle-button");
+      if(section.classList.contains("show")){
+        section.classList.remove("show");
+        setTimeout(()=>section.style.display="none",300);
+        btn.innerHTML = '상세정보 펼쳐보기 <i>▼</i>';
+      } else {
+        section.style.display="block";
+        setTimeout(()=>section.classList.add("show"),10);
+        btn.innerHTML = '상세정보 접기 <i>▲</i>';
+      }
+    }
+    function openTab(tabId){
+      document.querySelectorAll('.tab-pane-new').forEach(t=>t.classList.remove('active'));
+      document.querySelectorAll('.tab-btn-new').forEach(b=>b.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      document.querySelector(`.tab-btn-new[onclick*="${tabId}"]`).classList.add('active');
+    }
+    let selectedOptions = [];
+    function addOption(){
+      const select = document.getElementById("product-option");
+      const text = select.options[select.selectedIndex].text;
+      const value = select.value;
+      if(!value) return;
+      if(selectedOptions.some(o => o.value === value)){
+        alert("이미 선택한 옵션입니다.");
+        return;
+      }
+      selectedOptions.push({value, text, quantity:1});
+      updateOptionList();
+    }
+    function updateOptionList(){
+      const container = document.getElementById("selected-options");
+      const totalQtyEl = document.getElementById("total-quantity");
+      if(selectedOptions.length === 0){
+        container.style.display="none";
+        totalQtyEl.innerText=0;
+        updateTotalPrice();
+        return;
+      }
+      container.style.display="block";
+      container.innerHTML = "";
+      let totalQty = 0;
+      selectedOptions.forEach((opt, i)=>{
+        totalQty += opt.quantity;
+        const row = document.createElement("div");
+        row.classList.add("option-item");
+        row.innerHTML = `
+          <span class="option-name">${opt.text}</span>
+          <div class="option-controls">
+            <button onclick="changeQuantity(${i},-1)">-</button>
+            <span>${opt.quantity}</span>
+            <button onclick="changeQuantity(${i},1)">+</button>
+            <button onclick="removeOption(${i})">X</button>
+          </div>`;
+        container.appendChild(row);
+      });
+      totalQtyEl.innerText = totalQty;
+      updateTotalPrice();
+    }
+    function changeQuantity(index, diff){
+      selectedOptions[index].quantity += diff;
+      if(selectedOptions[index].quantity < 1){
+        selectedOptions[index].quantity = 1;
+      }
+      updateOptionList();
+    }
+    function removeOption(index){
+      selectedOptions.splice(index,1);
+      updateOptionList();
+    }
+    function updateTotalPrice(){
+      let basePrice = parseInt(document.getElementById('product-price').innerText.replace('원','') || '0');
+      let total = 0;
+      selectedOptions.forEach(opt => {
+        total += basePrice * opt.quantity;
+      });
+      document.getElementById('total-price').innerText = total + '원';
+    }
+    document.addEventListener("DOMContentLoaded", function(){
+      const wishlistButton = document.getElementById('wishlistButton');
+      if(wishlistButton){
+        wishlistButton.addEventListener('click', async function(){
+          const userId = document.getElementById('userId').value;
+          const productId = document.getElementById('productId').value;
+          if(!userId || !productId){
+            alert('유저 정보 또는 상품 정보를 찾을 수 없습니다.');
+            return;
+          }
+          const response = await fetch(`/wishlist/add?userId=${userId}&productId=${productId}`, { method:'POST' });
+          const data = await response.json();
+          if(response.status === 400){
+            console.log("찜 목록 추가 실패", data);
+          }
+          if(response.status === 200){
+            console.log("찜 하기 성공!", data);
+            alert("찜 목록에 추가되었습니다.");
+          }
         });
-        const data = await response.json();
-        if(response.status === 400){
-          console.log("찜 목록 추가 실패", data);
-        }
-        if(response.status === 200){
-          console.log("찜 하기 성공!", data);
-          alert("찜 목록에 추가되었습니다.");
-        }
-      });
-    }
-  });
-
-  /* 장바구니 */
-  function addToCart() {
-    let productId = "[[${product.productId}]]";
-    let quantity = document.getElementById("quantity").value;
-    fetch(`/cart/items/${productId}/add?quantity=${quantity}`, { method:"POST" })
-    .then(response => {
-      if(!response.ok){
-        throw new Error("네트워크 응답이 올바르지 않습니다.");
       }
-      return response.json();
-    })
-    .then(data => {
-      alert("장바구니에 상품이 추가되었습니다!");
-      console.log("업데이트된 장바구니:", data);
-    })
-    .catch(error => {
-      console.error("Error:", error);
-      alert("오류가 발생했습니다.");
     });
-  }
-
-  /* 이미지 팝업 열기/닫기 */
-  function openImagePopup(imageSrc){
-    const popup = document.getElementById("imagePopup");
-    document.getElementById("popupImage").src = imageSrc;
-    popup.style.display = "flex";
-  }
-  function closeImagePopup(event){
-    if(event.target.id === "imagePopup" || event.target.classList.contains("close-btn")){
-      document.getElementById("imagePopup").style.display = "none";
+    function openImagePopup(imageSrc){
+      const popup = document.getElementById("imagePopup");
+      document.getElementById("popupImage").src = imageSrc;
+      popup.style.display = "flex";
     }
-  }
-
-  /* 리뷰 작성 모달 열기/닫기 */
-  function openReviewModal(){
-    document.getElementById('reviewModal').style.display = 'flex';
-  }
-  function closeReviewModal(){
-    document.getElementById('reviewModal').style.display = 'none';
-  }
-
-  /* 리뷰 수정 모달 열기/닫기 */
-  function openEditModal(reviewId){
-    const reviewElem = document.querySelector(`.review[data-review-id="${reviewId}"]`);
-    if(!reviewElem) return;
-    const currentRating = reviewElem.getAttribute('data-rating');
-    const currentComment = reviewElem.getAttribute('data-comment');
-    document.getElementById('editRating').value = currentRating;
-    document.getElementById('editComment').value = currentComment;
-    const productId = document.getElementById('productId').value;
-    document.getElementById('editReviewForm').action = `/products/${productId}/reviews/edit/${reviewId}`;
-    document.getElementById('editReviewModal').style.display = 'flex';
-  }
-  function closeEditModal(){
-    document.getElementById('editReviewModal').style.display = 'none';
-  }
-
-  /* 댓글 모달 열기/닫기 */
-  function openCommentModal(reviewId){
-    const modal = document.getElementById('commentModal');
-    modal.style.display = 'flex';
-    const productId = document.getElementById('productId').value;
-    document.getElementById('commentForm').action = `/products/${productId}/reviews/${reviewId}/comments`;
-  }
-  function closeCommentModal(){
-    document.getElementById('commentModal').style.display = 'none';
-  }
-
-  /* 모달 바깥 클릭 시 닫기 */
-  window.onclick = function(e){
-    const reviewModal = document.getElementById('reviewModal');
-    const editModal = document.getElementById('editReviewModal');
-    const commentModal = document.getElementById('commentModal');
-    if(e.target === reviewModal){ reviewModal.style.display = 'none'; }
-    if(e.target === editModal){ editModal.style.display = 'none'; }
-    if(e.target === commentModal){ commentModal.style.display = 'none'; }
-  }
-
-  /* 댓글 등록 AJAX */
-  function submitCommentAjax(e){
-    e.preventDefault();
-    const form = e.target;
-    const formData = new FormData(form);
-    const url = form.action;
-    fetch(url, { method:'POST', body:formData })
-    .then(resp => resp.json())
-    .then(data => {
-      console.log("댓글 등록 성공:", data);
-      const reviewId = url.match(/reviews\/(\d+)\/comments/)[1];
+    function closeImagePopup(event){
+      if(event.target.id === "imagePopup" || event.target.classList.contains("close-btn")){
+        document.getElementById("imagePopup").style.display = "none";
+      }
+    }
+    function openReviewModal(){
+      document.getElementById('reviewModal').style.display = 'flex';
+    }
+    function closeReviewModal(){
+      document.getElementById('reviewModal').style.display = 'none';
+    }
+    function openEditModal(reviewId){
+      const reviewElem = document.querySelector(`.review[data-review-id="${reviewId}"]`);
+      if(!reviewElem) return;
+      const currentRating = reviewElem.getAttribute('data-rating');
+      const currentComment = reviewElem.getAttribute('data-comment');
+      document.getElementById('editRating').value = currentRating;
+      document.getElementById('editComment').value = currentComment;
       const productId = document.getElementById('productId').value;
-      fetch(`/${productId}/reviews/${reviewId}/comments`)
-      .then(res => res.json())
-      .then(updatedComments => {
-        const reviewElem = document.querySelector(`.review[data-review-id="${reviewId}"]`);
-        if(reviewElem){
-          reviewElem.setAttribute('data-comments', JSON.stringify(updatedComments));
-          let commentsContainer = reviewElem.querySelector('.review-comments');
-          if(!commentsContainer){
-            commentsContainer = document.createElement('div');
-            commentsContainer.classList.add('review-comments');
-            commentsContainer.innerHTML = '<h4>댓글</h4><ul></ul>';
-            reviewElem.appendChild(commentsContainer);
-          }
-          const ul = commentsContainer.querySelector('ul');
-          ul.innerHTML = '';
-          if(updatedComments.length > 0){
-            updatedComments.forEach(c => {
-              const li = document.createElement('li');
-              li.innerHTML = `
-                	  <strong>${c.nickname}</strong> : <span>${c.content}</span>
-                	  <small style="margin-left:5px;font-size:12px;color:#888;">
-                	    ${new Date(c.createdAt).toLocaleString()}
-                	  </small>
-                	`;
-              ul.appendChild(li);
+      document.getElementById('editReviewForm').action = `/products/${productId}/reviews/edit/${reviewId}`;
+      document.getElementById('editReviewModal').style.display = 'flex';
+    }
+    function closeEditModal(){
+      document.getElementById('editReviewModal').style.display = 'none';
+    }
+    function openCommentModal(reviewId){
+      const modal = document.getElementById('commentModal');
+      modal.style.display = 'flex';
+      const productId = document.getElementById('productId').value;
+      document.getElementById('commentForm').action = `/products/${productId}/reviews/${reviewId}/comments`;
+    }
+    function closeCommentModal(){
+      document.getElementById('commentModal').style.display = 'none';
+    }
+    window.onclick = function(e){
+      const reviewModal = document.getElementById('reviewModal');
+      const editModal = document.getElementById('editReviewModal');
+      const commentModal = document.getElementById('commentModal');
+      if(e.target === reviewModal){ reviewModal.style.display = 'none'; }
+      if(e.target === editModal){ editModal.style.display = 'none'; }
+      if(e.target === commentModal){ commentModal.style.display = 'none'; }
+    }
+    function submitCommentAjax(e){
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form);
+      const url = form.action;
+      fetch(url, { method:'POST', body:formData })
+        .then(resp => resp.json())
+        .then(data => {
+          console.log("댓글 등록 성공:", data);
+          const reviewId = url.match(/reviews\/(\d+)\/comments/)[1];
+          const productId = document.getElementById('productId').value;
+          fetch(`/${productId}/reviews/${reviewId}/comments`)
+            .then(res => res.json())
+            .then(updatedComments => {
+              const reviewElem = document.querySelector(`.review[data-review-id="${reviewId}"]`);
+              if(reviewElem){
+                reviewElem.setAttribute('data-comments', JSON.stringify(updatedComments));
+                let commentsContainer = reviewElem.querySelector('.review-comments');
+                if(!commentsContainer){
+                  commentsContainer = document.createElement('div');
+                  commentsContainer.classList.add('review-comments');
+                  commentsContainer.innerHTML = '<h4>댓글 목록</h4><ul></ul>';
+                  reviewElem.appendChild(commentsContainer);
+                }
+                const ul = commentsContainer.querySelector('ul');
+                ul.innerHTML = '';
+                if(updatedComments.length > 0){
+                  updatedComments.forEach(c => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                      <strong>${c.userId}</strong> : <span>${c.content}</span>
+                      <small style="margin-left:5px;font-size:12px;color:#888;">
+                        ${new Date(c.createdAt).toLocaleString()}
+                      </small>
+                    `;
+                    ul.appendChild(li);
+                  });
+                } else {
+                  commentsContainer.remove();
+                }
+              }
             });
-          } else {
-            commentsContainer.remove();
-          }
+          form.reset();
+          closeCommentModal();
+        })
+        .catch(err => {
+          console.error("댓글 등록 실패:", err);
+          alert("댓글 등록 중 오류 발생");
+        });
+      return false;
+    }
+
+    <!-- 장바구니 상품 담기 ajax-->
+    function addToCart() {
+      let productId = "[[${product.productId}]]";
+      let quantity = document.getElementById("quantity").value;
+
+      fetch(`/cart/items/${productId}/add?quantity=${quantity}`, {  // URL에 쿼리 스트링으로 전달
+        method: "POST"
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("네트워크 응답이 올바르지 않습니다.");
         }
+        return response.json();
+      })
+      .then(data => {
+        alert("장바구니에 상품이 추가되었습니다!");  // 성공 메시지
+        console.log("업데이트된 장바구니:", data);  // 장바구니 데이터 확인
+      })
+      .catch(error => {
+        console.error("Error:", error);
+        alert("오류가 발생했습니다.");
       });
-      form.reset();
-      closeCommentModal();
-    })
-    .catch(err => {
-      console.error("댓글 등록 실패:", err);
-      alert("댓글 등록 중 오류 발생");
-    });
-    return false;
-  }
-</script>
+    }
+  </script>
 </body>
 </html>

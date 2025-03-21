@@ -17,10 +17,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
   User findByUserIdAndAccountType(String userId, String accountType);
 
+
   User findByEmail(String email);
 
-  Optional<User> findByUserId(String userId);
-
+  User findByUserId(String userId);
 
   User findByUserIdAndEmail(String userId, String email);
 

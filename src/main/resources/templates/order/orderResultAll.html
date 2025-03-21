@@ -3,11 +3,93 @@
 <head>
 	<meta charset="UTF-8">
 	<title>주문 상세 정보</title>
-	<link rel="stylesheet" href="/css/order/orderAllList.css">
+	<style>
+		/* 주문 상세정보 페이지 스타일 - 클래스명을 'order-container'로 변경 */
+        .order-container {
+          max-width: 1200px;
+          margin: 30px auto;
+          padding: 20px;
+          background-color: #ffffff;
+          border-radius: 10px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .order-container h1 {
+          text-align: center;
+          color: #333;
+          margin-bottom: 20px;
+        }
+        .order-container a.button {
+          display: inline-block;
+          background-color: #007bff;
+          color: #fff;
+          text-decoration: none;
+          padding: 10px 15px;
+          border-radius: 5px;
+          box-shadow: 0 2px 4px rgba(0, 123, 255, 0.4);
+          transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        .order-container a.button:hover {
+          background-color: #0056b3;
+          box-shadow: 0 4px 8px rgba(0, 123, 255, 0.6);
+        }
+        .order-container table {
+          width: 100%;
+          border-collapse: separate;
+          border-spacing: 0;
+          margin-top: 20px;
+          background-color: #fafafa;
+          border-radius: 8px;
+          overflow: hidden;
+          box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.05);
+        }
+        .order-container table thead th {
+          background-color: #f5f5f5;
+          color: #333;
+          padding: 12px;
+          border-bottom: 2px solid #ddd;
+          text-align: center;
+        }
+        .order-container table tbody td {
+          padding: 12px;
+          text-align: center;
+          border-bottom: 1px solid #eee;
+        }
+        .order-container table tbody tr:hover {
+          background-color: #f0f8ff;
+        }
+        .order-container td > div {
+          background-color: #fff;
+          border: 1px solid #ddd;
+          padding: 10px;
+          margin: 5px 0;
+          border-radius: 5px;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .order-container .pagination {
+          margin-top: 20px;
+          text-align: center;
+        }
+        .order-container .pagination a {
+          display: inline-block;
+          margin: 0 5px;
+          padding: 8px 12px;
+          color: #007bff;
+          text-decoration: none;
+          border: 1px solid #ddd;
+          border-radius: 5px;
+          transition: background-color 0.3s, color 0.3s;
+        }
+        .order-container .pagination a:hover,
+        .order-container .pagination a.active {
+          background-color: #007bff;
+          color: #fff;
+          border-color: #007bff;
+        }
+	</style>
 </head>
 <body>
 <h1>주문 상세정보</h1>
-<div class="container">
+<div class="order-container">
 	<p>
 		<a href="/order" class="button">메인페이지로</a>
 	</p>
@@ -27,49 +109,59 @@
 		<thead>
 		<tr>
 			<th>주문번호</th>
-			<th>결제 상태</th>
 			<th>주문자 ID</th>
-			<th>총 가격</th>
-			<th>주문/취소 시간</th>
-			<th>배송 상태</th>
+			<th>주문시간</th>
+			<th>주문정보</th>
+			<th>결제가격</th>
 			<th>상세보기</th>
 		</tr>
 		</thead>
 		<tbody>
 		<tr th:each="purchase : ${purchase}">
-			<td th:text="${purchase.purchaseId}">
+			<td th:text="${purchase.purchaseId}"></td>
+			<td>
+				<a th:href="@{/order/orders/userId?userId={userId}&admin={admin}(userId=${purchase.userId}, admin='admin')}"
+				   th:text="${purchase.userId}"></a>
 			</td>
-			<td th:text="${purchase.cancelAt != null ? '취소' : '주문'}"></td>
-			<td><a th:href="@{/order/orders/userId?userId={userId}&admin={admin}(userId=${purchase.userId}, admin='admin')}" th:text="${purchase.userId}"></a></td>
+			<td th:utext="${#temporals.format(purchase.purchaseProduct[0].createAt, 'yyyy-M-d') + '<br>' + #temporals.format(purchase.purchaseProduct[0].createAt, 'a h시 mm분')}"></td>
+			<td>
+				<div th:text="purchase.purchaseProduct.productName"></div>
+				<div th:each="i : ${item}">
+					<div th:if="${i.purchase.purchaseId == purchase.purchaseId}">
+						<div>상품 이름: <span th:text="${i.productName}"></span></div>
+						<br>
+						<div>배송상태: <span th:text="${i.deliveryStatus}"></span></div>
+						<div th:if="${i.cancelAt != null}">
+							<span th:utext="${'취소/반품 시간 : ' + #temporals.format(i.cancelAt, 'yyyy-M-d')  + '<br>' + #temporals.format(i.cancelAt, 'a h시 mm분')}"></span>
+							<span th:text="${i.cancelReason}"></span>
+						</div>
+					</div>
+				</div>
+			</td>
 			<td th:text="${purchase.totalPrice}"></td>
-			<td th:utext="${purchase.cancelAt != null ? '주문: ' + #temporals.format(purchase.createAt, 'yyyy-M-d')  + '<br>' + #temporals.format(purchase.cancelAt, 'a h시 mm분') + '<hr>' + '취소: ' + #temporals.format(purchase.cancelAt, 'yyyy-M-d') + '<br>' + #temporals.format(purchase.cancelAt, 'a h시 mm분') : #temporals.format(purchase.createAt,'yyyy-M-d') + '<br>' + #temporals.format(purchase.createAt, 'a h시 mm분')}"></td>
-			<td th:text="${purchase.purchaseProduct[0].deliveryStatus}"></td>
 			<td>
 				<form th:action="@{/order/orders/{purchaseId}(purchaseId=${purchase.purchaseId})}" method="get">
-				<input type="hidden" name="purchaseId" th:value="${purchase.purchaseId}"/>
-					<input type="hidden" name="admin" value="admin">
+					<input type="hidden" name="purchaseId" th:value="${purchase.purchaseId}" />
+					<input type="hidden" name="admin" value="admin" />
 					<button type="submit">상세보기</button>
 				</form>
 			</td>
 		</tr>
 		</tbody>
 	</table>
-
 	<!-- 페이징 추가 -->
 	<div class="pagination" th:if="${purchase.totalPages > 1}">
-		<span th:if="${currentPage > 0}">
-			<a th:href="@{/order/admin/orderList(page=${currentPage - 1}, size=${pageSize}, purchaseState=${param.purchaseState})}">이전</a>
-		</span>
-
+      <span th:if="${currentPage > 0}">
+        <a th:href="@{/order/admin/orderList(page=${currentPage - 1}, size=${pageSize}, purchaseState=${param.purchaseState})}">이전</a>
+      </span>
 		<span th:each="pageNum : ${#numbers.sequence(0, purchase.totalPages - 1)}">
-			<a th:href="@{/order/admin/orderList(page=${pageNum}, size=${pageSize}, purchaseState=${param.purchaseState})}"
-			   th:text="${pageNum + 1}"
-			   th:class="${pageNum == currentPage} ? 'active' : ''"></a>
-		</span>
-
+        <a th:href="@{/order/admin/orderList(page=${pageNum}, size=${pageSize}, purchaseState=${param.purchaseState})}"
+		   th:text="${pageNum + 1}"
+		   th:class="${pageNum == currentPage} ? 'active' : ''"></a>
+      </span>
 		<span th:if="${currentPage < purchase.totalPages - 1}">
-			<a th:href="@{/order/admin/orderList(page=${currentPage + 1}, size=${pageSize}, purchaseState=${param.purchaseState})}">다음</a>
-		</span>
+        <a th:href="@{/order/admin/orderList(page=${currentPage + 1}, size=${pageSize}, purchaseState=${param.purchaseState})}">다음</a>
+      </span>
 	</div>
 </div>
 </body>

@@ -101,7 +101,7 @@
 .agree-form .checkbox-container .custom-checkbox {
     width: 40px; /* 체크박스 이미지 너비 */
     height: 40px; /* 체크박스 이미지 높이 */
-    background-image: url('../images/ui/agree-unchecked.png'); /* 체크박스 기본 이미지 */
+    background-image: url('../images/uncheck1.png'); /* 체크박스 기본 이미지 */
     background-size: cover; /* 이미지 크기 조정 */
     display: inline-block; /* 인라인 블록으로 표시 */
     overflow: hidden;
@@ -113,7 +113,7 @@
 
 .agree-form .checkbox-container input:checked + .custom-checkbox {
 
-    background-image: url('../images/ui/agree-checked.png'); /* 체크된 상태 이미지 */
+    background-image: url('../images/check1.png'); /* 체크된 상태 이미지 */
 }
 
 .agree-form #consentForm button {

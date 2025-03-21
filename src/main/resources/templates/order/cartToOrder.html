@@ -3,60 +3,63 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="/css/layout/common.css">
 	<title>주문/결제</title>
 	<style>
 		/* 기존 스타일 유지 */
-        body {
+        .order-container {
             font-family: Arial, sans-serif;
             margin: 0;
-            background-color: #f5f5f5;
+            background-color: white;
             padding: 20px;
             display: flex;
             justify-content: center;
             gap: 20px;
         }
-        .container {
+        .custom-order-container {
+        	margin-top: 100px !important;
             flex: 2;
             max-width: 700px;
+            height: auto !important;
             background-color: white;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        .left-section {
+        .custom-order-left-section {
             padding: 20px;
         }
-        .right-section {
-            width: 250px;
-            height: 350px;
+        .custom-order-right-section {
+            width: 300px;
+            height: 450px;
             padding: 20px;
             position: sticky;
-            top: 20px;
+            top: 120px;
             background-color: white;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             overflow-y: auto;
         }
-        .title {
+        .custom-title {
             font-size: 24px;
             font-weight: bold;
             margin-bottom: 20px;
         }
-        .form-group {
+        .custom-form-group {
             margin-bottom: 30px;
         }
-        .form-group label {
+        .custom-form-group label {
             display: inline-block;
             width: 80px;
             font-weight: bold;
             margin-right: 10px;
             vertical-align: middle;
         }
-        .form-group .input-row {
+        .custom-form-group .custom-input-row {
             display: flex;
             align-items: center;
             margin-bottom: 5px;
         }
-        .form-group input[type="text"] {
+        .custom-form-group input[type="text"] {
             width: 450px;
             padding: 8px;
             font-size: 16px;
@@ -64,18 +67,18 @@
             border-radius: 5px;
             box-sizing: border-box;
         }
-        .form-group select {
+        .custom-form-group select {
             width: 100%;
             padding: 8px;
             border: 1px solid #ccc;
             border-radius: 5px;
             box-sizing: border-box;
         }
-        .form-group .delivery-request-custom {
+        .custom-form-group .delivery-request-custom {
             display: none;
             margin-top: 5px;
         }
-        .form-group button {
+        .custom-form-group button {
             width: 80px;
             padding: 8px;
             background-color: #007bff;
@@ -85,26 +88,26 @@
             cursor: pointer;
             margin-top: 5px;
         }
-        .form-group button:hover {
+        .custom-form-group button:hover {
             background-color: #0056b3;
         }
-        .section-divider {
+        .custom-section-divider {
             border: 0;
             height: 1px;
             background: #ccc;
             margin: 10px 15px 20px 10px;
         }
-        .summary-item {
+        .custom-summary-item {
             display: flex;
             justify-content: space-between;
             margin-bottom: 10px;
         }
-        .total {
+        .custom-total {
             font-weight: bold;
             border-top: 1px solid #e0e0e0;
             padding-top: 10px;
         }
-        .purchase-btn {
+        .custom-purchase-btn {
             width: 100%;
             padding: 15px;
             background-color: #007bff;
@@ -115,146 +118,147 @@
             cursor: pointer;
             margin-top: 20px;
         }
-        .purchase-btn:hover {
+        .custom-purchase-btn:hover {
             background-color: #0056b3;
         }
-        .note {
+        .custom-note {
             font-size: 12px;
             color: #666;
             margin-top: 10px;
         }
-        .product-item {
+        .custom-product-item {
             display: flex;
             align-items: center;
             margin-bottom: 20px;
             border: 1px solid #e0e0e0;
             padding: 10px;
         }
-        .product-item img {
+        .custom-product-item img {
             width: 80px;
             height: auto;
             margin-right: 20px;
             border-right: 1px solid #e0e0e0;
         }
-        .product-info {
+        .custom-product-info {
             flex: 1;
             border-right: 1px solid #e0e0e0;
         }
-        .payment-methods {
+        .custom-payment-methods {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
             margin-bottom: 10px;
         }
-        .payment-methods button {
+        .custom-payment-methods button {
             padding: 10px 20px;
             border: 1px solid #ccc;
             border-radius: 5px;
             background-color: #f8f8f8;
             cursor: pointer;
         }
-        .payment-methods button.active {
+        .custom-payment-methods button.active {
             background-color: #007bff;
             color: white;
             border-color: #007bff;
         }
-        .card-select {
+        .custom-card-select {
             display: none;
             margin-top: 10px;
         }
-        .card-select.active {
+        .custom-card-select.active {
             display: block;
         }
 	</style>
 </head>
 <body>
-<div class="container">
-	<form id="orderForm" class="left-section" onsubmit="submitOrder(event)">
+<div th:replace="fragment/header :: headerFragment"></div>
+<div class="order-container">
+	<div class="custom-order-container">
+	<form id="orderForm" class="custom-order-left-section" onsubmit="submitOrder(event)">
 		<!-- 주문제품 -->
-		<div class="title">주문제품</div>
-		<hr class="section-divider">
-		<div th:each="product, iterStat : ${product}" class="product-item">
-			<img th:src="${#strings.replace(#strings.replace(#strings.replace(product.imageUrl, 'http://localhost:8080/', ''), '[', ''), ']', '')}" alt="Product Image"/>
-			<div class="product-info">
-				<p>상품명: <span name="productName" th:text="${product.productName}"></span>g</p>
-				<p>옵션: <span name="option" th:text="${product.option != null ? product.option : '없음'}"></span>g</p>
-				<p>수량: <span name="quantity" th:text="${product.quantity}"></span>g</p>
+		<div class="custom-title">주문제품</div>
+		<hr class="custom-section-divider">
+		<div th:each="product, iterStat : ${product}" class="custom-product-item">
+			<img th:src="${product.imageUrl}" alt="Product Image">
+			<div class="custom-product-info">
+				<input type="hidden" th:name="'product[' + ${iterStat.index} + '].imageUrl'" th:value="${product.imageUrl}">
+				<p>상품명: <span name="productName" th:text="${product.productName}"></span></p>
+				<p>옵션: <span name="option" th:text="${product.option != null ? product.option : '없음'}"></span></p>
+				<p>수량: <span name="quantity" th:text="${product.quantity}"></span></p>
 				<!-- 각 상품 데이터를 배열 형태로 전송하기 위해 name에 인덱스 추가 -->
 				<input type="hidden" th:name="'product[' + ${iterStat.index} + '].productName'" th:value="${product.productName}">
 				<input type="hidden" th:name="'product[' + ${iterStat.index} + '].option'" th:value="${product.option}">
 				<input type="hidden" th:name="'product[' + ${iterStat.index} + '].quantity'" th:value="${product.quantity}">
+				<input type="hidden" th:name="'product[' + ${iterStat.index} + '].productId'" th:value="${product.productId}">
 			</div>
 			<p><span th:text="${product.price}"></span>원</p>
 			<input type="hidden" th:name="'product[' + ${iterStat.index} + '].price'" th:value="${product.price}">
 		</div>
-
 		<!-- 주문자 정보 -->
-		<div class="title">주문자 정보</div>
-		<hr class="section-divider">
-		<div class="form-group">
-			<div class="input-row">
+		<div class="custom-title">주문자 정보</div>
+		<hr class="custom-section-divider">
+		<div class="custom-form-group">
+			<div class="custom-input-row">
 				<label for="userId">주문자 ID</label>
 				<input type="text" id="userId" name="userId" th:value="${userId}">
 			</div>
-			<div class="input-row">
+			<div class="custom-input-row">
 				<label for="phone">전화번호:</label>
 				<input type="text" id="phone" name="userPhone" th:value="${userPhone}">
 			</div>
 		</div>
-
 		<!-- 배송지 정보 -->
-		<div class="title">배송지</div>
-		<hr class="section-divider">
-		<div class="form-group">
-			<div class="input-row">
+		<div class="custom-title">배송지</div>
+		<hr class="custom-section-divider">
+		<div class="custom-form-group">
+			<div class="custom-input-row">
 				<label for="receiverName">수령인:</label>
 				<input type="text" name="receiverName" id="receiverName" th:text="${nickname}" placeholder="받는 사람">
 			</div>
-			<div class="input-row">
+			<div class="custom-input-row">
 				<label for="receiverPhone">전화번호:</label>
 				<input type="text" name="receiverPhone" id="receiverPhone" th:text="${receiverPhone}" placeholder="휴대번호 입력 (-제외)">
 			</div>
-			<div class="input-row">
+			<div class="custom-input-row">
 				<label for="receiver_addr">주소:</label>
 				<input type="text" name="receiverAddr" id="receiver_addr" th:text="${receiverAddr}" placeholder="주소를 입력하세요" autocomplete="street-address" readonly>
 				<button type="button" onclick="execDaumPostcode()">주소 검색</button>
 			</div>
-			<div class="input-row">
+			<div class="custom-input-row">
 				<label for="receiver_addr_detail">상세 주소:</label>
 				<input type="text" name="receiverAddrDetail" id="receiver_addr_detail" placeholder="상세 주소를 입력하세요">
 			</div>
-			<div class="input-row">
+			<div class="custom-input-row">
 				<label for="deliveryRequest">배송 요청:</label>
 				<select id="deliveryRequest" name="deliveryMessage" onchange="toggleCustomRequest()">
 					<option value="">선택하세요</option>
 					<option value="door">문 앞에 놓아주세요</option>
 					<option value="guard">경비실에 맡겨주세요</option>
-					<option value="contact">수령 전 연락 바랍니다</option>
+					<option value="contact">배송 완료 전 연락 바랍니다</option>
 					<option value="custom">직접 입력</option>
 				</select>
 			</div>
-			<div class="form-group delivery-request-custom">
+			<div class="custom-form-group delivery-request-custom">
 				<input type="text" id="customDeliveryRequest" name="customDeliveryRequest" placeholder="요청 사항을 입력하세요">
 			</div>
 		</div>
 
 		<!-- 쿠폰 -->
-		<div class="title">쿠폰</div>
-		<hr class="section-divider">
-		<div class="form-group">
+		<div class="custom-title">쿠폰</div>
+		<hr class="custom-section-divider">
+		<div class="custom-form-group">
 			<select name="coupon" id="coupon-select">
 				<option value="">쿠폰을 선택해주세요.</option>
 				<option value="5000" id="accession_coupon">가입 감사 쿠폰 5천원</option>
 			</select>
-
 		</div>
 		<div id="coupon-details" style="display:none;">
 			<p id="coupon-description"></p>
 		</div>
 		<!-- 결제 수단 -->
-		<div class="title">결제 수단</div>
-		<hr class="section-divider">
-		<div class="payment-methods">
+		<div class="custom-title">결제 수단</div>
+		<hr class="custom-section-divider">
+		<div class="custom-payment-methods">
 			<button type="button" data-card="true" data-method="shinhan-check">신한-체크카드</button>
 			<button type="button" data-method="toss">toss pay</button>
 			<button type="button" data-method="payco">PAYCO</button>
@@ -265,7 +269,7 @@
 			<button type="button" data-method="naver">네이버페이</button>
 		</div>
 		<input type="hidden" id="paymentMethod" name="paymentMethod">
-		<div class="form-group card-select" id="cardSelect">
+		<div class="custom-form-group custom-card-select" id="cardSelect">
 			<select id="cardCompany" name="cardCompany">
 				<option value="">카드사 선택</option>
 				<option value="shinhan">신한카드</option>
@@ -277,147 +281,169 @@
 				<option value="nh">NH농협카드</option>
 			</select>
 		</div>
-		<hr class="section-divider">
+		<hr class="custom-section-divider">
 	</form>
-</div>
+	</div>
 
 <!-- 결제 금액 -->
-<div class="right-section">
-	<div class="title">결제 금액</div>
-	<div class="summary-item">
+<div class="custom-order-right-section">
+	<div class="custom-title">결제 금액</div>
+	<div class="custom-summary-item">
 		<span>총 제품 금액</span>
 		<span id="totalProductPrice" th:text="${totalProductPrice}">0원</span>
 	</div>
-	<div class="summary-item">
+	<div class="custom-summary-item">
 		<span>쿠폰 할인</span>
 		<span id="couponDiscount">-0원</span>
 	</div>
-	<div class="summary-item">
+	<div class="custom-summary-item">
 		<span>적립금사용</span>
 		<span id="pointsUsed">-0원</span>
 	</div>
-	<div class="summary-item">
+	<div class="custom-summary-item">
 		<span>배송비</span>
 		<span id="shippingFee">0원</span>
 	</div>
-	<div class="summary-item total">
+	<div class="custom-summary-item custom-total">
 		<span>총 결제 금액</span>
-		<span id="totalPrice" th:text="${totalPrice}">0원</span>
+		<span id="totalPrice" th:text="${totalPrice}"></span>
 	</div>
-	<div class="note">
-		위 제품의 구매 조건을 확인하였으며, 결제 및 개인 정보 제3자 제공에 모두 동의합니다.
-		<input type="checkbox" id="agreeTerms">
+	<div class="custom-note">
+		위 제품의 구매 조건을 확인하였으며, 결제 및 <br>개인 정보 제3자 제공에 모두 동의합니다.
+		<input type="checkbox" id="agreeTerms" style="vertical-align: middle; margin-right: 5px;">
 	</div>
-	<button type="submit" form="orderForm" class="purchase-btn" id=totalPay th:text="${totalPayment}">원 결제하기</button>
+	<button type="submit" form="orderForm" class="custom-purchase-btn" id="pay">결제하기</button>
+	<script>
+		const totalSumPrice = document.getElementById('totalPrice').textContent;
+		const totalPurchase = 0;
+		var updateTotal = totalSumPrice;
+        document.getElementById('totalPrice').textContent = totalSumPrice + ' 원';
+        document.getElementById('coupon-select').addEventListener('change', function() {
+            var couponDetails = document.getElementById('coupon-details');
+            // 선택된 값이 5000일 때만 표시
+            if (this.value === '5000') {
+                couponDetails.style.display = 'block';
+                updateTotal = totalSumPrice - 5000;
+                document.getElementById('couponDiscount').textContent = '-5000 원';
+                if(updateTotal <= 0){
+                    updateTotal = 0;
+                }
+                document.getElementById('totalPrice').textContent = `${updateTotal} 원`;
+            } else {
+                couponDetails.style.display = 'none';
+                document.getElementById('couponDiscount').textContent = '-0 원';
+                updateTotal = totalSumPrice;
+                document.getElementById('totalPrice').textContent = `${updateTotal} 원`;
+            }
+        });
+
+        // 결제 수단 버튼 클릭 이벤트
+        const paymentButtons = document.querySelectorAll('.custom-payment-methods button');
+        const cardSelect = document.getElementById('cardSelect');
+        const paymentMethodInput = document.getElementById('paymentMethod');
+
+        paymentButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                paymentButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                paymentMethodInput.value = this.getAttribute('data-method');
+
+                if (this.getAttribute('data-card') === 'true') {
+                    cardSelect.classList.add('active');
+                } else {
+                    cardSelect.classList.remove('active');
+                }
+            });
+        });
+
+        // Daum Postcode API
+        function execDaumPostcode() {
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    var addr = data.address;
+                    document.getElementById('receiver_addr').value = addr;
+                }
+            }).open();
+        }
+
+        // 배송 요청 사항 커스텀 입력 토글
+        function toggleCustomRequest() {
+            const deliveryRequest = document.getElementById('deliveryRequest');
+            const customInput = document.querySelector('.delivery-request-custom');
+            if (deliveryRequest.value === 'custom') {
+                customInput.style.display = 'block';
+            } else {
+                customInput.style.display = 'none';
+            }
+        }
+
+        // 폼 제출 이벤트
+        function submitOrder(event) {
+            event.preventDefault();
+            const agreeCheckbox = document.getElementById('agreeTerms');
+
+            if (!agreeCheckbox.checked) {
+                alert('결제 및 개인정보 제3자 제공에 동의해주세요.');
+                return;
+            } else if(deliveryRequest.value === ""){
+                alert('배송 요청 사항을 작성해주세요.');
+                return;
+            } else if(paymentMethodInput.value === ""){
+                alert('결제수단을 선택해 주세요.');
+                return;
+            }
+
+            const form = document.getElementById('orderForm');
+            const formData = new FormData(form);
+
+            const deliverySelect = document.getElementById('deliveryRequest');
+            if (deliverySelect.value === 'custom') {
+                const customText = document.getElementById('customDeliveryRequest').value;
+                formData.set('deliveryMessage', customText);
+            }
+
+            formData.forEach((value, key) => {
+                console.log(key, value);  // 각 key와 value를 출력해서 확인
+            });
+
+            // 오른쪽 섹션의 결제 금액 데이터 추가
+            const paymentData = {
+                totalProductPrice: document.getElementById('totalProductPrice').textContent.replace('원', '').replace(/,/g, ''),
+                couponDiscount: document.getElementById('couponDiscount').textContent.replace('원', '').replace(/,/g, ''),
+                pointsUsed: document.getElementById('pointsUsed').textContent.replace('원', '').replace(/,/g, ''),
+                shippingFee: document.getElementById('shippingFee').textContent.replace('원', '').replace(/,/g, ''),
+                totalPrice: updateTotal
+            };
+
+            Object.entries(paymentData).forEach(([key, value]) => {
+                formData.append(key, value);
+                console.log(`${key}: ${value}`);
+            });
+
+            // 백엔드로 전송
+            fetch('/order/rest/process', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('주문이 완료되었습니다!');
+                    window.location.href = `/order/orders/${data.purchaseId}`;
+                } else {
+                    alert('주문 처리 중 오류가 발생했습니다: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('주문 처리 중 오류가 발생했습니다.');
+            });
+        }
+	</script>
 </div>
-<script>
-	document.getElementById('coupon-select').addEventListener('change', function() {
-    var couponDetails = document.getElementById('coupon-details');
-    var total = document.getElementById('totalPay').value;
-    var updatedTotal = total;
-    // 선택된 값이 5000일 때만 표시
-    if (this.value === '5000') {
-    couponDetails.style.display = 'block';
-    updateTotal -= 5000;
-    } else {
-    couponDetails.style.display = 'none';
-    }
-    document.getElementById('totalPay').textContent = `${updatedTotal} 원 결제하기`;
-    });
+</div>
+<div th:replace="fragment/footer :: footerFragment"></div>
 
-const totalPayment = document.getElementById('orderForm');
-totalPayment.forEach((value, key) => {
-console.log(key, value);  // 각 key와 value를 출력해서 확인
-    });
-// 결제 수단 버튼 클릭 이벤트
-const paymentButtons = document.querySelectorAll('.payment-methods button');
-const cardSelect = document.getElementById('cardSelect');
-const paymentMethodInput = document.getElementById('paymentMethod');
-const agreeCheckbox = document.getElementById('agreeTerms');
-
-paymentButtons.forEach(button => {
-button.addEventListener('click', function() {
-    paymentButtons.forEach(btn => btn.classList.remove('active'));
-    this.classList.add('active');
-    paymentMethodInput.value = this.getAttribute('data-method');
-
-    if (this.getAttribute('data-card') === 'true') {
-        cardSelect.classList.add('active');
-    } else {
-        cardSelect.classList.remove('active');
-    }
-});
-});
-
-// Daum Postcode API
-function execDaumPostcode() {
-new daum.Postcode({
-    oncomplete: function(data) {
-        var addr = data.address;
-        document.getElementById('receiver_addr').value = addr;
-    }
-}).open();
-}
-
-// 배송 요청 사항 커스텀 입력 토글
-function toggleCustomRequest() {
-const deliveryRequest = document.getElementById('deliveryRequest');
-const customInput = document.querySelector('.delivery-request-custom');
-if (deliveryRequest.value === 'custom') {
-    customInput.style.display = 'block';
-} else {
-    customInput.style.display = 'none';
-}
-}
-
-// 폼 제출 이벤트
-function submitOrder(event) {
-event.preventDefault();
-
-if (!agreeCheckbox.checked) {
-    alert('결제 및 개인정보 제3자 제공에 동의하셔야 합니다.');
-    return;
-}
-
-const form = document.getElementById('orderForm');
-const formData = new FormData(form);
-
-formData.forEach((value, key) => {
-console.log(key, value);  // 각 key와 value를 출력해서 확인
-    });
-
-// 오른쪽 섹션의 결제 금액 데이터 추가
-const paymentData = {
-    totalProductPrice: document.getElementById('totalProductPrice').textContent.replace('원', '').replace(/,/g, ''),
-    couponDiscount: document.getElementById('couponDiscount').textContent.replace('원', '').replace(/,/g, ''),
-    pointsUsed: document.getElementById('pointsUsed').textContent.replace('원', '').replace(/,/g, ''),
-    shippingFee: document.getElementById('shippingFee').textContent.replace('원', '').replace(/,/g, ''),
-    totalPrice: document.getElementById('totalPrice').textContent.replace('원', '').replace(/,/g, '')
-};
-
-for (const [key, value] of Object.entries(paymentData)) {
-    formData.append(key, value);
-}
-// 백엔드로 전송
-fetch('/order/rest/process', {
-    method: 'POST',
-    body: formData
-})
-.then(response => response.json())
-.then(data => {
-    if (data.success) {
-        alert('주문이 완료되었습니다!');
-        window.location.href = '/order';
-    } else {
-        alert('주문 처리 중 오류가 발생했습니다: ' + data.message);
-    }
-})
-.catch(error => {
-    console.error('Error:', error);
-    alert('주문 처리 중 오류가 발생했습니다.');
-});
-}
-</script>
 <!-- Daum Postcode API 스크립트 추가 -->
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 </body>

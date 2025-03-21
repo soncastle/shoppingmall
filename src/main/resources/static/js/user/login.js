@@ -27,7 +27,7 @@ loginForm.addEventListener("submit" , async(e) =>{
         error.textContent = result.message
     } else {
         // 성공했지만 리다이렉트 정보가 없는 경우
-        window.location.href = "/";
+        window.location.href = "/home";
     }
 
 })

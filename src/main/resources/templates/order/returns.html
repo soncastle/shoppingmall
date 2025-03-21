@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>취소/반품 요청</title>
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/layout/common.css">
+  <link rel="stylesheet" href="/css/profile.css">
+  <style>
+    /* 기본 배경 및 폰트 설정 */
+    /* 컨테이너 스타일 */
+    .order-container {
+      width: 100%;
+      margin: 0 2px 0 5px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    /* 테이블 스타일 */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    table th {
+      background-color: #d2e4f7;
+      color: #555;
+      text-align: center;
+      padding: 10px;
+    }
+    table td {
+      vertical-align: middle;
+      text-align: center;
+      padding: 5px;
+    }
+    tr {
+    padding: 3px 0;
+    }
+    .reason {
+    margin-bottom:5px;
+    }
+    tr:hover {
+      background-color: #e0e0ff33;
+     }
+
+    /* 이미지 스타일 */
+    .return-img {
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      transition: transform 0.3s ease;
+    }
+    .return-img:hover {
+    position: fixed; /* 화면 기준으로 이동 */
+    transform: scale(10);
+    z-index: 9999; /* 최상위 레이어로 */
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+    .button {
+      display: inline-block;
+      padding: 10px 15px;
+      font-size: 14px;
+      font-weight: bold;
+      text-align: center;
+      border-radius: 5px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: 0.3s;
+      background-color: #fafaff;
+      color: black;
+      border: 1px solid #ebecff;
+      margin: 5px 0;
+    }
+    .button:hover {
+      background-color: #7a7aff;
+      color: white;
+    }
+    /* 페이지 네비게이션 스타일 */
+    .pagination {
+      display: flex;
+      list-style: none;
+      padding-left: 0;
+    }
+    .pagination li {
+      margin: 0 2px;
+    }
+    .pagination li a {
+      padding: 6px 12px;
+      color: #007bff;
+      text-decoration: none;
+      border: 1px solid #dee2e6;
+      border-radius: 4px;
+    }
+    .pagination li.active a {
+      background-color: #007bff;
+      color: white;
+      border-color: #007bff;
+    }
+    .pagination li.disabled a {
+      color: #6c757d;
+      pointer-events: none;
+      background-color: #fff;
+      border-color: #dee2e6;
+    }
+  </style>
+</head>
+<body>
+<div th:replace="fragment/header :: headerFragment"></div>
+<div class="container">
+  <section class="pm-section">
+    <div th:replace="fragment/profile-common :: mypage-top"></div>
+    <div class="mypage-bottom-content">
+      <div th:replace="fragment/profile-common :: mypage-sidebar"></div>
+      <div class="order-container">
+        <h2>교환 요청 목록</h2>
+        <table>
+          <thead>
+          <tr>
+            <th>주문 번호</th>
+            <th>회원 ID</th>
+            <th>취소 정보</th>
+            <th>요청 내용</th>
+            <th>이미지</th>
+            <th>결제 페이지</th>
+          </tr>
+          </thead>
+          <tbody>
+          <!-- Page 객체이므로, 반환된 content 리스트를 사용 -->
+          <tr th:each="req : ${returns.content}">
+            <td><strong><span th:text="${req.purchaseProduct.purchase.purchaseId}"></span></strong></td>
+            <td><span th:text="${req.userId}"></span></td>
+            <td><span th:text="${req.purchaseProduct.cancelReason}" calss="reason"></span><br>
+              <span th:text="${#temporals.format(req.purchaseProduct.cancelAt, 'yyyy-M-d a h시 mm분')}"></span>
+            <td th:text="${req.returnsContent}"></td>
+            <td>
+              <div th:if="${req.returnsImagePaths != null}">
+                <img class="return-img" th:each="path : ${#strings.arraySplit(req.returnsImagePaths, ',')}"
+                     th:src="@{${path}}"
+                     style="max-width: 100px; max-height: 100px; margin: 2px;" alt="업로드 이미지"/>
+              </div>
+            </td>
+            <td>
+              <a class="button" th:href="@{/order/orders/{purchaseId}?admin=admin(purchaseId=${req.purchaseProduct.purchase.purchaseId})}">
+                주문정보보기
+              </a>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <!-- 페이지 네비게이션 컨트롤 -->
+        <div style="margin-top: 20px;">
+          <ul class="pagination">
+            <!-- 이전 페이지 버튼 -->
+            <li th:classappend="${returns.first} ? 'disabled'">
+              <a th:href="@{?page=${returns.number - 1}}">&laquo;</a>
+            </li>
+            <!-- 페이지 번호 버튼: 0부터 totalPages -1 까지 반복 -->
+            <li th:each="i : ${#numbers.sequence(0, returns.totalPages - 1)}"
+                th:classappend="${returns.number == i} ? 'active'">
+              <a th:href="@{?page=${i}}" th:text="${i + 1}"></a>
+            </li>
+            <!-- 다음 페이지 버튼 -->
+            <li th:classappend="${returns.last} ? 'disabled'">
+              <a th:href="@{?page=${returns.number + 1}}">&raquo;</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<div th:replace="fragment/footer :: footerFragment"></div>
+</body>
+</html>

@@ -10,12 +10,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.firewall.HttpFirewall;
@@ -38,19 +35,21 @@ public class SecurityConfig {
   private CustomAuthenticationFailureHandler failureHandler;
   private CustomOAuth2UserService customOAuth2UserService;
   private final CustomSuccessHandler2 successHandler;
+  private final JWTUtil jwtUtil;
 
   public SecurityConfig(CustomUserDetailsService userDetailsService,
                         CustomAuthenticationFailureHandler failureHandler,
                         CustomOAuth2UserService customOAuth2UserService,
-                        CustomSuccessHandler2 successHandler
-                       ) {
+                        CustomSuccessHandler2 successHandler,
+                        JWTUtil jwtUtil) {
       this.userDetailsService = userDetailsService;
       this.failureHandler = failureHandler;
       this.customOAuth2UserService = customOAuth2UserService;
       this.successHandler = successHandler;
-
-
+      this.jwtUtil = jwtUtil;
   }
+
+
 
     @Bean
     public MultipartFilter multipartFilter() {
@@ -72,10 +71,8 @@ public class SecurityConfig {
     return new BCryptPasswordEncoder();
   }
 
-
-  @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http, UserRepository userRepository) throws Exception {
         // 기본 HTTP 인증 비활성화
         http.httpBasic(auth -> auth.disable());
 
@@ -94,8 +91,8 @@ public class SecurityConfig {
         // URL 기반 접근 권한 설정
         http
                 .authorizeHttpRequests(auth -> auth
-                // 공통 페이지 - 인증 없이 접근 가능 // 홈
-                .requestMatchers("/").permitAll()
+                // 공통 페이지 - 인증 없이 접근 가능
+                .requestMatchers("/", "/home", "/index.html").permitAll()
 
                 // 로그인 관련 페이지
                 .requestMatchers(regexMatcher("/login.*")).permitAll()
@@ -103,28 +100,25 @@ public class SecurityConfig {
                 // 사용자 관련 페이지
                 .requestMatchers("/users/agree", "/users", "/users/find/**", "/users/addr").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/users", "/api/users/find/**", "/api/users/check").permitAll()
-                .requestMatchers("/search").permitAll()
+
                 // 팀원별 기능 페이지 - 모두 접근 가능 설정
                 // ex) /cart/** -> cart 부터 아래의 하위 경로 허용
                 // ex) /cart    -> cart 경로 허용
 
-                .requestMatchers("/cart/cartCount").permitAll()
-                .requestMatchers("/api/products/**").permitAll()
-                .requestMatchers("/products" , "/product").permitAll()
-                // 게시판 페이지 허용
-                .requestMatchers("/board/main" , "/board/wiki" , "/board/best" ).permitAll()
-                // 게시판 api 허용
-                .requestMatchers("/board/list").permitAll()
-                .requestMatchers("/board/board/list/**") .permitAll()   // 준서님
+                .requestMatchers("/cart/**").permitAll()// 수민님
+                .requestMatchers("/cart/cart/**").permitAll()
+                .requestMatchers("/product/**" , "/products/**").permitAll() // 진호님
+                .requestMatchers("/board/**").permitAll()                                          // 준서님
                 .requestMatchers("/order/**").permitAll()// 성호님
 
                 // 정적 리소스 접근 허용
-                .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**" , "/slick/**").permitAll()
+                .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
+
                 // Swagger 문서 접근 허용
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
 
                 // 그 외 모든 요청은 인증 필요
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
         );
 
         // 폼 로그인 설정
@@ -145,7 +139,7 @@ public class SecurityConfig {
 
         // 로그아웃 설정
         http.logout(logout -> logout
-                .logoutSuccessUrl("/")            // 로그아웃 성공 시 리다이렉트 경로
+                .logoutSuccessUrl("/home")            // 로그아웃 성공 시 리다이렉트 경로
                 .permitAll()
         );
 

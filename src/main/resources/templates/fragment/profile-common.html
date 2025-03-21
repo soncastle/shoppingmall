@@ -15,7 +15,7 @@
         <div class="mypage-top" th:fragment="mypage-top">
               <div class="user">
                 <div class="img">
-                      <img src="/images/ui/my-page-user-basic.jpg" alt="기본 프로필">
+                      <img src="/images/user-basic.jpg" alt="기본 프로필">
                 </div>
                 <strong class="nickname"></strong>
                 <button type="button" class="profile_btn">설정</button>
@@ -24,8 +24,8 @@
                 <div class="inner-wrap">
                   <div class="inner">
                     <div class="inner-img">
-                      <a>
-                        <img src="/images/ui/my-page-coupon.png" >
+                      <a href="/order/coupon">
+                        <img src="/images/coupon4.png" >
                       </a>
                       <span class="quantity coupon"></span>
                     </div>
@@ -34,7 +34,7 @@
                   <div class="inner">
                     <div class="inner-img">
                       <a href="/cart">
-                        <img src="/images/ui/my-page-cart.png" >
+                        <img src="/images/cart3.png" >
                       </a>
                       <span class="quantity cartQuantity"></span>
                     </div>
@@ -42,8 +42,8 @@
                   </div>
                   <div class="inner">
                     <div class="inner-img">
-                      <a>
-                        <img src="/images/ui/my-page-delivery.png" >
+                      <a href="/order/onDelivery">
+                        <img src="/images/delivery2.png" >
                       </a>
                       <span class="quantity delivery">2</span>
                     </div>
@@ -78,14 +78,29 @@
                   </li>
                   <li>
                     <span>나의 쇼핑 정보</span>
-                    <a href="/order/orders">카트->주문하기(물품위치 puchaseProduct의 db)</a>
                     <a href="/order/admin/orderList">관리자용 주문/배송 리스트</a>
                     <a href="/order/orders/userId">주문/배송</a>
-                    <a href="/users/me/likes">교환/반품</a>
+                    <a href="/order/orders/userId?purchaseState=cancel">취소/반품</a>
+                    <a href="/order/returnsList">관리자용 취소/반품</a>
+                    <a href="#">찜한제품</a>
+                    <a href="/users/me/reviews">제품리뷰</a>
+                  </li>
+                  <li>
+                    <span>나의 반려 동물</span>
+                  </li>
+                  <li>
+                    <span>쿠폰/적립금</span>
+                    <a href="/users/me/coupons">쿠폰</a>
+                    <a href="/users/me/points">적립금</a>
                   </li>
                   <li>
                     <span>나의 정보</span>
                     <a href="/users/me/profile">회원 정보 관리</a>
+                  </li>
+                  <li>
+                    <span>고객센터</span>
+                    <a href="#">고객센터</a>
+                    <a href="#">문의내역</a>
                   </li>
                 </ul>
               </div>
@@ -100,7 +115,7 @@
                   </div>
                 </div>
                 <div class="like_area">
-                  <h2 class="border">찜한 제품</h2>
+                  <h2 class="border">좋아요한 제품</h2>
                   <a href="#" class="more">더보기</a>
                   <ul class="product_list">
 
@@ -155,11 +170,6 @@
                         <ul>
 
                         </ul>
-                        <div class="pagination" style="display: none;">
-                            <ul class="page">
-                                <!-- 페이지 버튼이 여기에 생성됩니다 -->
-                            </ul>
-                        </div>
                     </div>
                 </div>
         </div>
@@ -175,7 +185,7 @@
                   </div>
                 <div class="profile-default">
                   <div class="default-img">
-                    <img src="/images/ui/my-page-user-basic.jpg" alt="기본 프로필" id="profileOriginImg">
+                    <img src="/images/user_default.png" alt="기본 프로필" id="profileOriginImg">
                     <div class="upload_pic">
                       <img id="profilePhotoImg" src>
                     </div>
@@ -189,36 +199,6 @@
                 <span class="error">이미 존재하는 닉네임 입니다.</span>
                 <button id="saveNickname" disabled>저장</button>
               </div>
-            </div>
-
-            <div id="filter-Modal" class="modal" th:fragment="filter-modal">
-                <div class="modal-content">
-                    <div class="head">
-                        <span class="close">&times;</span>
-                        <h2>검색 필터</h2>
-                    </div>
-                    <div>
-
-                    </div>
-                    <a>기본 이미지</a>
-                    <h2>닉네임</h2>
-                    <input type="text" id="newNickname" name="nickname" placeholder="새 닉네임 입력">
-                    <span class="error">이미 존재하는 닉네임 입니다.</span>
-                    <button id="search-filter" disabled>저장</button>
-                </div>
-            </div>
-
-            <div id="pet-modal" class="modal" th:fragment="pet-modal">
-                <div class="modal-content">
-                    <div class="head">
-                        <span class="close">&times;</span>
-                        <h2>펫 정보</h2>
-                    </div>
-                    <div class="pet-info">
-                    </div>
-                    <a>기본 이미지</a>
-                    <h2>달이</h2>
-                </div>
             </div>
 </body>
 </html>

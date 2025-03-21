@@ -37,6 +37,7 @@ public class PetApiController {
 
   @DeleteMapping("/pets")
   public ResponseEntity<ApiResponse<?>> deletePet(@RequestBody Map<String , Long> request , Authentication authentication) {
+    System.out.println("요청왓다 딜리트");
     String userId = authentication.getName();
       long petId = request.get("id");
       petService.delete(petId , userId );

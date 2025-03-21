@@ -15,8 +15,6 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -59,7 +57,7 @@ public class UserApiController {
     }
 
     String userId = authentication.getName();
-    UserResponseDTO userResponseDTO = userService.getUserDTO(userId);
+    UserResponseDTO userResponseDTO = userService.getUser(userId);
 
     return ResponseEntity.ok(ApiResponse.success(userResponseDTO));
   }
@@ -108,7 +106,7 @@ public class UserApiController {
           "인증된 사용자의 정보를 받아와 출력 / 현재 시큐리티 permitAll 때문에 인증이 안된 사용자는 에러페이지 , 인증이 된 사용자만 마이페이지 ")
   public ResponseEntity<?> profileG(Authentication authentication) {
     if (authentication.isAuthenticated()) {
-      User user = userService.getUser(authentication.getName());
+      User user = userRepository.findByUserId(authentication.getName());
       return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(user.toDTO()));
     }
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.error("인증되지 않은 사용자"));
@@ -119,6 +117,7 @@ public class UserApiController {
       @RequestParam("nickname") String nickname ,
       @RequestParam(value = "profilePhotoFile", required = false) MultipartFile profilePhotoFile , Authentication authentication) {
 
+    try {
       String userId = authentication.getName();
       System.out.println("프로필 업데이트 요청 - 사용자 ID: " + userId);
 
@@ -132,6 +131,12 @@ public class UserApiController {
       data.put("nickname", nickname);
 
       return ResponseEntity.ok(ApiResponse.success(data));
+    } catch (Exception e) {
+      // 오류 발생 시 로그 출력 후 예외 전파
+      System.err.println("프로필 업데이트 오류: " + e.getMessage());
+      e.printStackTrace();
+      throw e;
+    }
   }
 
   @PatchMapping("/me/profile")
@@ -206,18 +211,9 @@ public class UserApiController {
 
   @GetMapping("/me/activities/{type}")
   public ResponseEntity<ApiResponse<?>> getActivities(
-      @PathVariable String type,
-      @RequestParam(defaultValue = "0") int page,
-      @RequestParam(defaultValue = "5") int size,
-      Authentication authentication) {
-
-    System.out.println(type);
-    System.out.println(page);
-    System.out.println(size);
-
-    Pageable pageable = PageRequest.of(page, size);
+      @PathVariable String type, Authentication authentication) {
     String userId = authentication.getName();
-    return ResponseEntity.ok(ApiResponse.success(userService.getActivities(type, userId , pageable)));
+    return ResponseEntity.ok(ApiResponse.success(userService.getActivities(type, userId)));
   }
 
   // 에러 핸들링 메소드

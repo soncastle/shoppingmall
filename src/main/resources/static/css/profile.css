@@ -72,7 +72,6 @@ button{
   text-align: center;
   position: relative;
 }
-
 .inner span{
   display: block;
   font-size: 20px;
@@ -222,7 +221,7 @@ a{
   text-indent: -9999px;
   border: 0;
   cursor: pointer;
-  background: url(../images/ui/petAdd-settings.png) no-repeat center center;
+  background: url(../images/settings.png) no-repeat center center;
   background-size: 100%;
 }
 
@@ -236,7 +235,7 @@ a{
   font-size: 18px;
   text-align: center;
   box-shadow: 0 0 16px rgba(0,0,0,0.08);
-  background: #fff url("../images/ui/petAdd-btn.png") no-repeat center;  /* 수정된 부분 */
+  background: #fff url("../images/plus.png") no-repeat center;  /* 수정된 부분 */
   background-size: 70px;  /* 이미지 크기 조절 */
   background-position-y: 70px;
   border-radius: 15px;
@@ -501,10 +500,6 @@ a{
   font-weight: 500;
   font-size: 15px;
   line-height: 130%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-
 }
 .pro_name .rate {
   margin-right: 10px;
@@ -512,12 +507,12 @@ a{
   font-weight: 600;
   font-size: 13px;
   line-height: 130%;
-  background: url("../images/ui/product-average.png") no-repeat left center;
+  background: url("../images/star.png") no-repeat left center;
   background-size: 15px;
 }
 
 .product_list li .heart.active {
-  background-image: url(../images/ui/heart.png);
+  background-image: url(../images/heart.png);
 }
 
 .like_area .product_list li .heart {
@@ -532,12 +527,7 @@ a{
   right: 16px;
   text-indent: -9999px;
   cursor: pointer;
-  background: url("../images/ui/heart-blank.png")
-
-}
-.product_list li .heart:hover{
-  scale: 1.1;
-  transition: 0.3s;
+  background: url("../images/heart-blank.png")
 
 }
 

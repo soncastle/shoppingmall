@@ -14,7 +14,7 @@
 </head>
 <body>
 <div th:replace="fragment/header :: headerFragment"></div>
-<div th:replace="fragment/nav :: navFragment" class="nav-var"></div>
+<div th:replace="fragment/nav :: navFragment"></div>
 <div class="container">
   <div class="pm-section">
     <section>
@@ -22,13 +22,13 @@
         <div class="post-slider">
           <div class="post-wrapper">
             <div class="post">
-              <img src="/images/ui/main-banner2.png">
+              <img src="/images/banner2.png">
             </div>
             <div class="post">
-              <img src="/images/ui/main-banner3.png">
+              <img src="/images/banner3.png">
             </div>
             <div class="post">
-              <img src="/images/ui/main-banner4.png">
+              <img src="/images/banner4.png">
             </div>
           </div>
         </div>
@@ -45,12 +45,12 @@
 
 
         </div>
-        <a class="more" href="/board/main">더보기</a>
+        <a class="more" href="/board/board">더보기</a>
       </article>
     </section>
     <section>
       <article class="inner-120">
-        <h2>회원들이 많이 리뷰한 제품</h2>
+        <h2>베스트 상품 👍</h2>
         <div class="scroll">
           <ul class="product_list">
 
@@ -62,26 +62,19 @@
     </section>
     <section>
       <article class="inner-120">
-        <h2>시사 상식</h2>
-        <div class="common_sense">
-          <div class="left consult-wrapper">
-              <div class="exposure_tag">
-                <ul>
+        <h2>반려견 상식</h2>
 
-                </ul>
-              </div>
-          </div>
-        </div>
-
-        <a class="more" href="/board/wiki">더보기</a>
+        <a class="more">더보기</a>
       </article>
+    </section>
+    <section>
+      <article class="inner-120"></article>
     </section>
   </div>
 </div>
 
 <div th:replace="fragment/footer :: footerFragment"></div>
 <script type="module" src="/js/home.js"></script>
-<script type="module" src="/js/nav.js"></script>
 <script>
   $('.post-wrapper').slick({
     slidesToShow: 1,

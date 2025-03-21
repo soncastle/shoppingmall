@@ -41,7 +41,6 @@ public class CartService {
     // 장바구니에 상품 추가
     public CartDTO addProductToCart(User user, Long productId, int quantity) {
         Product product = productService.getProductById(productId);
-        System.out.println(product.getImageUrls());
         Cart cart = user.getCart();
         
         // 장바구니의 상품을 찾기

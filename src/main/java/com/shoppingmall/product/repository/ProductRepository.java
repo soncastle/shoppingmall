@@ -1,6 +1,5 @@
 package com.shoppingmall.product.repository;
 
-import com.shoppingmall.product.dto.ProductResponseDTO;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -12,7 +11,6 @@ import com.shoppingmall.product.model.Category;
 import com.shoppingmall.product.model.PetType;
 import com.shoppingmall.product.model.Product;
 import com.shoppingmall.product.model.Subcategory;
-import org.springframework.data.jpa.repository.Query;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByCategory(Category category); // 기본 카테고리 검색
@@ -34,10 +32,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findBySubcategoryOrderByCreatedAtDesc(Subcategory subcategory); // 서브카테고리
     
     Page<Product> findAll(Pageable pageable);
-
-    List<Product> findTop4ByOrderByAverageRatingDesc();
-    @Query("SELECT b FROM Product b WHERE b.productName LIKE %:keyword% OR b.content LIKE %:keyword%")
-    List<Product> searchByKeyword(String keyword);
 }
 
 

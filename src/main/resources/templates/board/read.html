@@ -1,257 +1,78 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta charset="UTF-8">
-	<title>게시글 상세</title>
-	<link rel="stylesheet" href="/css/layout/common.css">
-	<link rel="stylesheet" href="/css/board/read.css">
+<meta charset="UTF-8">
+<title>게시글 상세</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  .content p {
+    margin: 0;
+  }
+  .ck-content img {
+    max-width: 100%;
+    height: auto;
+  }
+</style>
 </head>
-<body>
-
-<div th:replace="fragment/header :: headerFragment"></div>
-<div th:replace="fragment/nav :: navFragment"></div>
-
-<div class="container">
-	<div class="pm-section">
-		<div th:if="${board == null}" class="noPage">
-			<p>게시글을 찾을 수 없습니다.</p>
-		</div>
-		<div th:if="${board != null}">
-			<div>
-				<span th:text="${board.categoryId}" class="boardCategoryId"></span>
-				<h2 th:text="${board.title}" class="boardTitle"></h2>
-				<div class="userInfo">
-					<img th:src="${board.user.userImg.url}" class="userImage">
-					<div class="userInfoText">
-						<span th:text="${board.nickname}" class="boardNickname"></span>
-						<span class="boardViewCount">조회수 [[${board.viewCount}]]</span>
-					</div>
-				</div>
-				<div class="createdAt">
-					<span th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd HH:mm:ss')}" class="boardCreatedAt"></span>
-					<span><a>공유</a></span>
-				</div>
-				<hr>
-			</div>
-
-			<div class="contentContain">
-				<div th:utext="${board.content}" class="boardContent"></div>
-			</div><br><br>
-
-			<span th:each="hashtag : ${board.hashtag}">
-               <a th:href="@{/board/board(hashtag=${hashtag})}" class="boardHashtag" th:text="${hashtag}"></a>
-            </span><br><br><br>
-
-			<div class="buttons" th:if="${master} != null">
-				<a th:href="@{/board/update(boardId=${board.boardId})}" class="update">수정</a>
-				<a th:href="@{/board/delete(boardId=${board.boardId})}" class="delete" onClick="confirmDelete(event, this)">삭제</a>
-			</div><br><br>
-
-			<div class="likeContain">
-				<a href="#" th:if="${#lists.contains(board.likeContain, user.id)}" id="likeCount"
-					 class="likeButton" th:data-board-id="${board.boardId}" th:data-id="${user.id}">❤️ [[${board.likeCount}]]</a>
-				<a href="#" th:unless="${#lists.contains(board.likeContain, user.id)}" id="likeCount"
-					 class="likeButton" th:data-board-id="${board.boardId}" th:data-id="${user.id}">🤍 [[${board.likeCount}]]</a>
-				<a href="#" id="commentButton" class="commentButton">🗨️</a>
-				<span th:text="${board.commentCount}" class="boardCommentCount"></span>
-			</div>
-
-			<hr>
-
-			<h3 class="comments">댓글</h3>
-
-			<div class="commentWrite">
-				<img th:src="${user.userImg.url}" class="commentWriteUserImage">
-				<form action="/board/commentCreate" method="post">
-					<input type="hidden" name="boardId" th:value="${board.boardId}">
-					<div class="commentBox" id="commentBox">
-						<textarea id="content" name="content" rows="3" class="commentWriteContent" placeholder="댓글을 입력해주세요" required></textarea>
-						<button type="submit" class="commentWriteButton">✔️</button>
-					</div>
-				</form>
-			</div>
-
-			<div class="commentList" th:each="comment : ${comment}">
-				<img th:src="${comment.user.userImg.url}" class="commentUserImage">
-				<div class="comment">
-					<div class="commentNicknameCreatedAt">
-						<p class="commentNickname" th:text="${comment.nickname}"></p>
-						<p class="commentCreatedAt" th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></p>
-					</div>
-
-					<p class="commentContent" th:text="${comment.content}" th:id="'commentContent_' + ${comment.commentId}"></p>
-					<div class="commentSaveBox">
-						<textarea class="commentEditTextarea" th:id="'editTextarea_' + ${comment.commentId}" style="display: none;"></textarea>
-						<a href="#" class="commentSave" th:data-comment-id="${comment.commentId}" style="display: none;">✔️</a>
-					</div>
-
-					<div class="commentButtons">
-                     <span class="commentUpdateDelete" th:if="${comment.user.id} == ${user.id}">
-                        <a href="#" class="commentUpdate" th:data-comment-id="${comment.commentId}">수정</a>
-                        <a th:href="@{/board/commentDelete(commentId=${comment.commentId}, boardId=${board.boardId})}" class="commentDelete"
-													 onClick="confirmDelete(event, this)">삭제</a>
-                     </span>
-
-						<a href="#" th:if="${#lists.contains(comment.likeContain, user.id)}" class="commentLikeCount"
-							 th:data-comment-id="${comment.commentId}" th:data-id="${user.id}">❤️ [[${comment.likeCount}]]</a>
-						<a href="#" th:unless="${#lists.contains(comment.likeContain, user.id)}" class="commentLikeCount"
-							 th:data-comment-id="${comment.commentId}" th:data-id="${user.id}">🤍 [[${comment.likeCount}]]</a>
-					</div>
-				</div>
-			</div>
-
-
-		</div>
-	</div>
-</div>
-
-<div th:replace="fragment/footer :: footerFragment"></div>
-
+<body class="bg-gray-100 p-6">
+  <div class="max-w-2xl mx-auto bg-white shadow-lg rounded-lg p-6">
+    <div th:if="${board == null}" class="text-center text-gray-600">
+      <p>게시글을 찾을 수 없습니다.</p>
+    </div>
+    <div th:if="${board != null}">
+      <h1 class="text-2xl font-bold text-gray-900">게시글 상세 정보</h1>
+      <div class="mt-4">
+        <p><strong>제목:</strong> <span th:text="${board.title}" class="text-gray-700"></span></p>
+        <p><strong>카테고리:</strong> <span th:text="${board.categoryId}" class="text-gray-700"></span></p>
+        <p><strong>조회수:</strong> <span th:text="${board.viewCount}" class="text-gray-700"></span></p>
+        <p><strong>작성자:</strong> <span th:text="${board.nickname}" class="text-gray-700"></span></p>
+        <p><strong>작성일:</strong> <span th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd HH:mm:ss')}" class="text-gray-700"></span></p>
+      </div>
+      
+      <div class="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+        <h2 class="font-semibold text-lg">내용</h2>
+        <div th:utext="${board.content}" class="content ck-content"></div>
+      </div>
+      
+      <p><a href="/board/hashtag" class="mt-2 text-sm text-gray-500" th:text="${board.hashtag}"></a></p>
+      
+      <div class="mt-6 flex space-x-2">
+        <a href="/board/board" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">목록으로</a>
+        <a th:href="@{/board/update(boardId=${board.boardId})}" class="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600">수정</a>
+        <a th:href="@{/board/delete(boardId=${board.boardId})}" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">삭제</a>
+      </div>
+      
+      <div class="mt-4 flex items-center space-x-2">
+        <a th:href="@{/board/like(boardId=${board.boardId})}" class="text-red-500">❤️</a>
+        <span th:text="${board.likeCount}" class="text-gray-700"></span>
+      </div>
+      
+      <h3 class="mt-6 text-lg font-bold">댓글</h3>
+      <hr class="my-2">
+      
+      <div class="mt-4 space-y-4" th:each="comment : ${comment}">
+        <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
+          <p class="text-gray-700 font-semibold" th:text="${comment.nickname}"></p>
+          <p class="text-sm text-gray-500" th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></p>
+          <p class="mt-2 text-gray-700" th:text="${comment.content}"></p>
+          <div class="mt-2 flex space-x-2">
+            <a th:href="@{/board/commentUpdate(commentId=${comment.commentId})}" class="text-blue-500">수정</a>
+            <a th:href="@{/board/commentDelete(commentId=${comment.commentId}, boardId=${board.boardId})}" class="text-red-500">삭제</a>
+            <a th:href="@{/board/commentLike(commentId=${comment.commentId}, boardId=${board.boardId})}" class="text-red-500">❤️</a>
+            <span th:text="${comment.likeCount}" class="text-gray-700"></span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+        <form action="/board/commentCreate" class="space-y-2">
+          <input type="hidden" name="boardId" th:value="${board.boardId}">
+          <label for="content" class="block text-gray-700">댓글 내용:</label>
+          <textarea id="content" name="content" rows="4" class="w-full p-2 border rounded" placeholder="댓글을 작성하세요" required></textarea>
+          <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">댓글 작성</button>
+        </form>
+      </div>
+    </div>
+  </div>
 </body>
-<script>
-	function confirmDelete(event, element) {
-		event.preventDefault();
-		let userConfirm = confirm("정말 삭제하시겠습니까?");
-		if (userConfirm) {
-			window.location.href = element.href;
-		}
-	}
-
-	document.addEventListener("DOMContentLoaded", ()=>{
-		document.querySelectorAll(".commentUpdate").forEach(button => {
-			button.addEventListener("click", (e)=>{
-				e.preventDefault();
-
-				const commentId = button.dataset.commentId;
-				const contentElement = document.getElementById("commentContent_" + commentId);
-				const textareaElement = document.getElementById("editTextarea_" + commentId);
-				const saveButton = document.querySelector(".commentSave[data-comment-id='" + commentId + "']");
-
-				textareaElement.value = contentElement.innerText;
-				contentElement.style.display = "none";
-				textareaElement.style.display = "block";
-				saveButton.style.display = "inline-block";
-				button.style.color = "white";
-			})
-		});
-
-		document.querySelectorAll(".commentSave").forEach(button => {
-			button.addEventListener("click", (e)=>{
-				e.preventDefault();
-				const commentId = button.dataset.commentId;
-				const textareaElement = document.getElementById("editTextarea_" + commentId);
-				const updatedContent = textareaElement.value;
-
-				fetch(`/board/commentUpdate`, {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json"
-					},
-					body: JSON.stringify({
-						commentId: commentId,
-						content: updatedContent
-					})
-				}).then(response => response.json())
-				.then(data => {
-					if (data.data.success) {
-						document.getElementById("commentContent_" + commentId).innerText = updatedContent;
-						document.getElementById("commentContent_" + commentId).style.display = "block";
-						textareaElement.style.display = "none";
-						button.style.display = "none";
-						document.querySelector(".commentUpdate[data-comment-id='" + commentId + "']").style.color = "black";
-					} else {
-						alert("댓글 수정에 실패했습니다.");
-					}
-				}).catch(error => console.error("Error:", error));
-			});
-		});
-	})
-
-	const commentBtn = document.getElementById("commentButton")
-	commentBtn.addEventListener("click", (e)=>{
-		e.preventDefault();
-		document.querySelector(".likeContain").scrollIntoView({
-			behavior: "smooth",
-			block: "start"
-		});
-	})
-
-	document.addEventListener("DOMContentLoaded", (e) =>{
-		const likesBtn = document.getElementById("likeCount");
-		const boardId = likesBtn.dataset.boardId;
-		const userId = likesBtn.dataset.id;
-		likesBtn.addEventListener("click" , async (e) =>{
-			e.preventDefault();
-
-			const data = {
-				boardId : boardId,
-				userId : userId
-			}
-
-			const response = await fetch(`/board/like` , {
-
-				method : "POST" ,
-				headers : {
-					"Content-Type" : "application/json"
-				},
-				body : JSON.stringify(data)
-
-			})
-
-			const result = await response.json()
-
-			if(!response.ok){
-				console.log("데이터를 못받아왔씁니다")
-			}
-
-			if(result.data.contain === "contained"){
-				likesBtn.textContent = `❤️ ${result.data.likeCount}`;
-			}
-			else {
-				likesBtn.textContent = `🤍 ${result.data.likeCount}`;
-			}
-
-
-		})
-	})
-	document.addEventListener("DOMContentLoaded", (e) =>{
-		const likeButtons = document.querySelectorAll(".commentLikeCount");
-
-		likeButtons.forEach(likesBtn => {
-			const commentId = likesBtn.dataset.commentId;
-			const userId = likesBtn.dataset.id;
-
-			likesBtn.addEventListener("click" , async (e) =>{
-				e.preventDefault();
-
-				const data = {
-					commentId : commentId,
-					userId : userId
-				}
-				const response = await fetch(`/board/commentLike` , {
-
-					method : "POST" ,
-					headers : {
-						"Content-Type" : "application/json"
-					},
-					body : JSON.stringify(data)
-
-				})
-
-				const result = await response.json()
-
-				if(!response.ok){
-					console.log("데이터를 못받아왔씁니다")
-				}
-
-				if(result.data.contain === "contained"){
-					likesBtn.textContent = `❤️ ${result.data.commentLikeCount}`;
-				}
-				else {
-					likesBtn.textContent = `🤍 ${result.data.commentLikeCount}`;
-				}
-			})
-		})
-	})
-</script>
 </html>

@@ -40,5 +40,9 @@ public interface PurchaseProductRepository extends JpaRepository<PurchaseProduct
   void updateDeliveryStatus(@Param("purchaseProductId") Long purchaseProductId, @Param("deliveryStatus") String deliverStatus);
 
     List<PurchaseProduct> findByPurchaseProductId(Long purchaseProductId);
+
+    List<PurchaseProduct> findByDeliveryStatusAndUserIdOrderByPurchaseProductIdDesc(String deliveryStatus, String userId);
+
+  Page<PurchaseProduct> findByCancelAtIsNotNullAndUserIdOrderByPurchaseProductIdDesc(String userId, Pageable pageable);
 }
 

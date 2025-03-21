@@ -23,6 +23,6 @@ public class WebConfig implements WebMvcConfigurer {
         .addResourceLocations("file:" + uploadPath + "/")
         .setCachePeriod(0);
 
-
+    System.out.println("업로드 경로 설정: " + uploadPath);
   }
 }

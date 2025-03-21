@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -83,12 +84,8 @@ public class PurchaseRestController {
     public ResponseEntity<String> deliveryState(@RequestBody Map<String, String> request){
       String deliveryState = request.get("deliveryState");
       Long purchaseProductId = Long.parseLong(request.get("purchaseProductId"));
-      System.out.println(deliveryState);
-      System.out.println(purchaseProductId);
-      String state = service.deliveryChange(deliveryState, purchaseProductId);
-      System.out.println("sss" + state);
-
-      return ResponseEntity.ok(state);
+      service.deliveryChange(deliveryState, purchaseProductId);
+      return ResponseEntity.ok("success");
     }
 
     @PostMapping("/receiverChange")
@@ -98,14 +95,28 @@ public class PurchaseRestController {
 
   //물품 구입
   @PostMapping("/process")
-  public ResponseEntity<?> processOrder(@ModelAttribute List<PurchaseProductDto> purchaseProductDtos,
+  public ResponseEntity<?> processOrder(@ModelAttribute CartToPuchaseDto cartToPuchaseDtos,
                                         Authentication authentication) {
     try {
+      // 주문 처리 로직 진행
       String userId = authentication.getName();
+      System.out.println("id" + cartToPuchaseDtos.getProduct().get(0).getProductId());
+      System.out.println("id");
+      Long purchaseId = service.processOrder(cartToPuchaseDtos, userId);
       // 서비스 레이어로 주문 데이터 전달
-      return ResponseEntity.ok().body("{\"success\":true}");
+      Map<String, Object> response = new HashMap<>();
+      response.put("success", true);
+      response.put("purchaseId", purchaseId);
+      System.out.println("purchaseId" + purchaseId);
+      return ResponseEntity.ok(response);
     } catch (Exception e) {
       return ResponseEntity.badRequest().body("{\"success\":false, \"message\":\"" + e.getMessage() + "\"}");
     }
+  }
+
+  @PostMapping("/purchaseConform")
+  public ResponseEntity<Map<String, String>> purchaseConform(@RequestBody Map<String, String> request){
+    service.purchaseConform(request.get("purchaseProductId"));
+      return ResponseEntity.ok(Map.of("message", "구매 확정 완료"));
   }
 }

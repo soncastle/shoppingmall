@@ -1,5 +1,10 @@
 /* 제목 스타일 */
-
+.order-container {
+    width: 100% !important;
+    height: auto !important;
+    margin: 5px !important;
+    justify-content: center;
+}
 h1 {
     text-align: center;
     color: #333;
@@ -21,20 +26,21 @@ h1 {
 
 /* 기본 버튼 스타일 */
 .button {
-    background-color: #007bff;
-    color: white;
-    border: none;
+    background-color: #fafaff;
+    color: black;
+   border: 1px solid #ebecff;
+   margin: 5px 0;
 }
 
 .button:hover {
-    background-color: #0056b3;
+    background-color: #7a7aff;
 }
 
 /* 테이블 스타일 */
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
+    margin: 20px 0 !important;
 }
 
 th, td {
@@ -97,4 +103,56 @@ img[alt="미리보기 이미지"] {
 
 .button[type="submit"]:hover {
     background-color: #0056b3;
+}
+/* 교환 요청 모달 전용 스타일 */
+.exchange-modal .exchange-modal-content {
+  border-radius: 10px;
+  border: 2px solid #007bff;
+  overflow: hidden;
+}
+
+.exchange-modal .exchange-modal-header {
+  background-color: #007bff;
+  color: #ffffff;
+  padding: 1rem;
+  border-bottom: 1px solid #0056b3;
+}
+
+.exchange-modal .exchange-modal-header .modal-title {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.exchange-modal .exchange-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.25rem;
+  color: #ffffff;
+}
+
+.exchange-modal .exchange-modal-body {
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+  color: #333333;
+}
+
+/* 입력 필드와 버튼 커스터마이징 */
+.exchange-modal .form-control {
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  padding: 0.5rem;
+}
+
+.exchange-modal .button {
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+.exchange-modal .button:hover {
+  background-color: #0056b3;
 }

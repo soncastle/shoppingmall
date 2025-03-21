@@ -3,11 +3,10 @@ package com.shoppingmall.user.model;
 import com.shoppingmall.board.model.Board;
 import com.shoppingmall.board.model.Comment;
 import com.shoppingmall.cart.model.Cart;
+import com.shoppingmall.order.domain.Coupon;
 import com.shoppingmall.pet.model.Pet;
 import com.shoppingmall.user.dto.UserResponseDTO;
 import jakarta.persistence.*;
-
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -27,7 +26,7 @@ import lombok.Setter;
 @Table(uniqueConstraints = {
     @UniqueConstraint(columnNames = {"email", "accountType"})
 })
-public class User implements Serializable {
+public class User {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,6 +61,9 @@ public class User implements Serializable {
   @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private Cart cart;
 
+  @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Coupon coupon;
+
   @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private UserImg userImg;
 
@@ -83,10 +85,15 @@ public class User implements Serializable {
       this.cart.setUser(this); // Cart의 user도 설정
     }
 
+    if (this.coupon == null) {
+      this.coupon = new Coupon(); // User 생성 시 자동으로 Cart 생성
+      this.coupon.setUser(this); // Cart의 user도 설정
+    }
+
     if ( this.userImg == null){
       this.userImg = new UserImg();
       this.userImg.setUser(this);
-      this.userImg.setUrl("/images/ui/my-page-user-basic.jpg");
+      this.userImg.setUrl("/images/user-basic.jpg");
     }
   }
 

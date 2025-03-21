@@ -3,157 +3,156 @@
 <head>
 <meta charset="UTF-8">
 <title>게시판</title>
-<link rel="stylesheet" href="/css/layout/common.css">
 <style>
-/* 기본 스타일 */
+	/* 기본 스타일 */
 body {
-	font-family: 'Arial', sans-serif;
-	background-color: #f9f9f9;
-	color: #333;
-	margin: 0;
-	padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    margin: 0;
+    padding: 0;
 }
 
 /* 레이아웃 */
 .container {
-	display: flex;
-	max-width: 1200px;
-	margin: 0 auto;
-	padding: 20px;
+    display: flex;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
 .sidebar {
-	width: 250px;
-	background-color: #fff;
-	padding: 20px;
-	border-radius: 10px;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 250px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar h3 {
-	font-size: 18px;
-	margin-bottom: 10px;
+    font-size: 18px;
+    margin-bottom: 10px;
 }
 
 .category a {
-	display: block;
-	padding: 8px 0;
-	color: #333;
-	text-decoration: none;
-	font-size: 14px;
-	margin-bottom: 5px;
+    display: block;
+    padding: 8px 0;
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+    margin-bottom: 5px;
 }
 
 .category a:hover {
-	color: #007bff;
+    color: #007bff;
 }
 
 .content {
-	flex-grow: 1;
-	margin-left: 20px;
+    flex-grow: 1;
+    margin-left: 20px;
 }
 
 h1 {
-	font-size: 24px;
-	margin-bottom: 20px;
+    font-size: 24px;
+    margin-bottom: 20px;
 }
 
 .search {
-	display: flex;
-	gap: 10px;
-	margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
 }
 
 .search input[type="text"], .search select {
-	padding: 8px;
-	font-size: 14px;
+    padding: 8px;
+    font-size: 14px;
 }
 
 .search button {
-	padding: 8px 12px;
-	background-color: #007bff;
-	color: white;
-	border: none;
-	cursor: pointer;
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
 }
 
 .search button:hover {
-	background-color: #0056b3;
+    background-color: #0056b3;
 }
 
 .write-button {
-	display: inline-block;
-	padding: 10px 15px;
-	background-color: #28a745;
-	color: white;
-	text-decoration: none;
-	margin-bottom: 20px;
-	border-radius: 5px;
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #28a745;
+    color: white;
+    text-decoration: none;
+    margin-bottom: 20px;
+    border-radius: 5px;
 }
 
 .write-button:hover {
-	background-color: #218838;
+    background-color: #218838;
 }
 
 /* 게시글 스타일 */
 .board-container {
-	display: flex;
-	flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 .board-item {
-	background-color: #fff;
-	margin-bottom: 20px;
-	padding: 20px;
-	border-radius: 10px;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-	position: relative;
+    background-color: #fff;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: relative;
 }
 
 .board-header {
-	display: flex;
-	font-size: 16px;
-	margin-bottom: 10px;
+    display: flex;
+    font-size: 16px;
+    margin-bottom: 10px;
 }
 
 .board-title {
-	font-weight: bold;
-	color: #007bff;
-	text-decoration: none;
+    font-weight: bold;
+    color: #007bff;
+    text-decoration: none;
 }
 
 .board-title:hover {
-	text-decoration: underline;
+    text-decoration: underline;
 }
 
 .comment-count {
-	font-weight: bold;
-	color: #007bff;
-	text-decoration: none;
+    font-weight: bold;
+    color: #007bff;
+    text-decoration: none;
 }
 
 .comment-count:hover {
-	text-decoration: underline;
+    text-decoration: underline;
 }
 
 .board-meta {
-	font-size: 14px;
-	color: #777;
-	margin-bottom: 10px;
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 10px;
 }
 
 .board-category {
-	font-size: 14px;
-	margin-bottom: 10px;
+    font-size: 14px;
+    margin-bottom: 10px;
 }
 
 .board-content {
-	font-size: 16px;
-	margin-bottom: 10px;
-	max-width: 500px;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
+    font-size: 16px;
+    margin-bottom: 10px;
+    max-width: 500px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .board-image {
@@ -167,129 +166,106 @@ img {
 	height: 130px;
 	object-fit: cover;
 	border-radius: 10px;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .paging {
-	text-align: center;
-	margin-top: 30px;
+    text-align: center;
+    margin-top: 30px;
 }
 
 .paging a {
-	padding: 8px 15px;
-	margin: 0 5px;
-	background-color: #f1f1f1;
-	text-decoration: none;
-	color: #333;
-	border-radius: 5px;
+    padding: 8px 15px;
+    margin: 0 5px;
+    background-color: #f1f1f1;
+    text-decoration: none;
+    color: #333;
+    border-radius: 5px;
 }
 
 .paging a:hover {
-	background-color: #007bff;
-	color: white;
+    background-color: #007bff;
+    color: white;
 }
 
 .pagingNumber {
-	margin: 10px 0;
+    margin: 10px 0;
 }
 
 .pagingNumber a.current {
-	background-color: #007bff;
-	color: white;
+    background-color: #007bff;
+    color: white;
 }
+	
 </style>
 </head>
 <body>
-	<div th:replace="fragment/header :: headerFragment"></div>
-	<div th:replace="fragment/nav :: navFragment"></div>
+    <div class="container">
+    <div class="sidebar">
+        <h3>카테고리</h3>
+        <div class="category">
+            <a th:href="@{/board/board(category='', keyword=${keyword})}">전체</a>
+            <a th:href="@{/board/board(category='반슐랭', keyword=${keyword})}">반슐랭</a>
+            <a th:href="@{/board/board(category='육아팁', keyword=${keyword})}">육아팁</a>
+            <a th:href="@{/board/board(category='일상공유', keyword=${keyword})}">일상공유</a>
+            <a href="">상품후기</a>
+        </div>
+    </div>
+    <div class="content">
+        <h1>게시판</h1>
+        <form class="search" action="/board/board">
+            <input type="hidden" name="category" th:value="${category}">
+            <input type="text" name="keyword" th:value="${keyword}" placeholder="검색어 입력" />
+            <select name="orderby">
+                <option th:selected="${orderby == '최신순'}">최신순</option>
+                <option th:selected="${orderby == '인기순'}">인기순</option>
+            </select>
+            <select name="bydate">
+                <option th:selected="${bydate == '1개월'}">1개월</option>
+                <option th:selected="${bydate == '3개월'}">3개월</option>
+                <option th:selected="${bydate == '전체'}">전체</option>
+            </select>
+            <button type="submit">검색</button>
+        </form><br><br>
+        
+        <a href="/board/write" class="write-button">글쓰기</a>
 
-	<div class="container">
-		<div class="pm-section">
-			<div class="sidebar">
-				<h3>카테고리</h3>
-				<div class="category">
-					<a th:href="@{/board/board(category='', keyword=${keyword})}">전체</a>
-					<a th:href="@{/board/board(category='반슐랭', keyword=${keyword})}">반슐랭</a>
-					<a th:href="@{/board/board(category='육아팁', keyword=${keyword})}">육아팁</a>
-					<a th:href="@{/board/board(category='일상공유', keyword=${keyword})}">일상공유</a>
-					<a href="">상품후기</a>
-				</div>
-			</div>
-			<div class="content">
-				<h1>게시판</h1>
-				<form class="search" action="/board/board">
-					<input type="hidden" name="category" th:value="${category}">
-					<input type="text" name="keyword" th:value="${keyword}"
-						placeholder="검색어 입력" /> <select name="orderby">
-						<option th:selected="${orderby == '최신순'}">최신순</option>
-						<option th:selected="${orderby == '인기순'}">인기순</option>
-					</select> <select name="bydate">
-						<option th:selected="${bydate == '1개월'}">1개월</option>
-						<option th:selected="${bydate == '3개월'}">3개월</option>
-						<option th:selected="${bydate == '전체'}">전체</option>
-					</select>
-					<button type="submit">검색</button>
-				</form>
-				<br> <a href="/board/write" class="write-button">글쓰기</a>
+        <div class="board-container">
+            <div th:each="board : ${board}" class="board-item">
+                <div class="board-header">
+                    <a th:href="@{/board/read(boardId=${board.boardId}, page=${currentPage})}" th:text="${board.title}" class="board-title"></a>
+                    <a th:href="@{/board/read(boardId=${board.boardId}, page=${currentPage})}"
+                    	class="comment-count" th:if="${board.commentCount > 0}" th:text="'[' + ${board.commentCount} + ']'"></a>
+                </div>
+                <div class="board-meta">
+                    <span class="nickname" th:text="${board.nickname}"></span>
+                    <span class="date" th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd')}"></span>
+                    <span>조회수: </span><span class="view-count" th:text="${board.viewCount}"></span>
+                    <span>👍: </span><span class="like-count" th:text="${board.likeCount}"></span>
+                </div>
+                <div class="board-category">
+                    <span class="category" th:text="${board.categoryId}"></span>
+                    <a href="/board/hashtag" class="hashtag" th:text="${board.hashtag}"></a>
+                </div>
+                <div th:utext="${board.content}" class="board-content"></div>
+                <div th:utext="${board.image}" class="board-image"></div>
+            </div>
+        </div>
 
-				<div th:if="${hashtag != 'all'}">
-					<h3>[[${hashtag}]]</h3>
-				</div>
+        <div class="paging">
+            <a th:if="${currentPage >= 10}" th:href="@{/board/board(page=${currentPage - 10}, keyword=${keyword}, category=${category})}">&lt;&lt;</a>
+            <a th:if="${currentPage > 0}" th:href="@{/board/board(page=${currentPage - 1}, keyword=${keyword}, category=${category})}">&lt;</a>
 
-				<div class="board-container">
-					<div th:each="board : ${board}" class="board-item">
-						<div class="board-header">
-							<a
-								th:href="@{/board/read(boardId=${board.boardId}, page=${currentPage})}"
-								th:text="${board.title}" class="board-title"></a> <a
-								th:href="@{/board/read(boardId=${board.boardId}, page=${currentPage})}"
-								class="comment-count" th:if="${board.commentCount > 0}"
-								th:text="'[' + ${board.commentCount} + ']'"></a>
-						</div>
-						<div class="board-meta">
-							<span class="nickname" th:text="${board.nickname}"></span> <span
-								class="date"
-								th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd')}"></span>
-							<span>조회수: </span><span class="view-count"
-								th:text="${board.viewCount}"></span> <span>👍: </span><span
-								class="like-count" th:text="${board.likeCount}"></span>
-						</div>
-						<div class="board-category">
-							<span class="category" th:text="${board.categoryId}"></span> <span
-								th:each="hashtag : ${board.hashtag}"> <a
-								th:href="@{/board/board(hashtag = ${hashtag})}" class="hashtag"
-								th:text="${hashtag}"></a>
-							</span>
-						</div>
-						<div th:utext="${board.content}" class="board-content"></div>
-						<div th:utext="${board.image}" class="board-image"></div>
-					</div>
-				</div>
+            <div class="pagingNumber">
+                <span th:each="i : ${#numbers.sequence((currentPage / 10) * 10, ((currentPage / 10) + 1) * 10 - 1)}" th:if="${i >= 0 and i < board.totalPages}">
+                    <a th:href="@{/board/board(page=${i}, keyword=${keyword}, category=${category}, orderby=${orderby})}" th:text="${i + 1}" th:classappend="${i == currentPage ? 'current' : ''}"></a>
+                </span>
+            </div>
+            <a th:if="${currentPage + 1 < board.totalPages}" th:href="@{/board/board(page=${currentPage + 1}, keyword=${keyword}, category=${category})}">&gt;</a>
+            <a th:if="${((currentPage / 10) + 1) * 10 < board.totalPages}" th:href="@{/board/board(page=${currentPage + 10 - currentPage}, keyword=${keyword}, category=${category})}">&gt;&gt;</a>
+        </div>
+    </div>
+</div>
 
-				<div class="paging">
-					<a th:if="${currentPage >= 10}"
-						th:href="@{/board/board(page=${currentPage - 10}, keyword=${keyword}, category=${category}, hashtag=${hashtag})}">&lt;&lt;</a>
-					<a th:if="${currentPage > 0}"
-						th:href="@{/board/board(page=${currentPage - 1}, keyword=${keyword}, category=${category}, hashtag=${hashtag})}">&lt;</a>
-
-					<div class="pagingNumber">
-						<span
-							th:each="i : ${#numbers.sequence((currentPage / 10) * 10, ((currentPage / 10) + 1) * 10 - 1)}"
-							th:if="${i >= 0 and i < board.totalPages}"> <a
-							th:href="@{/board/board(page=${i}, keyword=${keyword}, category=${category}, orderby=${orderby}, hashtag=${hashtag})}"
-							th:text="${i + 1}"
-							th:classappend="${i == currentPage ? 'current' : ''}"></a>
-						</span>
-					</div>
-					<a th:if="${currentPage + 1 < board.totalPages}"
-						th:href="@{/board/board(page=${currentPage + 1}, keyword=${keyword}, category=${category}, hashtag=${hashtag})}">&gt;</a>
-					<a th:if="${((currentPage / 10) + 1) * 10 < board.totalPages}"
-						th:href="@{/board/board(page=${currentPage + 10 - currentPage}, keyword=${keyword}, category=${category}, hashtag=${hashtag})}">&gt;&gt;</a>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div th:replace="fragment/footer :: footerFragment"></div>
 </body>
 </html>

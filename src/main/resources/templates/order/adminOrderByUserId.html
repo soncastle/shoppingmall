@@ -4,97 +4,132 @@
 	<meta charset="UTF-8">
 	<title>주문 상세 정보</title>
 	<link rel="stylesheet" href="/css/order/adminOrderResult.css">
+	<link rel="stylesheet" href="/css/layout/common.css">
+	<link rel="stylesheet" href="/css/profile.css">
+	<style>
+		/* 기존 스타일 생략... */
+
+        /* 페이징 영역 스타일 */
+        .pagination {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 10px;
+          margin-top: 20px;
+        }
+        .pagination a {
+          padding: 8px 12px;
+          margin: 0 4px;
+          border: 1px solid #ddd;
+          text-decoration: none;
+          color: #007bff;
+          border-radius: 4px;
+          transition: background-color 0.3s, color 0.3s;
+        }
+        .pagination a:hover,
+        .pagination a.active {
+          background-color: #007bff;
+          color: #fff;
+          border-color: #007bff;
+        }
+        .pagination span {
+          padding: 8px 12px;
+          margin: 0 4px;
+          color: #6c757d;
+        }
+	</style>
 </head>
 <body>
-
-
-<h1>관리자용 id별 주문정보</h1>
-
-<p>
-	<a href="/order" class="button">메인페이지로</a> <a href="/order/admin/orderList" class="button">주문목록</a>
-</p>
-
+<div th:replace="fragment/header :: headerFragment"></div>
 <div class="container">
-	<h2>주문 상세정보</h2>
-
-	<table>
-		<thead>
-		<tr>
-			<th>주문번호</th>
-			<th>주문 정보</th>
-			<th>배송 정보</th>
-			<th>구매 상품</th>
-		</tr>
-		</thead>
-		<tbody>
-		<!-- 주문번호당 하나의 행 -->
-		<tr th:each="purchase : ${purchase}">
-			<!-- 주문번호 -->
-			<td th:text="${purchase.purchaseId}"></td>
-
-			<!-- 주문 정보 -->
-			<td class="info-cell">
-				<div class="info-section">
-					<strong>주문자 ID:</strong> <span th:text="${purchase.userId}"></span>
-				</div>
-				<div class="info-section">
-					<strong>총 가격:</strong> <span th:text="${purchase.totalPrice}"></span>
-				</div>
-				<div class="info-section">
-					<strong>주문/취소 시간:</strong> <br>
-					<span th:utext="${purchase.cancelAt != null ? '취소 시각: ' + #temporals.format(purchase.cancelAt, 'yyyy-M-d') + '<br>' + #temporals.format(purchase.cancelAt, 'a h시 mm분') : '주문 시각: ' + #temporals.format(purchase.createAt, 'yyyy-M-d') + '<br>' + #temporals.format(purchase.createAt, 'a h시 mm분')}"></span>
-				</div>
-				<div class="info-section">
-					<strong>주문/취소 현황:</strong> <span th:text="${purchase.cancelAt != null ? '취소' : '주문'}"></span>
-				</div>
-			</td>
-
-			<!-- 배송 정보 -->
-			<td class="info-cell" th:each="delivery : ${delivery}" th:if="${delivery.purchase.purchaseId == purchase.purchaseId}">
-				<div class="info-section">
-					<strong>수령인:</strong> <span th:text="${delivery.receiverName}"></span>
-				</div>
-				<div class="info-section">
-					<strong>전화번호:</strong> <span th:text="${delivery.receiverPhone}"></span>
-				</div>
-				<div class="info-section">
-					<strong>주소:</strong> <span th:text="${delivery.receiverAddr}"></span>
-				</div>
-				<div class="info-section">
-					<strong>요청사항:</strong> <span th:text="${delivery.deliveryMessage}"></span>
-				</div>
-			</td>
-
-			<!-- 구매 상품 -->
-			<td class="info-cell">
-				<div th:each="currentItem : ${item}" th:if="${currentItem.purchase != null and currentItem.purchase.purchaseId == purchase.purchaseId}" class="product-item">
-					<div><strong>상품번호:</strong> <span th:text="${currentItem.productId}"></span></div>
-					<div><strong>상품명:</strong> <span th:text="${currentItem.productName}"></span></div>
-					<div><strong>옵션:</strong> <span th:text="${currentItem.option == null ? '없음': currentItem.option}"></span></div>
-					<div><strong>수량:</strong> <span th:text="${currentItem.quantity}"></span></div>
-					<div><strong>가격:</strong> <span th:text="${currentItem.totalPrice}"></span></div>
-					<div><strong>배송상태:</strong> <span th:text="${currentItem.deliveryStatus}"></span></div>
-				</div>
-			</td>
-		</tr>
-		</tbody>
-	</table>
-
-	<div class="pagination" th:if="${purchase.totalPages > 1}">
-		<span th:if="${currentPage > 0}">
-			<a th:href="@{/order/orders/userId(admin='admin', userId=${purchase.content[0].userId}, page=${currentPage - 1}, size=${pageSize}, purchaseState=${param.purchaseState})}">이전</a>
-		</span>
-
-		<span th:each="pageNum : ${#numbers.sequence(0, purchase.totalPages - 1)}">
-			<a th:href="@{/order/orders/userId(admin='admin', userId=${purchase.content[0].userId}, page=${pageNum}, size=${pageSize}, purchaseState=${param.purchaseState})}"
+	<section class="pm-section">
+		<div th:replace="fragment/profile-common :: mypage-top"></div>
+		<div class="mypage-bottom-content">
+			<div th:replace="fragment/profile-common :: mypage-sidebar"></div>
+			<h1>관리자용 id별 주문정보</h1>
+			<p>
+				<a href="/order" class="button">메인페이지로</a>
+				<a href="/order/admin/orderList" class="button">주문목록</a>
+			</p>
+			<div class="order-container">
+				<h2>주문 상세정보</h2>
+				<table>
+					<thead>
+					<tr>
+						<th>주문번호</th>
+						<th>주문 정보</th>
+						<th>배송 정보</th>
+						<th>구매 상품</th>
+					</tr>
+					</thead>
+					<tbody>
+					<!-- 주문번호당 하나의 행 -->
+					<tr th:each="purchase : ${purchase}">
+						<!-- 주문번호 -->
+						<td th:text="${purchase.purchaseId}"></td>
+						<!-- 주문 정보 -->
+						<td class="info-cell">
+							<div class="info-section">
+								<strong>주문자 ID:</strong> <span th:text="${purchase.userId}"></span>
+							</div>
+							<div class="info-section">
+								<strong>총 가격:</strong> <span th:text="${purchase.totalPrice}"></span>
+							</div>
+							<div class="info-section">
+								<strong>주문/취소 시간:</strong> <br>
+								<span th:utext="${purchase.cancelAt != null ? '취소 시각: ' + #temporals.format(purchase.cancelAt, 'yyyy-M-d') + '<br>' + #temporals.format(purchase.cancelAt, 'a h시 mm분') : '주문 시각: ' + #temporals.format(purchase.createAt, 'yyyy-M-d') + '<br>' + #temporals.format(purchase.createAt, 'a h시 mm분')}"></span>
+							</div>
+							<div class="info-section">
+								<strong>주문/취소 현황:</strong> <span th:text="${purchase.cancelAt != null ? '취소' : '주문'}"></span>
+							</div>
+						</td>
+						<!-- 배송 정보 -->
+						<td class="info-cell" th:each="delivery : ${delivery}" th:if="${delivery.purchase.purchaseId == purchase.purchaseId}">
+							<div class="info-section">
+								<strong>수령인:</strong> <span th:text="${delivery.receiverName}"></span>
+							</div>
+							<div class="info-section">
+								<strong>전화번호:</strong> <span th:text="${delivery.receiverPhone}"></span>
+							</div>
+							<div class="info-section">
+								<strong>주소:</strong> <span th:text="${delivery.receiverAddr}"></span>
+							</div>
+							<div class="info-section">
+								<strong>요청사항:</strong> <span th:text="${delivery.deliveryMessage}"></span>
+							</div>
+						</td>
+						<!-- 구매 상품 -->
+						<td class="info-cell">
+							<div th:each="currentItem : ${item}" th:if="${currentItem.purchase != null and currentItem.purchase.purchaseId == purchase.purchaseId}" class="product-item">
+								<div><strong>상품번호:</strong> <span th:text="${currentItem.productId}"></span></div>
+								<div><strong>상품명:</strong> <span th:text="${currentItem.productName}"></span></div>
+								<div><strong>옵션:</strong> <span th:text="${currentItem.option == null ? '없음': currentItem.option}"></span></div>
+								<div><strong>수량:</strong> <span th:text="${currentItem.quantity}"></span></div>
+								<div><strong>가격:</strong> <span th:text="${currentItem.totalPrice}"></span></div>
+								<div><strong>배송상태:</strong> <span th:text="${currentItem.deliveryStatus}"></span></div>
+							</div>
+						</td>
+					</tr>
+					</tbody>
+				</table>
+				<!-- 페이징 -->
+				<div class="pagination" th:if="${purchase.totalPages > 1}">
+          <span th:if="${currentPage > 0}">
+            <a th:href="@{/order/orders/userId(admin='admin', userId=${purchase.content[0].userId}, page=${currentPage - 1}, size=${pageSize}, purchaseState=${param.purchaseState})}">이전</a>
+          </span>
+					<span th:each="pageNum : ${#numbers.sequence(0, purchase.totalPages - 1)}">
+            <a th:href="@{/order/orders/userId(admin='admin', userId=${purchase.content[0].userId}, page=${pageNum}, size=${pageSize}, purchaseState=${param.purchaseState})}"
 			   th:text="${pageNum + 1}"
 			   th:class="${pageNum == currentPage} ? 'active' : ''"></a>
-		</span>
-
-		<span th:if="${currentPage < purchase.totalPages - 1}">
-			<a th:href="@{/order/orders/userId(admin='admin', userId=${purchase.content[0].userId}, page=${currentPage + 1}, size=${pageSize}, purchaseState=${param.purchaseState})}">다음</a>
-		</span>
-	</div>
+          </span>
+					<span th:if="${currentPage < purchase.totalPages - 1}">
+            <a th:href="@{/order/orders/userId(admin='admin', userId=${purchase.content[0].userId}, page=${currentPage + 1}, size=${pageSize}, purchaseState=${param.purchaseState})}">다음</a>
+          </span>
+				</div>
+			</div>
+		</div>
+	</section>
 </div>
+<div th:replace="fragment/footer :: footerFragment"></div>
 </body>
 </html>

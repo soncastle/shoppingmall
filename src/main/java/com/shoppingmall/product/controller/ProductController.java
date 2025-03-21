@@ -14,7 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,8 +28,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shoppingmall.config.security.CustomUserDetails;
-import com.shoppingmall.product.dto.ProductResponseDTO;
 import com.shoppingmall.product.model.Category;
 import com.shoppingmall.product.model.PetType;
 import com.shoppingmall.product.model.Product;
@@ -40,7 +37,6 @@ import com.shoppingmall.product.repository.ReviewRepository;
 import com.shoppingmall.product.service.CategoryService;
 import com.shoppingmall.product.service.ProductService;
 import com.shoppingmall.product.service.ReviewService;
-import com.shoppingmall.user.dto.ApiResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 
@@ -60,87 +56,24 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    @Operation(summary = "상품 목록 조회", description = "네비게이션 탭별로 상품 목록을 조회하거나 petType으로 필터링합니다.")
-    public String listProducts(
-            @RequestParam(defaultValue = "storeHome") String sort,
-            @RequestParam(required = false) PetType petType,
-            Model model) {
-
-        // petType이 있으면 해당 petType에 맞는 카테고리만 보여줌 (이미 CategoryService에 구현되어 있다고 가정)
+    @Operation(summary = "상품 목록 조회", description = "모든 상품을 조회하거나 petType으로 필터링합니다.")
+    public String listProducts(@RequestParam(defaultValue = "newest") String sort,
+                               @RequestParam(required = false) PetType petType, Model model) {
+        List<Product> products;
         if (petType != null) {
-            model.addAttribute("categories", categoryService.findCategoriesByPetType(petType));
+            products = productService.getProductsByPetTypeSorted(petType, sort);
         } else {
-            model.addAttribute("categories", categoryService.findAllCategories());
+            products = productService.listAllProductsSorted(sort);
         }
-        model.addAttribute("selectedPetType", petType);
-        model.addAttribute("sort", sort);
-
-        if ("storeHome".equals(sort)) {
-            // 1) 스토어홈 (가성비, 베스트, 신상품)
-            List<Product> cheapList = productService.listAllProductsSorted("priceLowHigh");
-            // 리뷰 개수·평점 계산
-            setReviewCount(cheapList);
-            List<Product> cheapProducts = cheapList.stream().limit(4).toList();
-
-            List<Product> bestList = productService.listAllProductsSorted("rating");
-            setReviewCount(bestList);
-            List<Product> bestProducts = bestList.stream().limit(4).toList();
-
-            List<Product> newList = productService.listAllProductsSorted("newest");
-            setReviewCount(newList);
-            List<Product> newProducts = newList.stream().limit(4).toList();
-
-            model.addAttribute("cheapProducts", cheapProducts);
-            model.addAttribute("bestProducts", bestProducts);
-            model.addAttribute("newProducts", newProducts);
-
-            model.addAttribute("products", List.of());
-        }
-        else if ("all".equals(sort)) {
-            // 2) 전체제품
-            List<Product> products;
-            if (petType != null) {
-                // petType이 있으면 해당 petType 상품만 가져오기
-                products = productService.getProductsByPetTypeSorted(petType, "newest");
-            } else {
-                products = productService.listAllProductsSorted("newest");
-            }
-            setReviewCount(products);
-            model.addAttribute("products", products);
-            // 카테고리 안 누른 상태
-            model.addAttribute("currentCategory", null);
-            model.addAttribute("subcategories", List.of());
-        } else if ("rating".equals(sort)) {
-            // 3) 베스트
-            List<Product> products = productService.listAllProductsSorted("rating");
-            setReviewCount(products);
-            model.addAttribute("products", products);
-            model.addAttribute("currentCategory", null);
-            model.addAttribute("subcategories", List.of());
-        } else if ("newest".equals(sort)) {
-            // 4) NEW
-            List<Product> products = productService.listAllProductsSorted("newest");
-            setReviewCount(products);
-            model.addAttribute("products", products);
-            model.addAttribute("currentCategory", null);
-            model.addAttribute("subcategories", List.of());
-        } else {
-            // 그 외 (priceLowHigh, priceHighLow 등)
-            List<Product> products = productService.listAllProductsSorted(sort);
-            setReviewCount(products);
-            model.addAttribute("products", products);
-            model.addAttribute("currentCategory", null);
-            model.addAttribute("subcategories", List.of());
-        }
-
-        return "product/index2";
-    }
-
-    private void setReviewCount(List<Product> products) {
         for (Product product : products) {
             int reviewCount = reviewService.getReviewsByProductId(product.getProductId()).size();
             product.setReviewCount(reviewCount);
         }
+        model.addAttribute("products", products);
+        model.addAttribute("categories", categoryService.findAllCategories());
+        model.addAttribute("selectedPetType", petType);
+        model.addAttribute("sort", sort);
+        return "/product/index2";
     }
 
     @GetMapping("/products/add")
@@ -169,13 +102,13 @@ public class ProductController {
 
     private String uploadFile(MultipartFile file) {
         if (!file.isEmpty()) {
-            String basePath = new File("src/main/resources/static/images/product").getAbsolutePath();
+            String basePath = new File("src/main/resources/static/images").getAbsolutePath();
             String fileName = System.currentTimeMillis() + "-" + file.getOriginalFilename();
             String filePath = basePath + File.separator + fileName;
             File destinationFile = new File(filePath);
             try {
                 file.transferTo(destinationFile);
-                return "/images/product/" + fileName;
+                return "/images/" + fileName;
             } catch (IOException e) {
                 e.printStackTrace();
                 return null;
@@ -183,7 +116,7 @@ public class ProductController {
         }
         return null;
     }
-
+    
     private List<String> uploadFiles(List<MultipartFile> files) {
         List<String> imageUrls = new ArrayList<>();
         for (MultipartFile file : files) {
@@ -194,7 +127,7 @@ public class ProductController {
         }
         return imageUrls;
     }
-
+    
     @GetMapping("/products/{id}")
     public String viewProduct(@PathVariable("id") Long productId,
                               @RequestParam(defaultValue = "0") int page,
@@ -243,7 +176,7 @@ public class ProductController {
         model.addAttribute("reviewComments", reviewComments);
         return "/product/productDetail";
     }
-
+    
     @GetMapping("/products/edit/{id}")
     public String editProductForm(@PathVariable Long id, Model model) {
         Product product = productService.getProductById(id);
@@ -252,7 +185,7 @@ public class ProductController {
         model.addAttribute("subcategories", categoryService.findAllSubcategories());
         return "/product/editProduct";
     }
-
+    
     @PostMapping("/products/edit/{id}")
     public String editProduct(@PathVariable Long id,
                               @ModelAttribute("product") Product product,
@@ -271,50 +204,41 @@ public class ProductController {
             mainImageUrls = existingProduct.getImageUrls();
         }
         product.setImageUrls(mainImageUrls);
-        List<String> detailImageUrls = (detailImageFiles != null && !detailImageFiles.isEmpty())
-                ? uploadFiles(detailImageFiles)
-                : existingProduct.getDetailImageUrls();
+        List<String> detailImageUrls = (detailImageFiles != null && !detailImageFiles.isEmpty()) ?
+                uploadFiles(detailImageFiles) : existingProduct.getDetailImageUrls();
         product.setDetailImageUrls(detailImageUrls);
         productService.updateProduct(id, product, categoryId, subcategoryId, mainImageUrls, detailImageUrls);
         return "redirect:/products/" + id;
     }
-
+    
     @DeleteMapping("/products/delete/{id}")
     public String deleteProduct(@PathVariable("id") Long id) {
         productService.deleteProduct(id);
         return "redirect:/products";
     }
-
-    // 카테고리 진입 시에도 전체제품 레이아웃 재사용 -> sort="all"
+    
     @GetMapping("/products/category/{categoryId}")
-    public String getProductsByCategory(
-        @PathVariable("categoryId") Long categoryId,
-        @RequestParam(required = false) PetType petType,
-        @RequestParam(defaultValue = "newest") String sort,
-        Model model
-    ) {
+    public String getProductsByCategory(@PathVariable("categoryId") Long categoryId,
+                                        @RequestParam(required = false) PetType petType,
+                                        @RequestParam(required = false, defaultValue = "newest") String sort,
+                                        Model model) {
         Category category = categoryService.findCategoryById(categoryId);
         List<Product> products;
         if (petType != null) {
             products = productService.getProductsByCategoryAndPetTypeSorted(categoryId, petType, sort);
-            model.addAttribute("categories", categoryService.findCategoriesByPetType(petType)); // ✅ 수정 포인트
         } else {
             products = productService.findProductsByCategory(category, sort);
-            model.addAttribute("categories", categoryService.findAllCategories());
         }
-
-        setReviewCount(products);
         List<Subcategory> subcategories = categoryService.findSubcategoriesByCategory(category);
-
-        model.addAttribute("sort", "all");
         model.addAttribute("currentCategory", category);
         model.addAttribute("products", products);
         model.addAttribute("subcategories", subcategories);
-        model.addAttribute("selectedPetType", petType); // ✅ 반드시 유지
+        model.addAttribute("categories", categoryService.findAllCategories());
+        model.addAttribute("selectedPetType", petType);
+        model.addAttribute("sort", sort);
         return "product/index2";
     }
-
-
+    
     @GetMapping("/products/category/{categoryId}/json")
     public ResponseEntity<List<Product>> getProductsByCategoryJson(
             @PathVariable("categoryId") Long categoryId,
@@ -323,95 +247,72 @@ public class ProductController {
         List<Product> products = productService.findProductsByCategory(category, sort);
         return ResponseEntity.ok(products);
     }
-
-    // 서브카테고리 접근 시에도 동일하게 전체제품 레이아웃 사용 (sort="all")
+    
     @GetMapping("/products/subcategory/{subId}")
-    public String getProductsBySubcategory(
-        @PathVariable("subId") Long subId,
-        @RequestParam(required = false) PetType petType,
-        @RequestParam(defaultValue = "newest") String sort,
-        Model model
-    ) {
+    public String getProductsBySubcategory(@PathVariable("subId") Long subId,
+                                           @RequestParam(required = false) PetType petType,
+                                           @RequestParam(required = false, defaultValue = "newest") String sort,
+                                           Model model) {
         Subcategory subcategory = categoryService.findSubcategoryById(subId);
-        Category parentCategory = subcategory.getCategory();
         List<Product> products;
         if (petType != null) {
             products = productService.getProductsBySubcategoryAndPetTypeSorted(subId, petType, sort);
-            model.addAttribute("categories", categoryService.findCategoriesByPetType(petType)); // ✅ 수정 포인트
         } else {
             products = productService.findProductsBySubcategory(subcategory, sort);
-            model.addAttribute("categories", categoryService.findAllCategories());
         }
-
-        setReviewCount(products);
+        Category parentCategory = subcategory.getCategory();
         List<Subcategory> subcategories = categoryService.findSubcategoriesByCategory(parentCategory);
-
-        model.addAttribute("sort", "all");
         model.addAttribute("currentCategory", parentCategory);
         model.addAttribute("products", products);
         model.addAttribute("subcategories", subcategories);
-        model.addAttribute("selectedPetType", petType); // ✅ 반드시 유지
-        model.addAttribute("selectedSubcategoryId", subId);
+        model.addAttribute("categories", categoryService.findAllCategories());
+        model.addAttribute("selectedPetType", petType);
+        model.addAttribute("sort", sort);
         return "product/index2";
     }
-
-
+    
     @GetMapping("/products/search")
     public String searchProducts(@RequestParam("search") String search, Model model) {
         List<Product> products = productService.searchProducts(search);
         model.addAttribute("products", products);
         return "/product/index2";
     }
-
-    // 리뷰 로그인한 유저id 받아오도록 수정
+    
     @PostMapping("/products/{productId}/reviews")
-    public String addReview(@PathVariable Long productId,
-                            @ModelAttribute Review review,
-                            @RequestParam("imageFile") MultipartFile imageFile,
-                            @AuthenticationPrincipal CustomUserDetails userDetails) {
-    	
-        review.setUserId(userDetails.getUser().getId());
+    public String addReview(@PathVariable Long productId, @ModelAttribute Review review, @RequestParam("imageFile") MultipartFile imageFile) {
         review.setProductId(productId);
-
+        review.setUserId(1L);
         reviewService.saveReview(review, imageFile);
         return "redirect:/products/" + productId;
     }
-
-
+    
     @GetMapping("/products/{productId}/reviews")
     public ResponseEntity<List<Review>> getReviews(@PathVariable Long productId) {
         List<Review> reviews = reviewService.getReviewsByProductId(productId);
         return ResponseEntity.ok(reviews);
     }
-
+    
     @PostMapping("/products/{productId}/reviews/{reviewId}/comments")
     @ResponseBody
     public Map<String, Object> addCommentAjax(
         @PathVariable Long productId,
         @PathVariable Long reviewId,
         @RequestParam String content,
-        @AuthenticationPrincipal CustomUserDetails userDetails
+        @RequestParam Long userId
     ) {
         Map<String, Object> result = new HashMap<>();
         try {
-            Long userId = userDetails.getUser().getId();
-            String nickname = userDetails.getUser().getNickname();
-            reviewService.addComment(reviewId, content, userId, nickname);
-            result.put("status", "success");
+            reviewService.addComment(reviewId, content, userId);
             result.put("userId", userId);
-            result.put("nickname", nickname);
             result.put("content", content);
             result.put("createdAt", new Date());
-        } catch (Exception e) {
+        } catch (JsonProcessingException e) {
             e.printStackTrace();
-            result.put("status", "error");
-            result.put("message", "서버 오류가 발생했습니다: " + e.getMessage());
+            result.put("error", "댓글 추가에 실패하였습니다: " + e.getMessage());
         }
         return result;
     }
-
-
-
+    
     @GetMapping("/{productId}/reviews/{reviewId}/comments")
     @ResponseBody
     public List<Map<String, Object>> getComments(@PathVariable Long productId,
@@ -422,7 +323,7 @@ public class ProductController {
         }
         return new ObjectMapper().readValue(review.getComments(), new TypeReference<List<Map<String, Object>>>() {});
     }
-
+    
     @PostMapping("/products/{productId}/reviews/edit/{reviewId}")
     public String editReview(@PathVariable Long productId,
                              @PathVariable Long reviewId,
@@ -431,17 +332,11 @@ public class ProductController {
         reviewService.updateReview(reviewId, review, imageFile);
         return "redirect:/products/" + productId;
     }
-
+    
     @DeleteMapping("/products/{productId}/reviews/delete/{reviewId}")
     public String deleteReview(@PathVariable Long productId,
                                @PathVariable Long reviewId) {
         reviewService.deleteReview(reviewId);
         return "redirect:/products/" + productId;
-    }
-
-    @GetMapping("/api/products")
-    public ResponseEntity<ApiResponse<?>> getProduct() {
-        List<ProductResponseDTO> list = productService.bestLikeProducts();
-        return ResponseEntity.ok(ApiResponse.success(list));
     }
 }

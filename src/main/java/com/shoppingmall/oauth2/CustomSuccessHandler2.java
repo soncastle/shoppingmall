@@ -28,7 +28,7 @@ public class CustomSuccessHandler2 extends SimpleUrlAuthenticationSuccessHandler
     String userId = authentication.getName();
 
     // 사용자 정보 조회
-    User user = userRepository.findByUserId(userId).orElse(null);
+    User user = userRepository.findByUserId(userId);
     if (user != null) {
       // 카트 수량 가져오기
       int cartCount = user.getCart().getUniqueItemCount();
@@ -38,7 +38,7 @@ public class CustomSuccessHandler2 extends SimpleUrlAuthenticationSuccessHandler
       session.setAttribute("cartCount", 0); // 사용자 정보가 없을 경우 0으로 설정
     }
 
-    setDefaultTargetUrl("http://localhost:8080");
+    setDefaultTargetUrl("http://localhost:8080/home");
     // 기본 인증 성공 핸들러 호출
     super.onAuthenticationSuccess(request, response, authentication);
 

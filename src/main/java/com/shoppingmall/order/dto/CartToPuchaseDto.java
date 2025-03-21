@@ -25,7 +25,8 @@ public class CartToPuchaseDto {
   private String coupon;
   private String paymentMethod;
   private String cardCompany;
+  private String totalPrice;
 
-  private List<PurchaseProductDto> purchaseProductDtos;  // 여러 개의 상품을 받을 리스트
+  private List<PurchaseReadyDto> product;  // 여러 개의 상품을 받을 리스트
 
 }

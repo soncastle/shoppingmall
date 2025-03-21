@@ -3,126 +3,392 @@
 <head>
     <meta charset="UTF-8">
     <title>주문 상세 정보</title>
-    <link rel="stylesheet" href="/css/order/orderAllList.css">
-    <link rel="stylesheet" href="/css/order/review.css">
-    <script src="/js/order/review.js"></script>
+    <link rel="stylesheet" href="/css/layout/common.css">
+    <link rel="stylesheet" href="/css/profile.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        /* 컨테이너 */
+        .order-container {
+          width: 100%;
+          margin: 0 2px 0 5px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+        h2 {
+          text-align: center;
+          color: #333;
+          margin-bottom: 20px;
+        }
+        /* 테이블 스타일 */
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          background-color: #fff;
+          border-radius: 10px;
+          overflow: hidden;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        thead {
+          background-color: #d2e4f7;
+          color: black;
+          font-weight: bold;
+        }
+        thead th {
+          padding: 15px;
+          text-align: center;
+          border-right: 1px solid #93bbe6;
+        }
+        tbody {
+          background-color: #f9f9f9;
+        }
+        .table-group {
+          border-bottom: 2px solid #ddd;
+          transition: background-color 0.3s;
+        }
+        .table-group:hover {
+          background-color: #e0e0ff;
+        }
+        td {
+          padding: 12px;
+          text-align: center;
+          vertical-align: middle;
+          border-right: 1px solid #ccc;
+        }
+        td:last-child {
+          border-right: none;
+        }
+        .table-group img {
+          width: 80px;
+          height: auto;
+          border-radius: 10px;
+        }
+        /* 버튼 스타일 */
+        .button {
+          display: inline-block;
+          padding: 10px 15px;
+          font-size: 14px;
+          font-weight: bold;
+          text-align: center;
+          border-radius: 5px;
+          text-decoration: none;
+          cursor: pointer;
+          transition: 0.3s;
+          background-color: #fafaff;
+          color: black;
+          border: 1px solid #ebecff;
+          margin: 5px 0;
+        }
+        .button:hover {
+          background-color: #7a7aff;
+          color: white;
+        }
+        /* 미리보기 영역 스타일 */
+        #exchangePreviewContainer,
+        .preview-container {
+          display: flex;
+          flex-wrap: wrap;
+          margin-top: 10px;
+        }
+        .preview-item {
+          position: relative;
+          margin: 5px;
+        }
+        .preview-item img {
+          width: 100px;
+          height: auto;
+          border-radius: 5px;
+          border: 1px solid #ccc;
+        }
+        .delete-btn {
+          position: absolute;
+          top: 0;
+          right: 0;
+          background-color: rgba(255, 0, 0, 0.7);
+          color: #fff;
+          border: none;
+          cursor: pointer;
+          padding: 2px 5px;
+          border-radius: 0 5px 0 5px;
+          font-size: 12px;
+        }
+        /* 모달 커스텀 스타일 */
+        .modal.fade {
+          transition: opacity 0.4s ease-in-out;
+        }
+        .modal.show {
+          opacity: 1;
+        }
+        .modal-content {
+          background-color: #f7f7f7;
+          border: 2px solid #007bff33;
+          border-radius: 10px;
+          padding: 30px;
+          animation: slideDown 0.5s ease;
+          max-width: 500px;
+          width: 90%;
+        }
+        @keyframes slideDown {
+          from { transform: translateY(-100px); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+        }
+        .modal-header {
+          border-bottom: 1px solid #ddd;
+          padding-bottom: 15px;
+        }
+        .modal-title {
+          color: black;
+          font-size: 24px;
+          font-weight: bold;
+        }
+        .modal-body {
+          font-size: 16px;
+          color: #333;
+          padding-top: 15px;
+        }
+        .modal-footer {
+          border-top: 1px solid #ddd;
+          text-align: right;
+          padding-top: 15px;
+        }
+        .mb-3 {
+          margin-bottom: 10px;
+        }
+        .form-label {
+          display: block;
+          margin-bottom: 10px;
+        }
+        /* Bootstrap 버튼 오버라이드 (예시) */
+        .btn-warning:hover,
+        .btn-primary:hover {
+          cursor: url('/images/order/dog-c.png') 16 16, auto;
+          background-color: #0056b333;
+          border-color: #0056b3;
+          border-radius: 5px;
+          border: 2px solid transparent;
+        }
+        .btn-secondary:hover {
+          background-color: #0056b333;
+          border-color: #4e555b;
+          border-radius: 5px;
+          border: 2px solid transparent;
+        }
+        .order-image {
+          width: 50px;
+          height: 50px;
+        }
+        /* 페이징 스타일 */
+        .pagination {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 10px;
+          margin-top: 20px;
+        }
+        .pagination a {
+          padding: 8px 12px;
+          margin: 0 4px;
+          border: 1px solid #ddd;
+          text-decoration: none;
+          color: #007bff;
+          border-radius: 4px;
+          transition: background-color 0.3s, color 0.3s;
+        }
+        .pagination a.active,
+        .pagination a:hover {
+          background-color: #007bff;
+          color: #fff;
+          border-color: #007bff;
+        }
+        .pagination span {
+          padding: 8px 12px;
+          margin: 0 4px;
+          color: #6c757d;
+        }
+    </style>
 </head>
 <body>
+<div th:replace="fragment/header :: headerFragment"></div>
 <div class="container">
-    <h1>주문 상세정보</h1>
-    <p>
-        <a href="/order" class="button">메인페이지로</a>
-    </p>
-
-    <h2>주문 목록</h2>
-    <table>
-        <thead>
-        <tr>
-            <th>상품 사진</th>
-            <th>상품 이름</th>
-            <th>상세 정보</th>
-            <th>배송 상태</th>
-            <th>옵션</th>
-            <th>개수</th>
-            <th>가격</th>
-            <th>리뷰</th>
-        </tr>
-        </thead>
-        <tbody>
-
-        <tr th:each="item : ${item}">
-            <td><img th:src="@{${item.imageUrl}}" alt="이미지"/>
-            </td>
-                    <td th:text="${item.productName}">
-                    </td>
-                  <td><form action="/order/one" method="get">
-                      <input type="hidden" name="purchaseProductId" th:value="${item.purchaseProductId}">
-                      <button class="button">상세보기</button>
-                  </form>
-                    </td>
-                    <td th:text="${item.deliveryStatus}"></td>
-                    <td th:text="${item.option}"></td>
-                    <td th:text="${item.quantity}"></td>
-                    <td th:text="${item.price}"></td>
-            <td>
-                <!-- 리뷰 작성 버튼 (조건이 맞을 때만 표시) -->
-    <button type="button" class="button" data-bs-toggle="modal"
-            th:data-bs-target="'#reviewModal' + ${item.purchase.purchaseId}"
-            th:data-purchase-id="${item.purchase.purchaseId}"
-            th:if="${item.deliveryStatus == '배송완료' && item.cancelAt == null}">
-        리뷰작성
-    </button>
-
-                <!-- 리뷰 작성 모달 -->
-                    <div class="modal fade" th:id="'reviewModal' + ${item.productId}" tabindex="-1"
-                         aria-labelledby="reviewModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">리뷰 작성</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close">닫기</button>
-                                </div>
-                                <div class="modal-body">
-                                    <form th:action="@{/order/purchase/review}" method="post" enctype="multipart/form-data">
-                                        <input type="hidden" name="productId" th:value="${item.productId}">
-                                        <div class="mb-3">
-                                            <label class="form-label">리뷰 내용</label>
-                                            <textarea class="form-control" name="comment" rows="3" id="comment" required></textarea>
+    <section class="pm-section">
+        <div th:replace="fragment/profile-common :: mypage-top"></div>
+        <div class="mypage-bottom-content">
+            <div th:replace="fragment/profile-common :: mypage-sidebar"></div>
+            <div class="order-container">
+                <h2>주문 목록</h2>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>주문 시간</th>
+                        <th>상품 사진</th>
+                        <th>상품 이름</th>
+                        <th>배송 상태</th>
+                        <th>가격</th>
+                        <th>상세보기</th>
+                        <th>구매확정</th>
+                        <th>리뷰/취소/반품</th>
+                    </tr>
+                    </thead>
+                    <tbody th:each="i : ${item}" class="table-group">
+                    <tr>
+                        <td th:utext="${i.cancelAt != null ? '취소 시각: ' + #temporals.format(i.cancelAt, 'yyyy-M-d') + '<br>' + #temporals.format(i.cancelAt, 'a h시 mm분') : '주문 시각: ' + #temporals.format(i.createAt, 'yyyy-M-d') + '<br>' + #temporals.format(i.createAt, 'a h시 mm분')}"></td>
+                        <td>
+                            <img th:src="@{${i.imageUrl}}" alt="이미지" class="order-image"/>
+                        </td>
+                        <td th:text="${i.productName}"></td>
+                        <td th:text="${i.deliveryStatus}"></td>
+                        <td th:text="${i.price}"></td>
+                        <td>
+                            <form action="/order/one" method="get">
+                                <input type="hidden" name="purchaseProductId" th:value="${i.purchaseProductId}">
+                                <button class="button">상세보기</button>
+                            </form>
+                        </td>
+                        <td>
+                                <span th:if="${i.purchaseConform == null and i.cancelAt == null}">
+                                    <button class="button" th:onclick="'purchaseConfirm(' + ${i.purchaseProductId} + ')'">구매확정</button>
+                                </span>
+                            <span th:if="${i.cancelAt != null}">-</span>
+                            <span th:if="${i.purchaseConform != null and i.cancelAt == null}">구매확정</span>
+                        </td>
+                        <td>
+                            <a th:href="@{/products/{id}(id=${i.productId})}"
+                               th:if="${i.purchaseConform != null && i.cancelAt == null}"
+                               class="button">
+                                리뷰작성
+                            </a>
+                            <button type="button" class="button" data-bs-toggle="modal"
+                                    th:data-bs-target="'#cancelReturnModal' + ${i.purchaseProductId}"
+                                    th:if="${i.purchaseConform == null and i.cancelAt == null}">
+                                취소/반품
+                            </button>
+                            <span th:text="${i.cancelReason}"></span>
+                            <!-- 취소/반품 요청 모달 (각 상품마다 동적 ID 적용) -->
+                            <div class="modal fade" th:id="'cancelReturnModal' + ${i.purchaseProductId}" tabindex="-1"
+                                 th:aria-labelledby="'cancelReturnModalLabel' + ${i.purchaseProductId}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title" th:id="'cancelReturnModalLabel' + ${i.purchaseProductId}">취소/반품 요청</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="취소"></button>
                                         </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">별점</label>
-                                            <select class="form-select" name="rating" id="rating" required>
-                                                <option value="5">★★★★★</option>
-                                                <option value="4">★★★★☆</option>
-                                                <option value="3">★★★☆☆</option>
-                                                <option value="2">★★☆☆☆</option>
-                                                <option value="1">★☆☆☆☆</option>
-                                            </select>
-                                        </div>
-
-                                        <!-- 사진 업로드 (여러 개) -->
-                                        <div class="mb-3">
-                                            <label class="form-label">사진 업로드</label>
-                                            <input type="file" class="form-control" name="reviewImages" id="reviewImages" accept="image/*"
-                                                   multiple onchange="previewImages(event)">
-                                        </div>
-
-                                        <!-- 미리보기 이미지들 리스트 -->
-                                        <div class="mb-3" id="previewContainer">
-                                            <!-- 여러 개의 이미지 미리보기 여기에 표시 -->
-                                        </div>
-
-                                        <button type="submit" class="button" id="review_submit">리뷰 제출</button>
-                                    </form>
+                                        <!-- enctype="multipart/form-data" 필수! -->
+                                        <form th:action="@{/order/returns}" method="post" enctype="multipart/form-data">
+                                            <div class="modal-body">
+                                                <div class="mb-3">
+                                                    <label for="returnsContent" class="form-label">요청 내용</label>
+                                                    <textarea class="form-control" id="returnsContent" name="returnsContent" rows="3" placeholder="사유를 입력해주세요"></textarea>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label th:for="'returnsImage' + ${i.purchaseProductId}" class="form-label">첨부 사진</label>
+                                                    <!-- multiple 속성 추가 -->
+                                                    <input class="form-control" type="file" th:id="'returnsImage' + ${i.purchaseProductId}" name="returnsImage" multiple>
+                                                </div>
+                                                <!-- 미리보기 컨테이너, 고유 id 부여 -->
+                                                <div th:id="'exchangePreviewContainer' + ${i.purchaseProductId}" class="preview-container"></div>
+                                                <!-- purchaseProductId (필요한 경우 hidden으로 넘김) -->
+                                                <input type="hidden" name="purchaseProductId" th:value="${i.purchaseProductId}">
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-warning" name="cancelReason" value="cancel">취소 요청</button>
+                                                <button type="submit" class="btn btn-primary" name="cancelReason" value="return">반품 요청</button>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-            <span th:if="${item.purchase.cancelAt != null}">주문취소</span>
-            </td>
-<!--                    </span>-->
-        </tr>
-        </tbody>
-    </table>
-
-    <div class="pagination" th:if="${purchase.totalPages > 1}">
-		<span th:if="${currentPage > 0}">
-			<a th:href="@{/order/orders/userId(userId=${purchase.content[0].userId}, page=${currentPage - 1}, size=${pageSize}, purchaseState=${param.purchaseState})}">이전</a>
-		</span>
-
-        <span th:each="pageNum : ${#numbers.sequence(0, purchase.totalPages - 1)}">
-			<a th:href="@{/order/orders/userId(userId=${purchase.content[0].userId}, page=${pageNum}, size=${pageSize}, purchaseState=${param.purchaseState})}"
-               th:text="${pageNum + 1}"
-               th:class="${pageNum == currentPage} ? 'active' : ''"></a>
-		</span>
-
-        <span th:if="${currentPage < purchase.totalPages - 1}">
-			<a th:href="@{/order/orders/userId(userId=${purchase.content[0].userId}, page=${currentPage + 1}, size=${pageSize}, purchaseState=${param.purchaseState})}">다음</a>
-		</span>
-    </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <!-- 페이징 -->
+                <div class="pagination" th:if="${purchase.totalPages > 1}">
+                    <span th:if="${currentPage > 0}">
+                        <a th:href="@{/order/orders/userId(userId=${purchase.content[0].userId}, page=${currentPage - 1}, size=${pageSize}, purchaseState=${param.purchaseState})}">이전</a>
+                    </span>
+                    <span th:each="pageNum : ${#numbers.sequence(0, purchase.totalPages - 1)}">
+                        <a th:href="@{/order/orders/userId(userId=${purchase.content[0].userId}, page=${pageNum}, size=${pageSize}, purchaseState=${param.purchaseState})}"
+                           th:text="${pageNum + 1}"
+                           th:class="${pageNum == currentPage} ? 'active' : ''"></a>
+                    </span>
+                    <span th:if="${currentPage < purchase.totalPages - 1}">
+                        <a th:href="@{/order/orders/userId(userId=${purchase.content[0].userId}, page=${currentPage + 1}, size=${pageSize}, purchaseState=${param.purchaseState})}">다음</a>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
 </div>
-<!-- Bootstrap JS 추가 (모달 동작) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<div th:replace="fragment/footer :: footerFragment"></div>
+
+<script>
+    // 구매 확정 함수
+    function purchaseConfirm(purchaseProductId) {
+      if (confirm("구매를 확정하시겠습니까?")) {
+        fetch("/order/rest/purchaseConform", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({purchaseProductId: purchaseProductId}),
+        })
+          .then(response => response.json())
+          .then(data => {
+            alert("구매가 확정되었습니다.");
+            location.reload();
+          })
+          .catch(error => {
+            console.error("오류 발생:", error);
+            alert("구매 확정 중 오류가 발생했습니다");
+          });
+      }
+    }
+
+    // DOMContentLoaded 이벤트 내에서 파일 업로드 및 미리보기 이벤트 바인딩
+    document.addEventListener('DOMContentLoaded', function() {
+      // 모든 파일 input 요소에 대해 이벤트 리스너 등록
+      document.querySelectorAll('input[type="file"][id^="returnsImage"]').forEach(input => {
+        let dt = new DataTransfer();
+        input.addEventListener('change', function(event) {
+          const files = event.target.files;
+          // input id: returnsImage{purchaseProductId} → purchaseProductId 추출
+          const purchaseProductId = input.id.replace("returnsImage", "");
+          const previewContainer = document.getElementById("exchangePreviewContainer" + purchaseProductId);
+          // 기존 미리보기 초기화(필요 시)
+          previewContainer.innerHTML = "";
+          for (let file of files) {
+            // 중복 파일 체크
+            let duplicate = Array.from(dt.items).some(item => item.getAsFile().name === file.name);
+            if (duplicate) continue;
+            dt.items.add(file);
+            const reader = new FileReader();
+            reader.onload = function(e) {
+              const div = document.createElement('div');
+              div.classList.add('preview-item');
+              const img = document.createElement('img');
+              img.src = e.target.result;
+              const delBtn = document.createElement('button');
+              delBtn.textContent = 'X';
+              delBtn.classList.add('delete-btn');
+              delBtn.onclick = () => {
+                const index = [...dt.items].findIndex(item => item.getAsFile().name === file.name);
+                if (index > -1) {
+                  dt.items.remove(index);
+                }
+                input.files = dt.files;
+                div.remove();
+              };
+              div.appendChild(img);
+              div.appendChild(delBtn);
+              previewContainer.appendChild(div);
+            };
+            reader.readAsDataURL(file);
+          }
+          input.files = dt.files;
+        });
+      });
+    });
+</script>
 </body>
 </html>

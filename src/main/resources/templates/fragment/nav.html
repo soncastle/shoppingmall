@@ -12,12 +12,15 @@
   <div class="scrolling-tab">
     <section class="page-tab-area">
       <ul>
-        <li><a href="/">홈</a></li>
-        <li><a href="/board/wiki">시사상식</a></li>
-        <li><a href="/board/main">전체글</a></li>
-        <li><a href="/board/best">BEST</a></li>
-
-
+        <li class="active"><a href="/home">홈</a></li>
+        <li><a>시사상식</a></li>
+        <li><a href="/board/board">게시판</a></li>
+        <li><a>반슐랭</a></li>
+        <li><a>육아팁</a></li>
+        <li><a>메뉴5</a></li>
+        <li><a>메뉴6</a></li>
+        <li><a>메뉴7</a></li>
+        <li><a>메뉴8</a></li>
       </ul>
       <div>
         <button class="write_btn" id="newPostBtn" onclick="window.location.href='/board/write'">글쓰기</button>
@@ -29,22 +32,11 @@
   <div class="scrolling-tab">
     <section class="page-tab-area">
       <ul>
-        <li>
-          <a th:href="@{/products(sort='storeHome')}" 
-             th:classappend="${sort}=='storeHome' ? 'active'">스토어홈</a>
-        </li>
-        <li>
-          <a th:href="@{/products(sort='all')}"
-             th:classappend="${sort}=='all' ? 'active'">전체제품</a>
-        </li>
-        <li>
-          <a th:href="@{/products(sort='rating')}"
-             th:classappend="${sort}=='rating' ? 'active'">베스트</a>
-        </li>
-        <li>
-          <a th:href="@{/products(sort='newest')}"
-             th:classappend="${sort}=='newest' ? 'active'">NEW</a>
-        </li>
+        <li><a>스토어 홈</a></li>
+        <li><a>전체 제품</a></li>
+        <li><a>베스트</a></li>
+        <li><a>NEW</a></li>
+        <li><a>리뷰 후기</a></li>
       </ul>
     </section>
   </div>

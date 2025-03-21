@@ -82,7 +82,7 @@ public class ReviewService {
         return reviewRepository.findByProductId(productId, pageable);
     }
     
-    public void addComment(Long reviewId, String content, Long userId, String nickname) throws JsonProcessingException {
+    public void addComment(Long reviewId, String content, Long userId) throws JsonProcessingException {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new RuntimeException("Review not found"));
         List<Map<String, Object>> commentsList;
@@ -93,13 +93,13 @@ public class ReviewService {
         }
         Map<String, Object> newComment = new HashMap<>();
         newComment.put("userId", userId);
-        newComment.put("nickname", nickname); // ✅ 추가
         newComment.put("content", content);
         newComment.put("createdAt", new Date().getTime());
         commentsList.add(newComment);
         String updatedComments = new ObjectMapper().writeValueAsString(commentsList);
         review.setComments(updatedComments);
         reviewRepository.save(review);
+        System.out.println("리뷰 ID: " + reviewId + "에 댓글 추가됨: " + updatedComments);
     }
     
     public List<Map<String, Object>> getComments(Long reviewId) throws JsonProcessingException {

@@ -3,181 +3,100 @@
 <head>
   <meta charset="UTF-8">
   <title>상품 수정</title>
-  <link rel="stylesheet" href="/css/layout/common.css">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #fff;;
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      width: 80%;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-    .pm-section {
-      margin-top: 80px;
-      margin-bottom: 30px;
-    }
+    body { font-family: Arial, sans-serif; background-color: #f4f7fc; margin: 0; padding: 0; }
+    h1 { text-align: center; padding: 20px 0; color: #333; }
     .form-container {
-      width: 100%;
-      max-width: 600px;
-      margin: 0 auto;
-      background-color: #fff;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 500px; margin: 20px auto; padding: 20px;
+      background-color: white; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border-radius: 8px;
     }
-    h1 {
-      text-align: center;
-      margin-bottom: 30px;
-      color: #333;
+    label { font-size: 16px; color: #555; margin-bottom: 5px; display: block; }
+    input, select {
+      width: 100%; padding: 10px; margin: 8px 0 20px 0;
+      border: 1px solid #ddd; border-radius: 4px; font-size: 16px;
     }
-    .form-group {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-    .form-group label {
-      min-width: 140px;
-      font-size: 16px;
-      color: #555;
-    }
-    .form-group input,
-    .form-group select {
-      flex: 1;
-      padding: 10px 12px;
-      font-size: 16px;
-      height: 45px;
-      line-height: 1.4;
-      vertical-align: middle;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      background-color: #fff;
-      appearance: none;
-      min-width: 160px;
-      white-space: nowrap;
-      box-sizing: border-box;
-    }
-    .preview-container {
-      margin-bottom: 20px;
-    }
-    .preview-img {
-      width: 100px;
-      height: auto;
-      margin-top: 10px;
-      margin-right: 5px;
-    }
-
-    /* 버튼 2개 나란히 */
-    .button-row {
-      display: flex;
-      gap: 10px;
-      margin-top: 10px;
-    }
-    /* 공통 버튼 스타일 */
-    .form-btn {
-      flex: 1 1 0;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      height: 40px;
-      font-size: 16px;
-      border-radius: 5px;
-      transition: background-color .3s;
-      text-decoration: none;
-      text-align: center;
-      cursor: pointer;
-      border: none;
-    }
-    /* 수정 완료(파란색) */
-    .form-btn.submit {
-      background-color: #4A90E2;
-      color: #fff;
-    }
-    .form-btn.submit:hover {
-      background-color: #357ABD;
-    }
-    /* 목록으로 돌아가기(흰색 바탕, 파란 테두리) */
-    .form-btn.back {
-      background-color: #fff;
-      color: #4A90E2;
-      border: 1px solid #4A90E2;
-    }
-    .form-btn.back:hover {
-      background-color: #4A90E2;
-      color: #fff;
-    }
+    input[type="submit"] { background-color: #4CAF50; color: white; border: none;
+      padding: 10px 20px; font-size: 16px; cursor: pointer; border-radius: 4px; }
+    input[type="submit"]:hover { background-color: #45a049; }
+    a { text-decoration: none; color: #2196f3; font-size: 14px; display: block;
+         text-align: center; margin-top: 10px; }
+    .preview-img { width: 100px; height: auto; margin-top: 10px; }
   </style>
-
   <script>
-    $(document).ready(function() {
-      // 대표 이미지 미리보기
-      $("#mainImageFiles").change(function(e) {
-        const container = $("#mainImagePreviewContainer");
+    $(document).ready(function () {
+      // 옵션 추가/삭제 및 폼 제출 (기존 로직 유지)
+      $("#add-option").click(function () {
+        $("#option-container").append(`
+          <div class="option-item">
+            <input type="text" name="optionList" />
+            <button type="button" class="remove-option">삭제</button>
+          </div>
+        `);
+      });
+      $(document).on("click", ".remove-option", function () {
+        $(this).parent().remove();
+      });
+      $("form").submit(function () {
+        let optionValues = [];
+        $("input[name='optionList']").each(function () {
+          let val = $(this).val().trim();
+          if (val) { optionValues.push(val); }
+        });
+        $("#option-hidden").val(optionValues.join(","));
+      });
+
+      // 대표 이미지 미리보기 (여러 장)
+      $("#mainImageFiles").change(function (event) {
+        let container = $("#mainImagePreviewContainer");
         container.html("");
-        Array.from(e.target.files).forEach(file => {
-          const reader = new FileReader();
-          reader.onload = function() {
-            const img = $("<img>")
-              .attr("src", reader.result)
-              .addClass("preview-img");
+        Array.from(event.target.files).forEach(file => {
+          let reader = new FileReader();
+          reader.onload = function () {
+            let img = $("<img>").attr("src", reader.result).addClass("preview-img");
+            container.append(img);
+          };
+          reader.readAsDataURL(file);
+        });
+      });
+      // 상세 이미지 미리보기 (여러 장)
+      $("#detailImageFiles").change(function (event) {
+        let container = $("#detailImagePreviewContainer");
+        container.html("");
+        Array.from(event.target.files).forEach(file => {
+          let reader = new FileReader();
+          reader.onload = function () {
+            let img = $("<img>").attr("src", reader.result).addClass("preview-img");
             container.append(img);
           };
           reader.readAsDataURL(file);
         });
       });
 
-      // 상세 이미지 미리보기
-      $("#detailImageFiles").change(function(e) {
-        const container = $("#detailImagePreviewContainer");
-        container.html("");
-        Array.from(e.target.files).forEach(file => {
-          const reader = new FileReader();
-          reader.onload = function() {
-            const img = $("<img>")
-              .attr("src", reader.result)
-              .addClass("preview-img");
-            container.append(img);
-          };
-          reader.readAsDataURL(file);
-        });
-      });
-
-      // 펫 타입 / 카테고리 / 서브카테고리 필터링
-      const $petTypeSelect     = $('#petTypeSelect');
-      const $categorySelect    = $('#categorySelect');
-      const $subcategorySelect = $('#subcategorySelect');
-
-      const originalCatOptions    = $categorySelect.html();
-      const originalSubcatOptions = $subcategorySelect.html();
-
-      $petTypeSelect.on('change', function () {
-        const selectedPetType = $(this).val();
-        // 카테고리 필터
-        const filteredCats = $(originalCatOptions).filter(function () {
+      // 펫 타입/카테고리/서브카테고리 필터링 (기존 로직 유지)
+      var $petTypeSelect = $('#petTypeSelect');
+      var $categorySelect = $('#categorySelect');
+      var $subcategorySelect = $('#subcategorySelect');
+      var originalCatOptions = $categorySelect.html();
+      var originalSubcatOptions = $subcategorySelect.html();
+      
+      $petTypeSelect.on('change', function(){
+        var selectedPetType = $(this).val();
+        var filteredCats = $(originalCatOptions).filter(function(){
           return $(this).data('pettype') === selectedPetType;
         });
         $categorySelect.html(filteredCats);
-
-        // 서브카테고리 필터
-        const filteredSubs = $(originalSubcatOptions).filter(function () {
+        var filteredSubs = $(originalSubcatOptions).filter(function(){
           return $(this).data('pettype') === selectedPetType;
         });
         $subcategorySelect.html(filteredSubs);
       });
-
-      $categorySelect.on('change', function () {
-        const selectedCatId   = $(this).val();
-        const selectedPetType = $petTypeSelect.val();
-        const finalSubs = $(originalSubcatOptions).filter(function () {
-          return $(this).data('pettype') === selectedPetType
-              && $(this).data('catid') == selectedCatId;
+      
+      $categorySelect.on('change', function(){
+        var selectedCatId = $(this).val();
+        var selectedPetType = $petTypeSelect.val();
+        var finalSubs = $(originalSubcatOptions).filter(function(){
+          return $(this).data('pettype') === selectedPetType && $(this).data('catid') == selectedCatId;
         });
         $subcategorySelect.html(finalSubs);
       });
@@ -185,141 +104,94 @@
   </script>
 </head>
 <body>
-<div th:replace="fragment/header :: headerFragment"></div>
-<div th:replace="fragment/nav :: navFragment2"></div>
-
-<div class="container">
-  <div class="pm-section">
-    <div class="form-container">
-      <h1>상품 수정</h1>
-      <form th:action="@{'/products/edit/' + ${product.productId}}" method="post" enctype="multipart/form-data">
-        
-        <!-- 상품명 -->
-        <div class="form-group">
-          <label for="productName">상품명:</label>
-          <input type="text" id="productName" name="productName"
-                 th:value="${product.productName}" required />
+  <h1>상품 수정</h1>
+  <div class="form-container">
+    <form th:action="@{'/products/edit/' + ${product.productId}}" method="post" enctype="multipart/form-data">
+      <label>상품명:
+        <input type="text" name="productName" th:value="${product.productName}" required />
+      </label>
+      <label>가격:
+        <input type="number" name="price" th:value="${product.price}" required />
+      </label>
+      <!-- 옵션 입력 -->
+      <label>옵션:</label>
+      <div id="option-container">
+        <div th:each="opt : ${#strings.arraySplit(product.option, ',')}" class="option-item">
+          <input type="text" name="optionList" th:value="${opt}" />
+          <button type="button" class="remove-option">삭제</button>
         </div>
+      </div>
+      <button type="button" id="add-option">옵션 추가</button>
+      <input type="hidden" name="option" id="option-hidden" />
 
-        <!-- 가격 -->
-        <div class="form-group">
-          <label for="price">가격:</label>
-          <input type="number" id="price" name="price"
-                 th:value="${product.price}" required />
-        </div>
-
-        <!-- 옵션 -->
-        <div class="form-group">
-          <label for="option">옵션:</label>
-          <input type="text" id="option" name="option"
-                 th:value="${product.option}" />
-        </div>
-
-        <!-- 내용 -->
-        <div class="form-group">
-          <label for="content">내용:</label>
-          <input type="text" id="content" name="content"
-                 th:value="${product.content}" />
-        </div>
-
-        <!-- 설명 -->
-        <div class="form-group">
-          <label for="description">설명:</label>
-          <input type="text" id="description" name="description"
-                 th:value="${product.description}" />
-        </div>
-
-        <!-- 현재 대표 이미지 -->
-        <div class="form-group">
-          <label>현재 대표 이미지:</label>
-          <div>
-            <img th:each="imgUrl : ${product.imageUrls}"
-                 th:src="@{${imgUrl}}"
-                 alt="대표 이미지"
-                 class="preview-img" />
-          </div>
-        </div>
-
-        <!-- 새 대표 이미지 선택 -->
-        <div class="form-group">
-          <label for="mainImageFiles">새 대표 이미지 (여러 장):</label>
-          <input type="file" id="mainImageFiles" name="mainImageFiles" multiple />
-        </div>
-        <div id="mainImagePreviewContainer" class="preview-container"></div>
-
-        <!-- 현재 상세 이미지 -->
-        <div class="form-group">
-          <label>현재 상세 이미지:</label>
-          <div>
-            <img th:each="img : ${product.detailImageUrls}"
-                 th:src="@{${img}}"
-                 alt="상세 이미지"
-                 class="preview-img" />
-          </div>
-        </div>
-
-        <!-- 새 상세 이미지 선택 -->
-        <div class="form-group">
-          <label for="detailImageFiles">새 상세 이미지 (여러 장):</label>
-          <input type="file" id="detailImageFiles" name="detailImageFiles" multiple />
-        </div>
-        <div id="detailImagePreviewContainer" class="preview-container"></div>
-
-        <!-- 반려동물 타입 -->
-        <div class="form-group">
-          <label for="petTypeSelect">반려동물 타입:</label>
-          <select id="petTypeSelect" name="petType">
-            <option value="CAT"
-                    data-pettype="CAT"
-                    th:selected="${product.petType.name() eq 'CAT'}">
-              고양이
-            </option>
-            <option value="DOG"
-                    data-pettype="DOG"
-                    th:selected="${product.petType.name() eq 'DOG'}">
-              강아지
-            </option>
-          </select>
-        </div>
-
-        <!-- 카테고리 -->
-        <div class="form-group">
-          <label for="categorySelect">카테고리:</label>
-          <select id="categorySelect" name="categoryId">
-            <option th:each="cat : ${categories}"
-                    th:value="${cat.categoryId}"
-                    th:text="${cat.categoryName}"
-                    th:attr="data-pettype=${cat.petType.name()}"
-                    th:selected="${product.category.categoryId == cat.categoryId}">
-            </option>
-          </select>
-        </div>
-
-        <!-- 서브카테고리 -->
-        <div class="form-group">
-          <label for="subcategorySelect">서브카테고리:</label>
-          <select id="subcategorySelect" name="subcategoryId">
-            <option th:each="sub : ${subcategories}"
-                    th:value="${sub.subcategoryId}"
-                    th:text="${sub.subcategoryName}"
-                    th:attr="data-pettype=${sub.category.petType.name()}, data-catid=${sub.category.categoryId}"
-                    th:selected="${product.subcategory.subcategoryId == sub.subcategoryId}">
-            </option>
-          </select>
-        </div>
-
-        <!-- 수정/목록 버튼 -->
-        <div class="button-row">
-          <!-- 수정 완료 버튼 -->
-          <button type="submit" class="form-btn submit">수정 완료</button>
-          <!-- 목록으로 돌아가기 링크 -->
-          <a th:href="@{'/products'}" class="form-btn back">목록으로 돌아가기</a>
-        </div>
-      </form>
-    </div>
+      <label>내용:
+        <input type="text" name="content" th:value="${product.content}" />
+      </label>
+      <label>설명:
+        <input type="text" name="description" th:value="${product.description}" />
+      </label>
+      
+      <!-- 기존 대표 이미지 표시 -->
+      <label>현재 대표 이미지:</label>
+      <div>
+        <img th:each="imgUrl : ${product.imageUrls}"
+             th:src="@{${imgUrl}}"
+             alt="대표 이미지" class="preview-img" style="margin-right:10px;" />
+      </div>
+      <!-- 새 대표 이미지 입력 -->
+      <label>새 대표 이미지 선택 (여러 장):
+        <input type="file" name="mainImageFiles" id="mainImageFiles" multiple />
+      </label>
+      <div id="mainImagePreviewContainer"></div>
+      
+      <!-- 기존 상세 이미지 표시 -->
+      <label>현재 상세 이미지:</label>
+      <div>
+        <img th:each="img : ${product.detailImageUrls}"
+             th:src="@{${img}}"
+             alt="상세 이미지" class="preview-img" style="margin-right:10px;" />
+      </div>
+      <!-- 새 상세 이미지 입력 -->
+      <label>새 상세 이미지 선택 (여러 장):
+        <input type="file" name="detailImageFiles" id="detailImageFiles" multiple />
+      </label>
+      <div id="detailImagePreviewContainer"></div>
+      
+      <!-- 펫 타입 선택 -->
+      <label>반려동물 타입:
+        <select name="petType" id="petTypeSelect">
+		  <option value="CAT" th:selected="${product.petType.name() eq 'CAT'}">고양이</option>
+		  <option value="DOG" th:selected="${product.petType.name() eq 'DOG'}">강아지</option>
+		</select>
+      </label>
+      
+      <!-- 카테고리 선택 -->
+      <label>카테고리:
+        <select name="categoryId" id="categorySelect">
+          <option th:each="cat : ${categories}"
+                  th:value="${cat.categoryId}"
+                  th:text="${cat.categoryName}"
+                  th:attr="data-pettype=${cat.petType.name()}"
+                  th:selected="${product.category.categoryId == cat.categoryId}">
+          </option>
+        </select>
+      </label>
+      
+      <!-- 서브카테고리 선택 -->
+      <label>서브카테고리:
+        <select name="subcategoryId" id="subcategorySelect">
+          <option th:each="sub : ${subcategories}"
+                  th:value="${sub.subcategoryId}"
+                  th:text="${sub.subcategoryName}"
+                  th:attr="data-pettype=${sub.category.petType.name()}, data-catid=${sub.category.categoryId}"
+                  th:selected="${product.subcategory.subcategoryId == sub.subcategoryId}">
+          </option>
+        </select>
+      </label>
+      
+      <input type="submit" value="수정 완료" />
+    </form>
+    <a th:href="@{'/products'}">목록으로 돌아가기</a>
   </div>
-</div>
-
-<div th:replace="fragment/footer :: footerFragment"></div>
 </body>
 </html>

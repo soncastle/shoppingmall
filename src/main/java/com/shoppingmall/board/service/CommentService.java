@@ -1,7 +1,6 @@
 package com.shoppingmall.board.service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +34,8 @@ public class CommentService {
 	    return repository.save(comment);
 	}
 	
-	//댓글 좋아요
-	public Integer likeComment(Long commentId, User user) {
+	//게시글 좋아요
+	public void likeComment(Long commentId, User user) {
 		Comment comment = repository.findById(commentId).orElse(null);
 		Set<Long> container = comment.getLikeContain();
 		
@@ -47,7 +46,6 @@ public class CommentService {
 			likeCount++;
 			comment.setLikeCount(likeCount);
 			repository.save(comment);
-			return likeCount;
 		}
 		else {
 			container.remove(user.getId());
@@ -56,15 +54,7 @@ public class CommentService {
 			likeCount--;
 			comment.setLikeCount(likeCount);
 			repository.save(comment);
-			return likeCount;
 		}
-	}
-	
-	//댓글 수정
-	public void commentUpdate(Long commentId, String commentContent) {
-		Comment comment = repository.findById(commentId).orElseThrow(() -> new IllegalArgumentException("Invalid comment Id"));
-		comment.setContent(commentContent);
-		repository.save(comment);
 	}
 	
 	//댓글 삭제

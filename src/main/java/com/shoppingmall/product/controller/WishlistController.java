@@ -5,15 +5,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.shoppingmall.user.dto.UserResponseDTO;
-import com.shoppingmall.user.model.User;
-import com.shoppingmall.user.repository.UserRepository;
-import com.shoppingmall.user.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.shoppingmall.user.dto.ApiResponse;
 import com.shoppingmall.product.dto.WishlistDTO;
@@ -26,23 +26,19 @@ import com.shoppingmall.product.service.WishlistService;
 @RequestMapping("/wishlist")
 public class WishlistController {
     private final WishlistService wishlistService;
-    private final UserService userService;
-    private final UserRepository userRepository;
 
-    public WishlistController(WishlistService wishlistService, UserService userService, UserRepository userRepository) {
+    public WishlistController(WishlistService wishlistService) {
         this.wishlistService = wishlistService;
-        this.userService = userService;
-        this.userRepository = userRepository;
     }
 
  // 찜한 상품 저장
     @PostMapping("/add")
-    public ResponseEntity<?> addProductToWishlist(@RequestBody WishlistDTO dto, Authentication authentication) {
+    public ResponseEntity<?> addProductToWishlist(@RequestParam Long userId, @RequestParam Long productId) {
         Map<String , Object> data = new HashMap<>();
         try {
+            System.out.println("🛒 찜 추가 요청 - userId: " + userId + ", productId: " + productId);
 
-            User user = userService.getUser(authentication.getName());
-            Wishlist added = wishlistService.addProductToWishlist(user.getId(), dto.getProductId());
+            Wishlist added = wishlistService.addProductToWishlist(userId, productId);
             WishlistDTO wishlistDTO = new WishlistDTO();
             wishlistDTO.setId(added.getId());
             wishlistDTO.setUserId(added.getUser().getId());
@@ -62,15 +58,14 @@ public class WishlistController {
 
     @DeleteMapping("/remove")
     public ResponseEntity<?> removeProductFromWishlist(
-        @RequestBody WishlistDTO dto,Authentication authentication) {
+        @RequestParam Long userId,
+        @RequestParam Long productId) {
 
-        if (dto.getProductId() == null) {
+        if (userId == null || productId == null) {
             return ResponseEntity.badRequest().body("유효하지 않은 요청입니다.");
         }
-        User user = userService.getUser(authentication.getName());
 
-
-        wishlistService.removeProductFromWishlist(user.getId(), dto.getProductId());
+        wishlistService.removeProductFromWishlist(userId, productId);
         return ResponseEntity.ok("찜 목록에서 상품이 삭제되었습니다.");
     }
 

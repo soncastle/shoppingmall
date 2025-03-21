@@ -1,6 +1,5 @@
 package com.shoppingmall.product.service;
 
-import com.shoppingmall.product.dto.ProductResponseDTO;
 import java.util.List;
 import java.util.Optional;
 
@@ -168,12 +167,6 @@ public class ProductService {
             default: // 기본 정렬: 신제품순
                 return productRepository.findByPetType(petType, Sort.by(Sort.Direction.DESC, "createdAt"));
         }
-    }
-    public List<ProductResponseDTO> bestLikeProducts() {
-
-        return productRepository.findTop4ByOrderByAverageRatingDesc()
-            .stream().map(ProductResponseDTO :: toDTO).toList();
-
     }
 
 }

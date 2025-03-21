@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>내 쿠폰함</title>
+	<link rel="stylesheet" href="/css/layout/common.css">
+	<link rel="stylesheet" href="/css/profile.css">
+	<style>
+		.order-container {
+            width: 100%;
+            margin: 0 2px 0 12px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        .coupon-box {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+            background-color: #d2e4f7;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease-in-out;
+             border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .coupon-box:hover {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .coupon-box:last-child {
+            border-bottom: none;
+        }
+        .coupon-header, .coupon-info {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .coupon-header {
+            background-color: #f0f0f0;
+            font-weight: bold;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+        }
+        .header-field, .field {
+            flex: 1;
+            text-align: center;
+            border-right: 1px solid #ddd;
+        }
+        .header-field:last-child, .field:last-child {
+            border-right: none;
+        }
+        .coupon-name {
+            color: #333;
+        }
+        .comment {
+            color: #666;
+            font-size: 0.9em;
+        }
+        .discount {
+            color: #d9534f;
+            font-weight: bold;
+        }
+        /* 페이징 스타일링 */
+        .pagination {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .pagination ul {
+            list-style: none;
+            padding: 0;
+            display: inline-block;
+        }
+        .pagination li {
+            display: inline;
+            margin: 0 5px;
+        }
+        .pagination a {
+            text-decoration: none;
+            padding: 6px 12px;
+            color: #337ab7;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: #fff;
+        }
+        .pagination .active a {
+            background: #337ab7;
+            color: #fff;
+            border-color: #337ab7;
+        }
+        .pagination a:hover {
+            background: #eee;
+        }
+	</style>
+</head>
+<body>
+<div th:replace="fragment/header :: headerFragment"></div>
+<div class="container">
+	<section class="pm-section">
+		<div th:replace="fragment/profile-common :: mypage-top"></div>
+		<div class="mypage-bottom-content">
+			<div th:replace="fragment/profile-common :: mypage-sidebar"></div>
+			<div class="order-container">
+				<h2>내 쿠폰함</h2>
+				<!-- 필드명을 나타내는 헤더 행 추가 -->
+				<div class="coupon-header">
+					<div class="header-field">쿠폰 이름</div>
+					<div class="header-field">쿠폰 설명</div>
+					<div class="header-field">할인 정보</div>
+					<div class="header-field">발급일자</div>
+					<div class="header-field">사용 상태</div>
+				</div>
+				<!-- CouponDto 리스트를 반복 -->
+				<div class="coupon-box" th:each="couponDto : ${coupons}">
+					<!-- CouponDto 안의 couponList를 반복 -->
+					<div class="coupon-info" th:each="coupon : ${couponDto.couponList}">
+						<div class="field coupon-name" th:text="${coupon.couponName}">쿠폰 이름</div>
+						<div class="field comment" th:text="${coupon.couponComment}">쿠폰 설명</div>
+						<div class="field discount" th:text="${coupon.discount}">할인 정보</div>
+						<div class="field">
+							발급일자: <span th:utext="${#temporals.format(coupon.createAt, 'yyyy-M-d')}"></span>
+						</div>
+						<div class="field">
+							<span th:text="${coupon.usedAt==null? '사용가능' : '사용 일자: '}"></span>
+							<span th:if="${coupon.usedAt!=null}" th:utext="${#temporals.format(coupon.createAt, 'yyyy-M-d')}"></span>
+						</div>
+					</div>
+				</div>
+
+				<!-- 페이징 네비게이션 -->
+				<div class="pagination">
+					<ul>
+						<!-- 이전 페이지 버튼 -->
+						<li th:if="${coupons.hasPrevious()}">
+							<a th:href="@{/coupon(page=${coupons.number - 1}, size=${coupons.size})}">Previous</a>
+						</li>
+						<!-- 페이지 번호 반복 출력 -->
+						<li th:each="i : ${#numbers.sequence(0, coupons.totalPages - 1)}"
+							th:classappend="${i} == ${coupons.number} ? 'active'">
+							<a th:href="@{/coupon(page=${i}, size=${coupons.size})}" th:text="${i + 1}">1</a>
+						</li>
+						<!-- 다음 페이지 버튼 -->
+						<li th:if="${coupons.hasNext()}">
+							<a th:href="@{/coupon(page=${coupons.number + 1}, size=${coupons.size})}">Next</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>
+<div th:replace="fragment/footer :: footerFragment"></div>
+</body>
+</html>

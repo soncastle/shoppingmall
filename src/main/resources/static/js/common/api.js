@@ -60,4 +60,3 @@ export const apiClient = {
   delete: (endpoint, options = {}) =>
       apiRequest(endpoint, { ...options, method: 'DELETE' })
 };
-

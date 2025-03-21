@@ -26,12 +26,12 @@ public class PetService {
   }
 
   public void create(PetRequestDTO petRequestDTO , String userId) {
-    User user = userService.getUser(userId);
+    User user = userRepository.findByUserId(userId);
     petRepository.save(petRequestDTO.toEntity(user));
   }
 
   public List<PetResponseDTO> getAllPets(String userId) {
-    User user = userService.getUser(userId);
+    User user = userRepository.findByUserId(userId);
 
     return petRepository.findByUser(user).stream()
                                               .map(PetResponseDTO :: from)
@@ -39,7 +39,7 @@ public class PetService {
   }
 
   public void delete(long petId, String userId) {
-    User user = userService.getUser(userId);
+    User user = userRepository.findByUserId(userId);
     Pet pet = petRepository.findById(petId).orElse(null);
 
     if(pet != null) {

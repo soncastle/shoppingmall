@@ -1,6 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap');
-
-* { -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; font-family: 'Noto Sans' , sans-serif;
+* { -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; font-family: 'Pretendard', -apple-system,Arial, sans-serif;
   -webkit-tap-highlight-color: transparent;
 }
 html, body, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a,
@@ -343,7 +341,7 @@ footer a.logo img {
   left: 0;
   width: 100%;
   z-index: 8100;
-  transition: 0.8s all;
+  transition: .5s all;
 }
 
 .scrolling-tab .page-tab-area{
@@ -417,6 +415,6 @@ footer a.logo img {
   line-height: 130%;
   border-radius: 40px;
   border: 1px solid black;
-  background: #fff url("../../images/ui/edit.png") no-repeat left 8px center;
+  background: #fff url("../../images/edit.png") no-repeat left 8px center;
   background-size: 20px;
 }

@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>주문 상세 정보</title>
+    <link rel="stylesheet" href="/css/layout/common.css">
+    <link rel="stylesheet" href="/css/profile.css">
+    <script src="/js/order/review.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        /* 컨테이너 */
+        .order-container {
+          width: 100%;
+          margin: 0 2px 0 5px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+
+        h2 {
+          text-align: center;
+          color: #333;
+          margin-bottom: 20px;
+        }
+
+        /* 테이블 스타일 */
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          background-color: #fff;
+          border-radius: 10px;
+          overflow: hidden;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        thead {
+          background-color: #d2e4f7;
+          color: black;
+          font-weight: bold;
+        }
+
+        thead th {
+          padding: 15px;
+          text-align: center;
+          border-right: 1px solid #93bbe6;
+        }
+
+        tbody {
+          background-color: #f9f9f9;
+        }
+
+        .table-group {
+          border-bottom: 2px solid #ddd;
+          transition: background-color 0.3s;
+        }
+
+        .table-group:hover {
+          background-color: #e0e0ff;
+        }
+
+        td {
+          padding: 12px;
+          text-align: center;
+          vertical-align: middle;
+          border-right: 1px solid #ccc;
+        }
+
+        td:last-child {
+          border-right: none;
+        }
+
+        .table-group img {
+          width: 80px;
+          height: auto;
+          border-radius: 10px;
+        }
+
+        /* 버튼 스타일 */
+        .button {
+          display: inline-block;
+          padding: 10px 15px;
+          font-size: 14px;
+          font-weight: bold;
+          text-align: center;
+          border-radius: 5px;
+          text-decoration: none;
+          cursor: pointer;
+          transition: 0.3s;
+          background-color: #fafaff;
+          color: black;
+          border: 1px solid #ebecff;
+          margin: 5px 0;
+        }
+
+        .button:hover {
+          background-color: #7a7aff;
+          color: white;
+        }
+
+        /* 미리보기 영역 스타일 */
+        #exchangePreviewContainer {
+          display: flex;
+          flex-wrap: wrap;
+          margin-top: 10px;
+        }
+
+        .preview-item {
+          position: relative;
+          margin: 5px;
+        }
+
+        .preview-item img {
+          width: 100px;
+          height: auto;
+          border-radius: 5px;
+          border: 1px solid #ccc;
+        }
+
+        .delete-btn {
+          position: absolute;
+          top: 0;
+          right: 0;
+          background-color: rgba(255, 0, 0, 0.7);
+          color: #fff;
+          border: none;
+          cursor: pointer;
+          padding: 2px 5px;
+          border-radius: 0 5px 0 5px;
+          font-size: 12px;
+        }
+
+        /* 모달 커스텀 스타일 */
+        .modal.fade {
+          transition: opacity 0.4s ease-in-out;
+        }
+        .modal.show {
+          opacity: 1;
+        }
+        .modal-content {
+          background-color: #f7f7f7;
+          border: 2px solid #007bff33; /* 파란색 테두리(투명도 적용) */
+          border-radius: 10px;
+          padding: 30px;
+          animation: slideDown 0.5s ease;
+          max-width: 500px;
+          width: 90%;
+        }
+        @keyframes slideDown {
+          from { transform: translateY(-100px); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+        }
+        .modal-header {
+          border-bottom: 1px solid #ddd;
+          padding-bottom: 15px;
+        }
+        .modal-title {
+          color: black;
+          font-size: 24px;
+          font-weight: bold;
+        }
+        .modal-body {
+          font-size: 16px;
+          color: #333;
+          padding-top: 15px;
+        }
+        .modal-footer {
+          border-top: 1px solid #ddd;
+          text-align: right;
+          padding-top: 15px;
+        }
+        .mb-3 {
+          margin-bottom: 10px;
+        }
+        .form-label {
+          display: block;
+          margin-bottom: 10px;
+        }
+        /* Bootstrap 버튼 오버라이드 (예시) */
+        .btn-warning:hover,
+        .btn-primary:hover {
+          cursor: url('/images/order/dog-c.png') 16 16, auto;
+          background-color: #0056b333;
+          border-color: #0056b3;
+          border-radius: 5px;
+          border: 2px solid transparent;
+        }
+        .btn-secondary:hover {
+          background-color: #0056b333;
+          border-color: #4e555b;
+          border-radius: 5px;
+          border: 2px solid transparent;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="fragment/header :: headerFragment"></div>
+<div class="container">
+    <section class="pm-section">
+        <div th:replace="fragment/profile-common :: mypage-top"></div>
+        <div class="mypage-bottom-content">
+            <div th:replace="fragment/profile-common :: mypage-sidebar"></div>
+            <div class="order-container">
+                <h2>주문 목록</h2>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>주문 시간</th>
+                        <th>상품 사진</th>
+                        <th>상품 이름</th>
+                        <th>배송 상태</th>
+                        <th>가격</th>
+                        <th>상세보기</th>
+                        <th>구매확정</th>
+                        <th>리뷰/취소/반품</th>
+                    </tr>
+                    </thead>
+                    <th:block th:each="i : ${item}">
+                        <tbody class="table-group">
+                        <tr>
+                            <td th:utext="${i.cancelAt != null ? '취소 시각: ' + #temporals.format(i.cancelAt, 'yyyy-M-d') + '<br>' + #temporals.format(i.cancelAt, 'a h시 mm분') : '주문 시각: ' + #temporals.format(i.createAt, 'yyyy-M-d') + '<br>' + #temporals.format(i.createAt, 'a h시 mm분')}"></td>
+                            <td>
+                                <img th:src="@{${i.imageUrl}}" alt="이미지"/>
+                            </td>
+                            <td th:text="${i.productName}"></td>
+                            <td th:text="${i.deliveryStatus}"></td>
+                            <td th:text="${i.price}"></td>
+                            <td>
+                                <form action="/order/one" method="get">
+                                    <input type="hidden" name="purchaseProductId" th:value="${i.purchaseProductId}">
+                                    <button class="button">상세보기</button>
+                                </form>
+                            </td>
+                            <td>
+                    <span th:if="${i.purchaseConform == null && i.cancelAt == null}">
+                        <button class="button" th:onclick="'purchaseConfirm(' + ${i.purchaseProductId} + ')'">구매확정</button>
+
+                    </span>
+                                <span th:text="${i.purchaseConform != null ? '구매확정' : ''}"></span>
+                                <span th:if="${i.cancelAt != null}">주문취소</span>
+                            </td>
+                            <td>
+                                <button type="button" class="button" data-bs-toggle="modal"
+                                        th:data-bs-target="'#reviewModal' + ${i.purchase.purchaseId}"
+                                        th:data-purchase-id="${i.purchase.purchaseId}"
+                                        th:if="${i.purchaseConform != null}">
+                                    리뷰작성
+                                </button>
+                                <button type="button" class="button" data-bs-toggle="modal"
+                                        th:data-bs-target="'#exchangeModal' + ${i.productId}"
+                                        th:if="${i.purchaseConform == null && i.cancelAt == null}">
+                                    취소/반품
+                                </button>
+                                <span th:text="${i.cancelReason}"></span>
+                                <!-- 교환 요청 모달 (각 상품마다 동적 ID 적용) -->
+                                <div class="modal fade" th:id="'exchangeModal' + ${i.productId}" tabindex="-1" aria-labelledby="exchangeModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title" id="exchangeModalLabel">교환 요청</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="취소"></button>
+                                            </div>
+                                            <!-- enctype="multipart/form-data" 필수! -->
+                                            <form th:action="@{/order/returns}" method="post" enctype="multipart/form-data">
+                                                <div class="modal-body">
+                                                    <div class="mb-3">
+                                                        <label for="returnsContent" class="form-label">요청 내용</label>
+                                                        <textarea class="form-control" id="returnsContent" name="returnsContent" rows="3" placeholder="사유를 입력해주세요"></textarea>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="returnsImage" class="form-label">첨부 사진</label>
+                                                        <!-- multiple 속성 추가 -->
+                                                        <input class="form-control" type="file" id="returnsImage" name="returnsImage" multiple>
+                                                    </div>
+                                                    <!-- 미리보기 컨테이너 -->
+                                                    <div id="exchangePreviewContainer"></div>
+                                                    <!-- purchaseProductId (필요한 경우 hidden으로 넘김) -->
+                                                    <input type="hidden" name="purchaseProductId" th:value="${i.purchaseProductId}">
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <!-- 추가: 두 개의 submit 버튼 (동일한 URL로 다른 파라미터 값 전달) -->
+                                                    <button type="submit" class="btn btn-warning" name="cancelReason" value="cancel">취소 요청</button>
+                                                    <button type="submit" class="btn btn-primary" name="cancelReason" value="return">반품 요청</button>
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </th:block>
+                </table>
+                <!-- 페이징 -->
+                <br>
+                <div class="pagination" th:if="${purchase.totalPages > 1}">
+            <span th:if="${currentPage > 0}">
+              <a th:href="@{/order/orders/userId(userId=${purchase.content[0].userId}, page=${currentPage - 1}, size=${pageSize}, purchaseState=${param.purchaseState})}">이전</a>
+            </span>
+                    <span th:each="pageNum : ${#numbers.sequence(0, purchase.totalPages - 1)}">
+              <a th:href="@{/order/orders/userId(userId=${purchase.content[0].userId}, page=${pageNum}, size=${pageSize}, purchaseState=${param.purchaseState})}"
+                 th:text="${pageNum + 1}"
+                 th:class="${pageNum == currentPage} ? 'active' : ''"></a>
+            </span>
+                    <span th:if="${currentPage < purchase.totalPages - 1}">
+              <a th:href="@{/order/orders/userId(userId=${purchase.content[0].userId}, page=${currentPage + 1}, size=${pageSize}, purchaseState=${param.purchaseState})}">다음</a>
+            </span>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<div th:replace="fragment/footer :: footerFragment"></div>
+<script>
+    function purchaseConfirm(purchaseProductId) {
+      if (confirm("구매를 확정하시겠습니까?")) {
+        fetch("/order/rest/purchaseConform", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({purchaseProductId: purchaseProductId}),
+        })
+          .then(response => response.json())
+          .then(data => {
+            alert("구매가 확정되었습니다.");
+            location.reload();
+          })
+          .catch(error => {
+            console.error("오류 발생:", error);
+            alert(".구매 확정 중 오류가 발생했습니다");
+          });
+      }
+    }
+</script>
+
+<!-- 교환 요청 모달 관련 스크립트 -->
+<script>
+    // DataTransfer 객체 생성: 파일 목록을 관리하기 위한 객체
+    let dt = new DataTransfer();
+    // 교환 요청 모달의 파일 input과 미리보기 컨테이너를 선택 (ID가 고정된 경우, 모달마다 여러 개 있을 경우 ID 관리 필요)
+    const fileInput = document.getElementById('exchangeImage');
+    const previewContainer = document.getElementById('exchangePreviewContainer');
+
+    // 파일 선택 이벤트 처리
+    fileInput.addEventListener('change', function(event) {
+      const files = event.target.files;
+      for (let file of files) {
+        // 중복 파일 체크
+        let duplicate = Array.from(dt.items).some(item => item.getAsFile().name === file.name);
+        if (duplicate) continue;
+        dt.items.add(file);
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const div = document.createElement('div');
+          div.classList.add('preview-item');
+
+          const img = document.createElement('img');
+          img.src = e.target.result;
+
+          const delBtn = document.createElement('button');
+          delBtn.textContent = 'X';
+          delBtn.classList.add('delete-btn');
+          delBtn.onclick = () => {
+            // DataTransfer에서 파일 제거
+            const index = [...dt.items].findIndex(item => item.getAsFile().name === file.name);
+            if (index > -1) {
+              dt.items.remove(index);
+            }
+            // 파일 input 업데이트
+            fileInput.files = dt.files;
+            // 미리보기 제거
+            div.remove();
+          };
+
+          div.appendChild(img);
+          div.appendChild(delBtn);
+          previewContainer.appendChild(div);
+        };
+        reader.readAsDataURL(file);
+      }
+      fileInput.files = dt.files;
+    });
+
+    // 모달 닫힘 처리: Bootstrap의 data-bs-dismiss로 자동 처리되지만, 추가 작업이 필요하면 여기에 작성
+    document.querySelectorAll('[data-bs-dismiss="modal"]').forEach(btn => {
+      btn.addEventListener('click', function() {
+        console.log("모달창이 닫힙니다.");
+      });
+    });
+</script>
+<style>
+    /* 추가: 미리보기 영역 및 삭제 버튼 스타일 (모달 내부) */
+    #exchangePreviewContainer {
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .preview-item {
+      position: relative;
+      margin: 5px;
+    }
+    .preview-item img {
+      width: 100px;
+      height: auto;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .delete-btn {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background-color: rgba(255, 0, 0, 0.7);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      padding: 2px 5px;
+      border-radius: 0 5px 0 5px;
+      font-size: 12px;
+    }
+</style>
+</body>
+</html>
