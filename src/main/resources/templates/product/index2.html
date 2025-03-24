@@ -36,7 +36,7 @@
     }
     .content {
       flex: 1;
-      padding: 0 1rem;
+      padding: 0rem 1rem;
     }
 
     /* ===== 상품 목록 (4열), 카드 디자인 ===== */
@@ -50,35 +50,36 @@
     }
     .product-card {
       background: #fdfdfd; /* 기존 #fff보다 살짝 톤 다름 */
-	  border: 1px solid #e6e6e6;
-	  border-radius: 10px;
-	  box-shadow: 0 2px 4px rgba(0,0,0,0.06); /* 기본도 살짝 그림자 */
-	  text-align: center;
-	  padding: 1rem;
-	  transition: all 0.3s ease;
-	  min-width: 250px;
-	}
+ 	  border: 1px solid #e6e6e6;
+ 	  border-radius: 10px;
+ 	  box-shadow: 0 2px 4px rgba(0,0,0,0.06); /* 기본도 살짝 그림자 */
+ 	  text-align: center;
+ 	  padding: 1rem;
+ 	  transition: all 0.3s ease;
+ 	  min-width: 250px;
+ 	}
  	@media screen and (max-width: 1100px) {
-	  .product-list {
-	    grid-template-columns: repeat(3, 1fr);
-	  }
-	}
-	@media screen and (max-width: 800px) {
-	  .product-list {
-	    grid-template-columns: repeat(2, 1fr);
-	  }
-	}
-	@media screen and (max-width: 500px) {
-	  .product-list {
-	    grid-template-columns: 1fr;
-	  }
-	}
+ 	  .product-list {
+ 	    grid-template-columns: repeat(3, 1fr);
+ 	  }
+ 	}
+ 	@media screen and (max-width: 800px) {
+ 	  .product-list {
+ 	    grid-template-columns: repeat(2, 1fr);
+ 	  }
+ 	}
+ 	@media screen and (max-width: 500px) {
+ 	  .product-list {
+ 	    grid-template-columns: 1fr;
+ 	  }
+ 	}
     .product-card:hover {
       transform: translateY(-5px);
-	  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-	  border-color: #d0e5ff;
-	  background-color: #fbfdff;
+ 	  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+ 	  border-color: #d0e5ff;
+ 	  background-color: #fbfdff;
     }
+
     /* 상품명: 좀 더 크게 + 볼드 */
     .product-card h3 {
       margin: 0.4rem 0 0.2rem 0;
@@ -88,11 +89,11 @@
       margin-bottom: 0.2rem;
     }
 	/* 카드 내부 구분선 */
-	.product-card hr {
-	  border: none;
-	  border-top: 1px solid #e0e0e0;
-	  margin: 0.8rem 0;
-	}
+ 	.product-card hr {
+ 	  border: none;
+ 	  border-top: 1px solid #e0e0e0;
+ 	  margin: 0.8rem 0;
+ 	}
     /* 평점·리뷰, 당일발송, 카테고리 모두 조금 더 진하게 */
     .product-card .rating {
       font-size: 0.95rem;
@@ -119,20 +120,20 @@
       color: #666;       /* 약간 진하게 조정 */
       margin-bottom: 0.5rem;
     }
-    .product-card p {
-	  line-height: 1.3;
-	}  
-    .product-card p:last-child {
-	  margin-bottom: 0 !important;
-	}
-	.product-card .rating,
-	.product-card .price,
-	.product-card .delivery-badge,
-	.product-card .category-info {
-	  margin-bottom: 0.2rem;
-	  font-size: 0.95rem;
-	  color: #444;
-	}
+	.product-card p {
+ 	  line-height: 1.3;
+ 	}  
+     .product-card p:last-child {
+ 	  margin-bottom: 0 !important;
+ 	}
+ 	.product-card .rating,
+ 	.product-card .price,
+ 	.product-card .delivery-badge,
+ 	.product-card .category-info {
+ 	  margin-bottom: 0.2rem;
+ 	  font-size: 0.95rem;
+ 	  color: #444;
+ 	}
     /* 가격: 조금 더 크게 & 굵게 */
     .product-card .price {
       font-size: 1.1rem;
@@ -173,12 +174,12 @@
 	}
     .category-list li a {
       color: #333;
-	  text-decoration: none;
-	  display: flex;               /* 추가 */
-	  align-items: center;         /* 아이콘과 글자 수직 중앙정렬 */
-	  gap: 10px;                   /* 아이콘과 텍스트 사이 간격 */
-	  font-size: 1.1rem;           /* 글자 크기 확대 */
-	  font-weight: 600;            /* 글자 좀 더 굵게 */              /* 위아래 여백도 살짝 */
+      text-decoration: none;
+ 	  display: flex;               /* 추가 */
+ 	  align-items: center;         /* 아이콘과 글자 수직 중앙정렬 */
+ 	  gap: 10px;                   /* 아이콘과 텍스트 사이 간격 */
+ 	  font-size: 1.1rem;           /* 글자 크기 확대 */
+ 	  font-weight: 600;            /* 글자 좀 더 굵게 */              /* 위아래 여백도 살짝 */
     }
     .sidebar-buttons {
       margin-top: 1.5rem;
@@ -209,8 +210,8 @@
       line-height: 42px;
       position: relative;
       background: linear-gradient(to right, #66b6f2, #4e9cd8);
- 	  border-radius: 20px;
-    }    
+  	  border-radius: 20px;
+    }
     .sidebar-buttons button:hover,
     .sidebar-buttons a:hover {
       background: linear-gradient(to right, #4e9cd8, #66b6f2);
@@ -400,13 +401,13 @@
       object-fit: cover;
       border-radius: 6px;
       display: block;
-	  border-radius: 8px;
-  	  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-  	  transition: transform 0.3s ease;
+      border-radius: 8px;
+   	  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+   	  transition: transform 0.3s ease;
     }
     .img-wrap img:hover {
-	  transform: scale(1.03);
-	}
+ 	  transform: scale(1.03);
+ 	}
     .best-rank {
       position: absolute;
       left: 0;
@@ -530,36 +531,7 @@
       background-color: #2db7f5;
     }
 
-    /* ===== 사이드 배너 (베스트/NEW 탭에서만) ===== */
-    .side-banner-left,
-    .side-banner-right {
-      position: fixed;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 999;
-      max-width: 160px;
-    }
-    .side-banner-left {
-      left: 80px;
-    }
-    .side-banner-right {
-      right: 80px;
-    }
-    .side-banner-left img,
-    .side-banner-right img {
-      width: auto;
-      height: 430px;
-      display: block;
-    }
-    /* 화면이 1300px 이하로 줄어들면 배너 감춤 */
-    @media (max-width: 1300px) {
-      .side-banner-left,
-      .side-banner-right {
-        display: none;
-      }
-    }
-
-    /* 탭 스타일 (예: 베스트/NEW) */
+        /* 탭 스타일 (예: 베스트/NEW) */
     .scrolling-tab .page-tab-area ul li a {
       color: #333;
       font-weight: 500;
@@ -594,9 +566,9 @@
           <div class="banner-slider-container">
             <div class="swiper-container banner-swiper">
               <div class="swiper-wrapper">
-                <div class="swiper-slide"><img src="/images/v1.jpg" alt="배너1"></div>
-                <div class="swiper-slide"><img src="/images/v2.jpg" alt="배너2"></div>
-                <div class="swiper-slide"><img src="/images/v3.jpg" alt="배너3"></div>
+                <div class="swiper-slide"><img src="/images/product/v1.jpg" alt="배너1"></div>
+                <div class="swiper-slide"><img src="/images/product/v2.jpg" alt="배너2"></div>
+                <div class="swiper-slide"><img src="/images/product/v3.jpg" alt="배너3"></div>
               </div>
               <div class="swiper-button-prev"></div>
               <div class="swiper-button-next"></div>
@@ -607,38 +579,38 @@
           <section class="category-shortcut">
             <ul>
               <li>
-                <a th:href="@{'/products/category/7'(petType='CAT', sort='newest')}">
-                  <img src="/images/catbab.png" alt="고양이사료 아이콘"/>
+                <a th:href="@{'/products/category/1'(petType='CAT', sort='newest')}">
+                  <img src="/images/product/catbab.png" alt="고양이사료 아이콘"/>
                   <span>고양이사료</span>
                 </a>
               </li>
               <li>
-                <a th:href="@{'/products/category/8'(petType='CAT', sort='newest')}">
-                  <img src="/images/catsnack.png" alt="고양이간식 아이콘"/>
+                <a th:href="@{'/products/category/2'(petType='CAT', sort='newest')}">
+                  <img src="/images/product/catsnack.png" alt="고양이간식 아이콘"/>
                   <span>고양이간식</span>
                 </a>
               </li>
               <li>
-                <a th:href="@{'/products/category/9'(petType='CAT', sort='newest')}">
-                  <img src="/images/cattoy.png" alt="고양이용품 아이콘"/>
+                <a th:href="@{'/products/category/3'(petType='CAT', sort='newest')}">
+                  <img src="/images/product/cattoy.png" alt="고양이용품 아이콘"/>
                   <span>고양이용품</span>
                 </a>
               </li>
               <li>
-                <a th:href="@{'/products/category/10'(petType='DOG', sort='newest')}">
-                  <img src="/images/dogbab.png" alt="강아지사료 아이콘"/>
+                <a th:href="@{'/products/category/4'(petType='DOG', sort='newest')}">
+                  <img src="/images/product/dogbab.png" alt="강아지사료 아이콘"/>
                   <span>강아지사료</span>
                 </a>
               </li>
               <li>
-                <a th:href="@{'/products/category/11'(petType='DOG', sort='newest')}">
-                  <img src="/images/dogsnack.png" alt="강아지간식 아이콘"/>
+                <a th:href="@{'/products/category/5'(petType='DOG', sort='newest')}">
+                  <img src="/images/product/dogsnack.png" alt="강아지간식 아이콘"/>
                   <span>강아지간식</span>
                 </a>
               </li>
               <li>
-                <a th:href="@{'/products/category/12'(petType='DOG', sort='newest')}">
-                  <img src="/images/dogtoy.png" alt="강아지용품 아이콘"/>
+                <a th:href="@{'/products/category/6'(petType='DOG', sort='newest')}">
+                  <img src="/images/product/dogtoy.png" alt="강아지용품 아이콘"/>
                   <span>강아지용품</span>
                 </a>
               </li>
@@ -649,52 +621,47 @@
           <section>
             <h2 class="section-title">가성비 갑! 알뜰하게 득템하세요!</h2>
             <div class="product-list">
-              <div class="product-card" th:each="p : ${cheapProducts}">
+              <!-- data-product-id 에 식별자 넣기 -->
+              <div class="product-card"
+                   th:each="p : ${cheapProducts}"
+                   th:attr="data-product-id=${p.productId}">
                 <div class="img-wrap">
                   <a th:href="@{'/products/' + ${p.productId}}">
-                    <img th:src="@{${!#lists.isEmpty(p.imageUrls) ? p.imageUrls[0] : '/images/default.png'}}" alt="상품 이미지"/>
+                    <img th:src="@{${!#lists.isEmpty(p.imageUrls) ? p.imageUrls[0] : '/images/default.png'}}"
+                         alt="상품 이미지"/>
                   </a>
-                  <!-- 뱃지 -->
-                  <div class="badge new-badge" th:if="${T(java.lang.Math).random() < 0.4}">NEW</div>
-                  <div class="badge custom-badge" th:if="${T(java.lang.Math).random() < 0.6}">자체개발</div>
+                  <!-- 뱃지: JS에서 생성 -->
                 </div>
-
-                <!-- 상품명 (크게/굵게) -->
                 <h3 th:text="${p.productName}">상품명</h3>
-
-                <!-- 평점 + 리뷰 개수 -->
                 <p class="rating">
                   <span th:text="'⭐ ' + ${#numbers.formatDecimal(p.averageRating != null ? p.averageRating : 0.0, 1, 1)}"></span>
-                  <!-- "리뷰 96" 형태로 표시하고 싶다면 예: '리뷰 ' + ${p.reviewCount} -->
                   <span th:text="'리뷰 ' + (${p.reviewCount} != null ? ${p.reviewCount} : 0)"></span>
                 </p>
-
-                <!-- 가격 -->
                 <p class="price" th:text="${#numbers.formatInteger(p.price, 0)} + '원'"></p>
-
-                <!-- 당일발송 -->
                 <p class="delivery-badge">
-                  <img src="/images/truck.png" alt="배송아이콘">
+                  <img src="/images/product/truck.png" alt="배송아이콘">
                   당일발송
                 </p>
-
-                <!-- 카테고리/서브카테고리 -->
-                <p class="category-info" th:text="'(' + ${p.category.categoryName} + ' / ' + ${p.subcategory.subcategoryName} + ')'"></p>
+                <p class="category-info"
+                   th:text="'(' + ${p.category.categoryName} + ' / ' + ${p.subcategory.subcategoryName} + ')'">
+                </p>
               </div>
             </div>
           </section>
 
           <!-- 베스트 상품 섹션 -->
           <section>
-            <h2 class="section-title">모두가 선택한 베스트! 한 번 써보면 반해요!</h2>
+            <h2 class="section-title">모두가 선택한 베스트!</h2>
             <div class="product-list">
-              <div class="product-card" th:each="p : ${bestProducts}">
+              <div class="product-card"
+                   th:each="p : ${bestProducts}"
+                   th:attr="data-product-id=${p.productId}">
                 <div class="img-wrap">
                   <a th:href="@{'/products/' + ${p.productId}}">
-                    <img th:src="@{${!#lists.isEmpty(p.imageUrls) ? p.imageUrls[0] : '/images/default.png'}}" alt="상품 이미지"/>
+                    <img th:src="@{${!#lists.isEmpty(p.imageUrls) ? p.imageUrls[0] : '/images/default.png'}}"
+                         alt="상품 이미지"/>
                   </a>
-                  <div class="badge new-badge" th:if="${T(java.lang.Math).random() < 0.4}">NEW</div>
-                  <div class="badge custom-badge" th:if="${T(java.lang.Math).random() < 0.6}">자체개발</div>
+                  <!-- 뱃지: JS에서 생성 -->
                 </div>
                 <h3 th:text="${p.productName}">상품명</h3>
                 <p class="rating">
@@ -703,25 +670,29 @@
                 </p>
                 <p class="price" th:text="${#numbers.formatInteger(p.price, 0)} + '원'"></p>
                 <p class="delivery-badge">
-                  <img src="/images/truck.png" alt="배송아이콘">
+                  <img src="/images/product/truck.png" alt="배송아이콘">
                   당일발송
                 </p>
-                <p class="category-info" th:text="'(' + ${p.category.categoryName} + ' / ' + ${p.subcategory.subcategoryName} + ')'"></p>
+                <p class="category-info"
+                   th:text="'(' + ${p.category.categoryName} + ' / ' + ${p.subcategory.subcategoryName} + ')'">
+                </p>
               </div>
             </div>
           </section>
 
           <!-- 신상품 섹션 -->
           <section>
-            <h2 class="section-title">방금 출시된 따끈따끈 신상! 지금 만나보세요!</h2>
+            <h2 class="section-title">따끈따끈 신상!</h2>
             <div class="product-list">
-              <div class="product-card" th:each="p : ${newProducts}">
+              <div class="product-card"
+                   th:each="p : ${newProducts}"
+                   th:attr="data-product-id=${p.productId}">
                 <div class="img-wrap">
                   <a th:href="@{'/products/' + ${p.productId}}">
-                    <img th:src="@{${!#lists.isEmpty(p.imageUrls) ? p.imageUrls[0] : '/images/default.png'}}" alt="상품 이미지"/>
+                    <img th:src="@{${!#lists.isEmpty(p.imageUrls) ? p.imageUrls[0] : '/images/default.png'}}"
+                         alt="상품 이미지"/>
                   </a>
-                  <div class="badge new-badge" th:if="${T(java.lang.Math).random() < 0.4}">NEW</div>
-                  <div class="badge custom-badge" th:if="${T(java.lang.Math).random() < 0.6}">자체개발</div>
+                  <!-- 뱃지: JS에서 생성 -->
                 </div>
                 <h3 th:text="${p.productName}">상품명</h3>
                 <p class="rating">
@@ -730,10 +701,12 @@
                 </p>
                 <p class="price" th:text="${#numbers.formatInteger(p.price, 0)} + '원'"></p>
                 <p class="delivery-badge">
-                  <img src="/images/truck.png" alt="배송아이콘">
+                  <img src="/images/product/truck.png" alt="배송아이콘">
                   당일발송
                 </p>
-                <p class="category-info" th:text="'(' + ${p.category.categoryName} + ' / ' + ${p.subcategory.subcategoryName} + ')'"></p>
+                <p class="category-info"
+                   th:text="'(' + ${p.category.categoryName} + ' / ' + ${p.subcategory.subcategoryName} + ')'">
+                </p>
               </div>
             </div>
           </section>
@@ -745,24 +718,22 @@
             <aside class="sidebar">
               <h2>카테고리</h2>
               <ul class="category-list">
-				  <li th:each="cat : ${categories}"
-				      th:classappend="${(currentCategory != null) and (cat.categoryId == currentCategory.categoryId)} ? ' active' : ''">
-				    <a th:href="@{'/products/category/' + ${cat.categoryId} (petType=${selectedPetType}, sort='newest')}">
-				      <!-- 아이콘 조건 분기 -->
-				      <img th:if="${cat.categoryName.contains('고양이')}"
-				           src="/images/categorycat.svg"
-				           alt="고양이아이콘"
-				           style="width:30px; height:30px; margin-right:6px; vertical-align:middle;">
-				
-				      <img th:if="${cat.categoryName.contains('강아지')}"
-				           src="/images/categorydog.svg"
-				           alt="강아지아이콘"
-				           style="width:30px; height:30px; margin-right:6px; vertical-align:middle;">
-				
-				      <span th:text="${cat.categoryName}"></span>
-				    </a>
-				  </li>
-				</ul>
+                <li th:each="cat : ${categories}"
+                    th:classappend="${(currentCategory != null) and (cat.categoryId == currentCategory.categoryId)} ? ' active' : ''">
+                  <a th:href="@{'/products/category/' + ${cat.categoryId} (petType=${selectedPetType}, sort='newest')}">
+                    <!-- 예: 아이콘 -->
+                    <img th:if="${cat.categoryName.contains('고양이')}"
+                         src="/images/product/categorycat.svg"
+                         alt="고양이아이콘"
+                         style="width:30px; height:30px; margin-right:6px;">
+                    <img th:if="${cat.categoryName.contains('강아지')}"
+                         src="/images/product/categorydog.svg"
+                         alt="강아지아이콘"
+                         style="width:30px; height:30px; margin-right:6px;">
+                    <span th:text="${cat.categoryName}"></span>
+                  </a>
+                </li>
+              </ul>
               <div class="sidebar-buttons">
                 <button id="togglePetBtn" type="button"></button>
                 <a href="/products/add">상품 추가</a>
@@ -773,7 +744,7 @@
             <div class="content">
               <div class="category-header" th:if="${currentCategory != null}">
                 <h2 class="category-title" th:text="${currentCategory.categoryName}">카테고리명</h2>
-
+                
                 <div class="top-controls" th:if="${subcategories != null and !subcategories.isEmpty()}">
                   <div class="subcategory-tabs">
                     <a th:href="@{'/products/category/' + ${currentCategory.categoryId} (petType=${selectedPetType}, sort='newest')}"
@@ -791,7 +762,6 @@
                     총 <span th:text="${#lists.size(products)}"></span>개
                   </div>
                   <div class="sort-container">
-                    <!-- <label for="sortFilter">정렬:</label> -->
                     <select id="sortFilter" onchange="changeSort()">
                       <option value="newest" th:selected="${sort == 'newest'}">신제품순</option>
                       <option value="priceLowHigh" th:selected="${sort == 'priceLowHigh'}">낮은 가격순</option>
@@ -802,37 +772,31 @@
                 </div>
               </div>
 
+              <!-- 여기서도 product-card에 data-product-id, remove thymeleaf random -->
               <div class="product-list">
-                <div class="product-card" th:each="product : ${products}">
+                <div class="product-card"
+                     th:each="product : ${products}"
+                     th:attr="data-product-id=${product.productId}">
                   <div class="img-wrap">
                     <a th:href="@{'/products/' + ${product.productId}}">
-                      <img th:src="@{${!#lists.isEmpty(product.imageUrls) ? product.imageUrls[0] : '/images/default.png'}}" alt="Product Image"/>
+                      <img th:src="@{${!#lists.isEmpty(product.imageUrls) ? product.imageUrls[0] : '/images/default.png'}}"
+                           alt="Product Image"/>
                     </a>
-                    <div class="badge new-badge" th:if="${T(java.lang.Math).random() < 0.4}">NEW</div>
-                    <div class="badge custom-badge" th:if="${T(java.lang.Math).random() < 0.6}">자체개발</div>
+                    <!-- 뱃지는 JS에서 생성 -->
                   </div>
-
-                  <!-- 상품명 -->
                   <h3 th:text="${product.productName}">상품명</h3>
-
-                  <!-- 평점 + 리뷰 -->
                   <p class="rating">
                     <span th:text="'⭐ ' + ${#numbers.formatDecimal(product.averageRating != null ? product.averageRating : 0.0, 1, 1)}"></span>
                     <span th:text="'리뷰 ' + (${product.reviewCount} != null ? ${product.reviewCount} : 0)"></span>
                   </p>
-
-                  <!-- 가격 -->
                   <p class="price" th:text="${#numbers.formatInteger(product.price, 0)} + '원'"></p>
-
-                  <!-- 당일발송 -->
                   <p class="delivery-badge">
-                    <img src="/images/truck.png" alt="배송아이콘">
+                    <img src="/images/product/truck.png" alt="배송아이콘">
                     당일발송
                   </p>
-
-                  <!-- 카테고리 -->
                   <p class="category-info"
-                     th:text="'(' + ${product.category.categoryName} + ' / ' + ${product.subcategory.subcategoryName} + ')'"></p>
+                     th:text="'(' + ${product.category.categoryName} + ' / ' + ${product.subcategory.subcategoryName} + ')'">
+                  </p>
                 </div>
               </div>
             </div>
@@ -841,51 +805,34 @@
 
         <!-- (3) 베스트 (rating) -->
         <div th:case="'rating'">
-          <div class="side-banner-left">
-            <a href="#">
-              <img src="/images/v4.png" alt="왼쪽배너">
-            </a>
-          </div>
-          <div class="side-banner-right">
-            <a href="#">
-              <img src="/images/v5.png" alt="오른쪽배너">
-            </a>
-          </div>
-
           <section class="main_home best_area">
             <h2>베스트</h2>
             <div class="product-list">
-              <div class="product-card" th:each="p, stat : ${products}">
+              <div class="product-card"
+                   th:each="p, stat : ${products}"
+                   th:attr="data-product-id=${p.productId}">
                 <div class="img-wrap">
                   <a th:href="@{'/products/' + ${p.productId}}">
-                    <img th:src="@{${!#lists.isEmpty(p.imageUrls) ? p.imageUrls[0] : '/images/default.png'}}" alt="상품 이미지"/>
+                    <img th:src="@{${!#lists.isEmpty(p.imageUrls) ? p.imageUrls[0] : '/images/default.png'}}"
+                         alt="상품 이미지"/>
                   </a>
+                  <!-- 베스트 순위 표시 -->
                   <span class="best-rank" th:text="${stat.count}">1</span>
-                  <div class="badge new-badge" th:if="${T(java.lang.Math).random() < 0.4}">NEW</div>
-                  <div class="badge custom-badge" th:if="${T(java.lang.Math).random() < 0.6}">자체개발</div>
+                  <!-- 뱃지: JS에서 생성 -->
                 </div>
-
-                <!-- 상품명 -->
                 <h3 th:text="${p.productName}">상품명</h3>
-
-                <!-- 평점 + 리뷰 -->
                 <p class="rating">
                   <span th:text="'⭐ ' + ${#numbers.formatDecimal(p.averageRating != null ? p.averageRating : 0.0, 1, 1)}"></span>
                   <span th:text="'리뷰 ' + (${p.reviewCount} != null ? ${p.reviewCount} : 0)"></span>
                 </p>
-
-                <!-- 가격 -->
                 <p class="price" th:text="${#numbers.formatInteger(p.price, 0)} + '원'"></p>
-
-                <!-- 당일발송 -->
                 <p class="delivery-badge">
-                  <img src="/images/truck.png" alt="배송아이콘">
+                  <img src="/images/product/truck.png" alt="배송아이콘">
                   당일발송
                 </p>
-
-                <!-- 카테고리 -->
                 <p class="category-info"
-                   th:text="'(' + ${p.category.categoryName} + ' / ' + ${p.subcategory.subcategoryName} + ')'"></p>
+                   th:text="'(' + ${p.category.categoryName} + ' / ' + ${p.subcategory.subcategoryName} + ')'">
+                </p>
               </div>
             </div>
           </section>
@@ -893,50 +840,32 @@
 
         <!-- (4) NEW (newest) -->
         <div th:case="'newest'">
-          <div class="side-banner-left">
-            <a href="#">
-              <img src="/images/v4.png" alt="왼쪽배너">
-            </a>
-          </div>
-          <div class="side-banner-right">
-            <a href="#">
-              <img src="/images/v5.png" alt="오른쪽배너">
-            </a>
-          </div>
-
           <section class="main_home new_area">
             <h2>NEW</h2>
             <div class="product-list">
-              <div class="product-card" th:each="p : ${products}">
+              <div class="product-card"
+                   th:each="p : ${products}"
+                   th:attr="data-product-id=${p.productId}">
                 <div class="img-wrap">
                   <a th:href="@{'/products/' + ${p.productId}}">
-                    <img th:src="@{${!#lists.isEmpty(p.imageUrls) ? p.imageUrls[0] : '/images/default.png'}}" alt="상품 이미지"/>
+                    <img th:src="@{${!#lists.isEmpty(p.imageUrls) ? p.imageUrls[0] : '/images/default.png'}}"
+                         alt="상품 이미지"/>
                   </a>
-                  <div class="badge new-badge" th:if="${T(java.lang.Math).random() < 0.4}">NEW</div>
-                  <div class="badge custom-badge" th:if="${T(java.lang.Math).random() < 0.6}">자체개발</div>
+                  <!-- 뱃지: JS에서 생성 -->
                 </div>
-
-                <!-- 상품명 -->
                 <h3 th:text="${p.productName}">상품명</h3>
-
-                <!-- 평점 + 리뷰 -->
                 <p class="rating">
                   <span th:text="'⭐ ' + ${#numbers.formatDecimal(p.averageRating != null ? p.averageRating : 0.0, 1, 1)}"></span>
                   <span th:text="'리뷰 ' + (${p.reviewCount} != null ? ${p.reviewCount} : 0)"></span>
                 </p>
-
-                <!-- 가격 -->
                 <p class="price" th:text="${#numbers.formatInteger(p.price, 0)} + '원'"></p>
-
-                <!-- 당일발송 -->
                 <p class="delivery-badge">
-                  <img src="/images/truck.png" alt="배송아이콘">
+                  <img src="/images/product/truck.png" alt="배송아이콘">
                   당일발송
                 </p>
-
-                <!-- 카테고리 -->
                 <p class="category-info"
-                   th:text="'(' + ${p.category.categoryName} + ' / ' + ${p.subcategory.subcategoryName} + ')'"></p>
+                   th:text="'(' + ${p.category.categoryName} + ' / ' + ${p.subcategory.subcategoryName} + ')'">
+                </p>
               </div>
             </div>
           </section>
@@ -956,47 +885,46 @@
   <!-- Swiper JS -->
   <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
 
-  <!-- petType 관련 JS -->
+  <!-- petType 관련 JS 및 뱃지 결정 스크립트 -->
   <script th:inline="javascript">
     let currentPetType = /*[[${selectedPetType}]]*/ 'ALL';
     const toggleStates = [
-    	  {
-    	    label: `
-    	      <span style="position: relative; display:inline-block; width:100%; text-align:center;">
-    	        <img src="/images/categorycat.svg" alt="고양이" 
-    	             style="position:absolute; left:12px; top:50%; transform:translateY(-50%); width:24px; height:24px;" />
-    	        고양이
-    	      </span>
-    	    `,
-    	    type: 'CAT',
-    	    url: '/products?petType=CAT&sort=all'
-    	  },
-    	  {
-    	    label: `
-    	      <span style="position: relative; display:inline-block; width:100%; text-align:center;">
-    	        <img src="/images/categorydog.svg" alt="강아지"
-    	             style="position:absolute; left:12px; top:50%; transform:translateY(-50%); width:24px; height:24px;" />
-    	        강아지
-    	      </span>
-    	    `,
-    	    type: 'DOG',
-    	    url: '/products?petType=DOG&sort=all'
-    	  },
-    	  {
-    	    label: `
-    	      <span style="position: relative; display:inline-block; width:100%; text-align:center;">
-    	        전체상품보기
-    	      </span>
-    	    `,
-    	    type: 'ALL',
-    	    url: '/products?sort=all'
-    	  }
-    	];
-
+      {
+        label: `
+          <span style="position: relative; display:inline-block; width:100%; text-align:center;">
+            <img src="/images/ui/categorycat.svg" alt="고양이"
+                 style="position:absolute; left:12px; top:50%; transform:translateY(-50%); width:24px; height:24px;" />
+            고양이
+          </span>
+        `,
+        type: 'CAT',
+        url: '/products?petType=CAT&sort=all'
+      },
+      {
+        label: `
+          <span style="position: relative; display:inline-block; width:100%; text-align:center;">
+            <img src="/images/ui/categorydog.svg" alt="강아지"
+                 style="position:absolute; left:12px; top:50%; transform:translateY(-50%); width:24px; height:24px;" />
+            강아지
+          </span>
+        `,
+        type: 'DOG',
+        url: '/products?petType=DOG&sort=all'
+      },
+      {
+        label: `
+          <span style="position: relative; display:inline-block; width:100%; text-align:center;">
+            전체상품보기
+          </span>
+        `,
+        type: 'ALL',
+        url: '/products?sort=all'
+      }
+    ];
     let currentIndex = (currentPetType === 'CAT') ? 0 : (currentPetType === 'DOG' ? 1 : 2);
 
     function setButtonLabel() {
-    	document.getElementById('togglePetBtn').innerHTML = toggleStates[currentIndex].label;
+      document.getElementById('togglePetBtn').innerHTML = toggleStates[currentIndex].label;
     }
     function togglePetType() {
       currentIndex = (currentIndex + 1) % toggleStates.length;
@@ -1011,13 +939,14 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
+      // 1) Toggle pet button label
       const togglePetBtn = document.getElementById('togglePetBtn');
       if (togglePetBtn) {
         setButtonLabel();
         togglePetBtn.addEventListener('click', togglePetType);
       }
 
-      // sortFilter select 요소가 있을 경우, URL 파라미터 반영
+      // 2) Sort filter
       const sortSelect = document.getElementById("sortFilter");
       if (sortSelect) {
         const urlParams = new URLSearchParams(window.location.search);
@@ -1025,7 +954,7 @@
         sortSelect.value = sortParam;
       }
 
-      // 가격 3자리 콤마 처리
+      // 3) 3자리 콤마
       const priceElements = document.querySelectorAll('.price');
       priceElements.forEach(el => {
         const rawText = el.textContent.replace(/[^\d]/g,'');
@@ -1033,12 +962,51 @@
         el.textContent = priceNum.toLocaleString('en-US') + '원';
       });
 
-      // 메인 배너 Swiper 초기화
+      // 4) Swiper 배너
       new Swiper('.banner-swiper', {
         loop: true,
         autoplay: { delay: 3000, disableOnInteraction: false },
         navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' }
       });
+
+      // 5) LocalStorage 뱃지 로직
+      let badgeMapping = localStorage.getItem('badgeMapping');
+      if (badgeMapping) {
+        badgeMapping = JSON.parse(badgeMapping);
+      } else {
+        badgeMapping = {};
+      }
+
+      // 모든 product-card에 대해 data-product-id 읽고, 배지 결정
+      document.querySelectorAll('.product-card').forEach(card => {
+        const productId = card.getAttribute('data-product-id');
+        if (!productId) return; // 혹시나 data-product-id가 없으면 스킵
+
+        // 이미 존재 안 하면 랜덤 배정
+        if (!badgeMapping.hasOwnProperty(productId)) {
+          const rand = Math.random();
+          // 40% -> NEW, 60% -> 자체개발
+          badgeMapping[productId] = (rand < 0.4) ? "new" : "custom";
+        }
+
+        // 뱃지 생성
+        const badgeType = badgeMapping[productId];
+        const imgWrap = card.querySelector('.img-wrap');
+        if (imgWrap && !imgWrap.querySelector('.badge')) {
+          const badgeElem = document.createElement('div');
+          if (badgeType === "new") {
+            badgeElem.className = "badge new-badge";
+            badgeElem.textContent = "NEW";
+          } else if (badgeType === "custom") {
+            badgeElem.className = "badge custom-badge";
+            badgeElem.textContent = "자체개발";
+          }
+          imgWrap.appendChild(badgeElem);
+        }
+      });
+
+      // 저장
+      localStorage.setItem('badgeMapping', JSON.stringify(badgeMapping));
     });
   </script>
 </body>
