@@ -778,7 +778,7 @@
                      th:each="product : ${products}"
                      th:attr="data-product-id=${product.productId}">
                   <div class="img-wrap">
-                    <a th:href="@{'/products/' + ${product.productId}}">
+                    <a th:href="@{/products/{id}(id=${product.productId})}">
                       <img th:src="@{${!#lists.isEmpty(product.imageUrls) ? product.imageUrls[0] : '/images/default.png'}}"
                            alt="Product Image"/>
                     </a>
