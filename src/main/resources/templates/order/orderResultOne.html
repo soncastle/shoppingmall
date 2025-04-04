@@ -277,7 +277,7 @@
 							<td th:text="${result.purchaseProduct[0].purchaseProductId}"></td>
 							<td th:text="${result.purchaseProduct[0].userId}"></td>
 							<!-- data-price와 price-format 클래스로 JS 포맷팅 적용 -->
-							<td class="price-format" data-price="${result.purchaseProduct[0].price}"></td>
+							<td class="price-format" th:data-price="${result.purchaseProduct[0].price}"></td>
 							<td th:utext="${result.purchaseProduct[0].cancelAt != null ? '취소 시각: ' + #temporals.format(result.purchaseProduct[0].cancelAt, 'yyyy-M-d') + '<br>' + #temporals.format(result.purchaseProduct[0].cancelAt, 'a h시 mm분') : '주문 시각: ' + #temporals.format(result.purchaseProduct[0].createAt, 'yyyy-M-d') + '<br>' + #temporals.format(result.purchaseProduct[0].createAt, 'a h시 mm분')}"></td>
 							<td>
 										<span th:if="${result.purchaseProduct[0].cancelAt == null}">
