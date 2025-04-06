@@ -154,9 +154,7 @@ public class UserService {
       System.out.println("user");
     }
     else if(!authorities.isEmpty() && authorities.iterator().next().getAuthority().equals("ROLE_ADMIN")){
-      String deliveryStatus = "배송준비중";
-      onDeliveryStatusCount = purchaseProductRepository.countByDeliveryStatus(deliveryStatus);
-      System.out.println("admin");
+      onDeliveryStatusCount = purchaseProductRepository.countByCancelReasonIsNull();
     }
 
     return UserResponseDTO.MypageInfo.builder()

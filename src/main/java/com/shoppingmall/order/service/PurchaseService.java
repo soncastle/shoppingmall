@@ -314,8 +314,10 @@ public class PurchaseService {
 		product.setCancelAt(LocalDateTime.now());
 		if (dto.getCancelReason().equals("cancel")) {
 			product.setCancelReason("취소");
+			returns.setCancelReason("취소");
 		} else {
 			product.setCancelReason("반품");
+			returns.setCancelReason("반품");
 		}
 		productRepo.save(product);
 		returns.setReturnsContent(dto.getReturnsContent());
@@ -440,11 +442,14 @@ public class PurchaseService {
 
 //관리자용 배송 요청 출력 리스트
 	public Page<PurchaseProduct> adminPurchaseRequest(Pageable pageable){
-	String deliveryStatus = "배송준비중";
-	return productRepo.findByDeliveryStatusOrderByPurchaseProductIdDesc(deliveryStatus, pageable);
+	return productRepo.findByCancelReasonIsNullOrderByPurchaseProductIdDesc(pageable);
 	}
 
-	public Page<PurchaseProduct> userOrderList(String userId, Pageable pageable) {
+	public Page<PurchaseProduct> userOrderList(String userId, Pageable pageable, String purchaseState) {
+		if(purchaseState.equals("cancel")){
+			return productRepo.findByUserIdAndCancelReasonIsNotNullOrderByPurchaseProductIdDesc(userId, pageable);
+		}
 		return productRepo.findByUserIdOrderByPurchaseProductIdDesc(userId, pageable);
+
 	}
 }

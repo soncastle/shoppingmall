@@ -13,6 +13,9 @@
             flex-direction: column;
             width: 100%;
         }
+        .order-container{
+            width: 100%;
+        }
                 .pagination {
                     display: flex;
                     justify-content: center;
@@ -104,7 +107,7 @@
                                 <strong>주문자 ID:</strong> <a th:href="@{/order/orders/userId?userId={userId}&admin={admin}(userId=${item.userId}, admin='admin')}" th:text="${item.userId}"></a></span>
                             </div>
                             <div class="info-section">
-                                <strong>총 가격:</strong> <span th:text="|${#numbers.formatInteger(item.totalPrice, 3, 'COMMA')} 원|"></span>
+                                <strong>가격:</strong> <span th:text="|${#numbers.formatInteger(item.price, 3, 'COMMA')} 원|"></span>
                             </div>
                             <div class="info-section">
                                 <strong>주문 시간:</strong> <span th:text="${#temporals.format(item.createAt, 'yyyy-M-d a h시 mm분')}"></span>

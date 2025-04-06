@@ -179,10 +179,11 @@ public ResponseEntity<?> cancelAll(@RequestParam(name = "purchaseId") Long purch
 	@GetMapping("/orders/userId")
 	public String orderListByUserId(
 									Authentication authentication,
+									@RequestParam(name = "purchaseState", required = false, defaultValue = "all") String purchaseState,
 									@PageableDefault(page = 0, size = 5)  Pageable pageable,
 									Model model) {
 			String userId = authentication.getName();
-			model.addAttribute("item", service.userOrderList(userId, pageable));
+			model.addAttribute("item", service.userOrderList(userId, pageable, purchaseState));
 		return "order/userOrderList";
 	}
 
@@ -232,10 +233,10 @@ public ResponseEntity<?> cancelAll(@RequestParam(name = "purchaseId") Long purch
 	@PostMapping("/returns")
 	public  String purchaseReturns(@ModelAttribute PurchaseReturnsDto dto,
 									 Authentication authentication,
-								   @PageableDefault(page = 0, size = 5) Pageable pageable,
-								   Model model) {
-	 model.addAttribute("item", service.createExchangeRequest(dto, authentication.getName(), pageable));
-	return "order/orderList";
+								   @PageableDefault(page = 0, size = 5) Pageable pageable) {
+		System.out.println("gg");
+		service.createExchangeRequest(dto, authentication.getName(), pageable);
+	return "redirect:/order/orders/userId";
 	}
 	
 	//관리자용 환불 리스트
@@ -245,7 +246,7 @@ public String returnsList(Model model, @PageableDefault(page = 0, size = 5) Page
 	model.addAttribute("item", service.getAllReturns(pageable));
 	System.out.println(service.getAllReturns(pageable).getTotalPages());
 	Page<PurchaseReturns> purchaseReturns = service.getAllReturns(pageable);
-	return "order/purchaseCancelAdmin";
+	return "order/adminPurchaseCancel";
 }
 	//쿠폰 정보 확인
 	@GetMapping("/coupon")

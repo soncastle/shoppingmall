@@ -100,10 +100,10 @@
               <span th:text="${item.cancelReason}"></span><br>
               <span th:text="${#temporals.format(item.createAt, 'yyyy-M-d a h시 mm분')}"></span>
             </td>
-            <td th:if="${item.returnsContent!=null? item.returnsContent: '-'}"></td>
+            <td th:text="${item.returnsContent != null ? item.returnsContent : '-' }"></td>
             <td>
               <div th:if="${item.returnsImagePaths != null}">
-                <img class="return-img" th:each="path : ${#strings.arraySplit(req.returnsImagePaths, ',')}"
+                <img class="return-img" th:each="path : ${#strings.arraySplit(item.returnsImagePaths, ',')}"
                      th:src="@{${path}}"
                      style="max-width: 100px; max-height: 100px; margin: 2px;" alt="업로드 이미지"/>
               </div>

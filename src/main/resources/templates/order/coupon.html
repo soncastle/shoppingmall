@@ -20,7 +20,7 @@
             background-color: #d2e4f7;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             transition: box-shadow 0.3s ease-in-out;
-             border-radius: 8px;
+            border-radius: 8px;
             margin-bottom: 10px;
         }
         .coupon-box:hover {
@@ -115,6 +115,7 @@
 					<div class="coupon-info" th:each="coupon : ${couponDto.couponList}">
 						<div class="field coupon-name" th:text="${coupon.couponName}">쿠폰 이름</div>
 						<div class="field comment" th:text="${coupon.couponComment}">쿠폰 설명</div>
+						<!-- 할인 정보는 숫자 데이터가 들어있다고 가정 -->
 						<div class="field discount" th:text="${coupon.discount}">할인 정보</div>
 						<div class="field">
 							발급일자: <span th:utext="${#temporals.format(coupon.createAt, 'yyyy-M-d')}"></span>
@@ -152,5 +153,20 @@
 <div th:replace="fragment/profile-common :: modal"></div>
 <script type="module" src="/js/user/profile.js"></script>
 <script src="/js/user/address.js"></script>
+<script>
+	// DOMContentLoaded 이후 discount 클래스를 가진 요소의 숫자를 포맷팅
+    document.addEventListener("DOMContentLoaded", function() {
+        const discountElements = document.querySelectorAll(".discount");
+        discountElements.forEach(el => {
+            // 기존의 텍스트에서 숫자만 추출 (콤마나 공백, "원" 등 제거)
+            let rawValue = el.textContent.replace(/[^0-9]/g, '');
+            let numberValue = parseInt(rawValue, 10);
+            if (!isNaN(numberValue)) {
+                // toLocaleString('ko-KR')를 사용하여 3자리마다 콤마 추가 및 " 원" 붙이기
+                el.textContent = numberValue.toLocaleString('ko-KR') + " 원";
+            }
+        });
+    });
+</script>
 </body>
 </html>

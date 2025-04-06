@@ -44,8 +44,8 @@
         }
         th, td {
             padding: 12px;
-            text-align: center; /* 수평 가운데 정렬 */
-            vertical-align: middle; /* 수직 가운데 정렬 */
+            text-align: center;
+            vertical-align: middle;
             border-bottom: 1px solid #e0e0e0;
         }
         th {
@@ -80,8 +80,8 @@
         .status-other {
             color: #666;
         }
-        /* 모달 스타일 */
-        .modal {
+        /* 모달 스타일 (클래스 이름을 custom-modal로 변경) */
+        .custom-modal {
             display: none;
             position: fixed;
             z-index: 1000;
@@ -220,10 +220,12 @@
 						<tr th:each="purchase : ${purchase}">
 							<td th:text="${purchase.purchaseId}"></td>
 							<td th:text="${purchase.userId}"></td>
-							<!-- data-price 속성을 추가하여 JavaScript에서 가격 포맷팅을 적용 -->
 							<td data-price th:text="${purchase.totalPrice}"></td>
 							<td>
-								<div><strong>결제:</strong> <span th:text="${#temporals.format(purchase.createAt, 'yyyy-M-d a h시 mm분')}"></span></div>
+								<div>
+									<strong>결제:</strong>
+									<span th:text="${#temporals.format(purchase.createAt, 'yyyy-M-d a h시 mm분')}"></span>
+								</div>
 								<div th:if="${purchase.purchaseProduct[0].cancelAt != null}">
 									<strong>취소:</strong>
 									<span th:text="${#temporals.format(purchase.purchaseProduct[0].cancelAt, 'yyyy-M-d a h시 mm분')}"></span>
@@ -236,35 +238,28 @@
 										<input type="hidden" name="purchaseId" th:value="${purchase.purchaseId}">
 										<button type="submit" class="cancel-button" onclick="orderAllCancel(event)">결제 취소</button>
 									</form>
-
 									<script>
-									const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-									const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
-                                    function orderAllCancel(e) {
-                                        e.preventDefault(); // 기본 제출 방지
-
-                                        if (!confirm("정말 결제를 취소하시겠습니까?")) {
-                                            return; // 사용자가 취소 선택 시 함수 종료
+										const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+                                        const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+                                        function orderAllCancel(e) {
+                                            e.preventDefault();
+                                            if (!confirm("정말 결제를 취소하시겠습니까?")) {
+                                                return;
+                                            }
+                                            let form = document.getElementById("cancelForm");
+                                            let formData = new FormData(form);
+                                            fetch(form.action, {
+                                                method: 'POST',
+                                                headers: { [csrfHeader] : csrfToken },
+                                                body: formData
+                                            }).then(response => {
+                                                alert("취소되었습니다.");
+                                                location.reload();
+                                            }).catch(error => {
+                                                console.error("Error:", error);
+                                                alert("오류가 발생했습니다.");
+                                            });
                                         }
-
-                                        let form = document.getElementById("cancelForm"); // form 요소 가져오기
-                                        let formData = new FormData(form);
-
-                                        fetch(form.action, {
-                                            method: 'POST',
-                                            headers: {
-                                               [csrfHeader] : csrfToken
-                                            },
-                                            body: formData
-                                        }).then(response => {
-											alert("취소되었습니다.");
-											location.reload();
-                                        }).catch(error => {
-                                            console.error("Error:", error);
-                                                console.log(response)
-                                            alert("오류가 발생했습니다.");
-                                        });
-                                    }
 									</script>
 								</div>
 								<div th:if="${purchase.purchaseProduct[0].cancelAt != null}" th:text="취소"></div>
@@ -294,13 +289,14 @@
 							<td th:text="${delivery.receiverAddr}"></td>
 							<td th:text="${delivery.deliveryMessage}"></td>
 							<td>
-						            <span th:if="${dto.purchaseProduct[0].deliveryStatus == '배송준비중'}">
-							            <button class="button" onclick="openModal()">정보수정</button>
-						            </span>
+										<span th:if="${dto.purchaseProduct[0].deliveryStatus == '배송준비중'}">
+											<button class="button" onclick="openCustomModal()">정보수정</button>
+										</span>
 							</td>
-							<div id="editModal" class="modal">
+							<!-- 모달: 클래스 이름을 custom-modal로 수정 -->
+							<div id="editModal" class="custom-modal">
 								<div class="modal-content">
-									<span class="close" onclick="closeModal()">×</span>
+									<span class="close" onclick="closeCustomModal()">×</span>
 									<h2>배송 정보 수정</h2>
 									<form id="editForm" th:action="@{/order/rest/receiverChange}" method="post" onsubmit="saveAndGoBack(event)">
 										<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
@@ -318,7 +314,7 @@
 										<label for="deliveryMessage">배송 요청 사항:</label>
 										<input type="text" id="deliveryMessage" name="deliveryMessage" th:value="${delivery.deliveryMessage}" required>
 										<button type="submit">저장</button>
-										<button type="button" class="cancel" onclick="closeModal()">취소</button>
+										<button type="button" class="cancel" onclick="closeCustomModal()">취소</button>
 									</form>
 								</div>
 							</div>
@@ -343,7 +339,6 @@
 						<tr th:each="item : ${item}">
 							<td th:text="${item.productName}"></td>
 							<td th:text="${item.quantity}"></td>
-							<!-- data-price 속성을 추가하여 JS에서 가격 포맷팅 -->
 							<td data-price th:text="${item.price}"></td>
 							<td th:text="${item.deliveryStatus}"></td>
 						</tr>
@@ -360,16 +355,16 @@
 <script type="module" src="/js/user/profile.js"></script>
 <script src="/js/user/address.js"></script>
 <script>
-	function openModal() {
+	function openCustomModal() {
         document.getElementById("editModal").style.display = "flex";
     }
-    function closeModal() {
+    function closeCustomModal() {
         document.getElementById("editModal").style.display = "none";
     }
     window.onclick = function(event) {
         let modal = document.getElementById("editModal");
         if (event.target === modal) {
-            closeModal();
+            closeCustomModal();
         }
     }
     // 주소 검색 함수
@@ -387,9 +382,7 @@
         let formData = new FormData(form);
         fetch(form.action, {
             method: 'POST',
-		    headers: {
-                 [csrfHeader] : csrfToken
-                 },
+            headers: { [csrfHeader] : csrfToken },
             body: formData
         }).then(response => {
             if (response.ok) {
@@ -403,7 +396,7 @@
             alert("오류가 발생했습니다.");
         });
     }
-	// 3자리마다 ','를 넣고 '원'을 붙이는 함수
+    // 3자리마다 ','를 넣고 '원'을 붙이는 함수
     function formatPrice(price) {
         return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원';
     }
