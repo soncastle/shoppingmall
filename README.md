@@ -69,7 +69,7 @@
 - 🚥 **Spring Security 통한 인증 및 권한별 인가 시스템**
 - 🔐 **Oauth2 를 이용한 소셜 로그인**
 - 📨 **SMTP 기반의 이메일 전송을 통한 비밀번호 찾기**
-- 🛒 **Spring Data JPA를 활용한 페이징 처리**:
+- 🛒 **Spring Data JPA를 활용한 페이징 처리**
 - 🔄 **Swagger API 를 이용한 API 관리 및 명세**
 - 📦 **Docker로 환경 분리 및 배포 자동화**
 
