@@ -66,7 +66,7 @@
 ## 🔧 핵심 기술 및 구현 내용
 
 - 🔐 **Spring Security 기반 로그인 시스템 구현**
-- 🚥	**Spring Security Role 적용을 통한 Role별 접근 가능한 페이지 이동 및 데이터 반환 **
+- 🚥 **Spring Security Role 적용을 통한 Role별 접근 가능한 페이지 이동 및 데이터 반환**
 - 📨 **이메일 인증 및 임시 비밀번호 발급 기능 구현**
 - 📁 **도메인별 패키지 구조 및 예외 처리 통합**
 - 🔄 **RESTful API 설계 및 Swagger 연동**
