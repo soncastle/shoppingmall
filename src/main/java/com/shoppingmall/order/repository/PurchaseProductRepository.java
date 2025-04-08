@@ -62,5 +62,8 @@ public interface PurchaseProductRepository extends JpaRepository<PurchaseProduct
   Page<PurchaseProduct> findByCancelReasonIsNullOrderByPurchaseProductIdDesc(Pageable pageable);
 
   int countByCancelReasonIsNull();
+
+
+  int countByCancelReasonIsNullAndDeliveryStatusNot(String deliveryStatus);
 }
 

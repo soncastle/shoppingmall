@@ -153,8 +153,9 @@ public class UserService {
       onDeliveryStatusCount = purchaseProductRepository.countByUserIdAndDeliveryStatus(userId);
       System.out.println("user");
     }
-    else if(!authorities.isEmpty() && authorities.iterator().next().getAuthority().equals("ROLE_ADMIN")){
-      onDeliveryStatusCount = purchaseProductRepository.countByCancelReasonIsNull();
+    else if(!authorities.isEmpty() && authorities.iterator().next().getAuthority().equals("ROLE_ADMIN")) {
+      String deliveryStatus = "배송중";
+      onDeliveryStatusCount = purchaseProductRepository.countByCancelReasonIsNullAndDeliveryStatusNot(deliveryStatus);
     }
 
     return UserResponseDTO.MypageInfo.builder()
